@@ -45,3 +45,12 @@ export function get_ke_select(pl) {
         })
     });
 }
+export function c_ke_by_list(list) {
+    return request({
+        url: "admin-index?page=ke&action=c_ke_by_list",
+        method: "POST",
+        data: Qs.stringify({
+            list
+        })
+    });
+}

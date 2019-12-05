@@ -87,3 +87,12 @@ export function delete_file(file_id) {
         })
     });
 }
+export function c_pmaster_by_list(list) {
+    return request({
+        url: "admin-index?page=pmaster&action=c_pmaster_by_list",
+        method: "post",
+        data: Qs.stringify({
+            list
+        })
+    })
+}

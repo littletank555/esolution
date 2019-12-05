@@ -77,6 +77,13 @@
             <span class="label">客戶聯絡人</span>
             <a-input v-model="this.select_client_data.ccp" disabled="true"></a-input>
           </p>
+
+          <!-- <p class="item">
+            <span class="label">交標日期</span>
+            <a-date-picker format="DD/MM/YYYY" v-model="info.send_bid_date"></a-date-picker>
+          </p>-->
+        </a-col>
+        <a-col span="11" offset="1">
           <p class="item">
             <span class="label">工程標題</span>
             <a-input v-model="info.pt"></a-input>
@@ -94,15 +101,8 @@
             <!-- <a-input v-model="info.end_bid_time"></a-input> -->
             <a-time-picker style="width:100%" v-model="info.end_bid_time" format="HH:mm" />
           </p>
-          <p class="item">
-            <span class="label">交標日期</span>
-            <a-date-picker format="DD/MM/YYYY" v-model="info.send_bid_date"></a-date-picker>
-          </p>
-        </a-col>
-        <a-col span="11" offset="1">
-          <p class="item">
+          <!-- <p class="item">
             <span class="label">交標方法</span>
-            <!-- <a-input v-model="info.send_bid_way"></a-input> -->
             <a-select v-model="info.send_bid_way">
               <a-select-option
                 v-for="(item,i) in option"
@@ -131,7 +131,7 @@
           <p class="item">
             <span class="label">中標價錢</span>
             <a-input v-model="info.biding_price"></a-input>
-          </p>
+          </p>-->
           <p class="item">
             <span class="label">報價分判資料</span>
             <a-card style="width:100%">
@@ -172,7 +172,7 @@
               </a-button>
             </a-card>
           </p>
-          <p class="item">
+          <!-- <p class="item">
             <span class="label">中標分判名稱</span>
             <a-input v-model="info.sub_bid_name"></a-input>
           </p>
@@ -213,7 +213,7 @@
           <p class="item">
             <span class="label">投標書付款條款</span>
             <a-input v-model="info.regulation"></a-input>
-          </p>
+          </p>-->
         </a-col>
       </a-row>
 

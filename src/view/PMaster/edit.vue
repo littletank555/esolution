@@ -244,9 +244,9 @@ export default {
       this.info.start_date = getDate(this.info.start_date);
       this.info.end_date = getDate(this.info.end_date);
       this.subinfo = [];
-      let spn = this.info.sub_price_name.split("&");
-      let sp = this.info.sub_price.split("&");
-      let sd = this.info.spn_date.split("&");
+      let spn = this.info.sub_price_name.split("\n");
+      let sp = this.info.sub_price.split("\n");
+      let sd = this.info.spn_date.split("\n");
       for (let i = 1; i < spn.length + 1; i++) {
         this.subinfo.push({
           sub_price_name: spn[i - 1],
@@ -306,12 +306,13 @@ export default {
           this.info.spn_date = this.info.spn_date + element.spn_date;
         } else {
           this.info.sub_price_name =
-            this.info.sub_price_name + "&" + element.sub_price_name;
-          this.info.sub_price = this.info.sub_price + "&" + element.sub_price;
-          this.info.spn_date = this.info.spn_date + "&" + element.spn_date;
+            this.info.sub_price_name + "\n" + element.sub_price_name;
+          this.info.sub_price = this.info.sub_price + "\n" + element.sub_price;
+          this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
         }
       });
       this.onSubmiting = true;
+      console.log(this.info);
       update_pmaster(this.info)
         .then(res => {
           this.onSubmiting = false;

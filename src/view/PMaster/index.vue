@@ -85,10 +85,10 @@
     </p>
     <a-table :columns="columns" :dataSource="tableData" :loading="onTableLoading">
       <template slot="sub_name" slot-scope="record">
-        <span>{{record.sub_price_name.split("&")}}</span>
+        <span>{{record.sub_price_name.split("\n")}}</span>
       </template>
       <template slot="sub_price" slot-scope="record">
-        <span>{{record.sub_price.split("&")}}</span>
+        <span>{{record.sub_price.split("\n")}}</span>
       </template>
       <template slot="bid" slot-scope="record">
         <span v-show="record.is_bidding == 1">是</span>

@@ -36,3 +36,12 @@ export function delete_client_data(cid) {
         })
     })
 }
+export function c_client_data_by_list(list) {
+    return request({
+        url: "admin-index?page=client_data&action=c_client_data_by_list",
+        method: "post",
+        data: Qs.stringify({
+            list
+        })
+    })
+}

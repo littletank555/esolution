@@ -54,3 +54,13 @@ export function delete_client(cid) {
         })
     });
 }
+
+export function download_excel() {
+    return request({
+        url: "download-data",
+        method: "POST",
+        data: Qs.stringify({
+
+        })
+    });
+}

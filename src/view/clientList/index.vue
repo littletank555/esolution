@@ -3,6 +3,9 @@
     <p class="header">
       <a-input-search placeholder="search by client name" style="width: 200px" @search="onSearch" />
       <span>
+        <a :href="file_link" ref="download" hidden>下載</a>
+        <a-button type="primary" @click="downloadexcel">download</a-button>
+
         <a-button
           type="primary"
           @click="()=>{
@@ -55,7 +58,7 @@
 import newCLientList from "./newCLient.vue";
 import uploadList from "./uploadList.vue";
 import editClient from "./editClient.vue";
-import { get_clients, delete_client } from "@/api/client.js";
+import { get_clients, delete_client, download_excel } from "@/api/client.js";
 const columns = [
   {
     title: "客戶序號 (CSN) ClientSerial Number",
@@ -91,7 +94,8 @@ export default {
       tableData: [],
       dataSource: [],
       columns,
-      onLoading: false
+      onLoading: false,
+      file_link: ""
     };
   },
   created() {
@@ -109,6 +113,16 @@ export default {
       if (val == "") {
         this.tableData = this.dataSource;
       }
+    },
+    downloadexcel() {
+      download_excel()
+        .then(res => {
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {});
     },
     get_tableData() {
       this.onLoading = true;

@@ -18,6 +18,26 @@
         this.$refs.newClient.show(dataSource)
         }"
         >Add Client</a-button>
+        <!-- <a-dropdown @click="handleButtonClick">
+          <a-button style="margin-left: 8px" type="primary">
+            Upload / Download
+            <a-icon type="down" />
+          </a-button>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item
+              key="1"
+              @click="()=>{
+              this.$refs.uploadList.show()
+              }"
+            >
+              <a-icon type="file" />Add Record By Upload
+            </a-menu-item>
+            <a-menu-item key="2" @click="downloadexcel">
+              <a-icon type="file" />Download Record
+              <a :href="file_link" ref="download" hidden>下載</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>-->
       </span>
     </p>
     <a-table :columns="columns" :dataSource="tableData" :loading="onLoading">

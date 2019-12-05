@@ -159,8 +159,7 @@ export default {
           this.info[key] = "";
         }
       }
-      this.info.send_date = moment().format("YYYY-MM-DD");
-      console.log(this.info.send_date);
+      this.info.send_date = moment().format();
       this.pmaster_list = list;
       this.visible = true;
     },

@@ -128,7 +128,7 @@ export default {
       info: {
         sort: "",
         contractor_id: "",
-        send_date: "",
+        send_date: moment(),
         send_way: "",
         is_min_project: "",
         p_contact: "",
@@ -149,6 +149,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
+          console.log(res.list);
           this.contractor = res.list;
         })
         .catch(err => {});
@@ -159,8 +160,6 @@ export default {
           this.info[key] = "";
         }
       }
-      this.info.send_date = moment().format("YYYY-MM-DD");
-      console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;
     },

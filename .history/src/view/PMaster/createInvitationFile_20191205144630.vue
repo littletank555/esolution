@@ -37,10 +37,10 @@
           </template>
         </a-auto-complete>
       </p>
-      <!-- <p class="item">
+      <p class="item">
         <span class="label">發出時間</span>
         <a-date-picker v-model="info.send_date" format="DD/MM/YYYY"></a-date-picker>
-      </p>-->
+      </p>
       <p class="item">
         <span class="label">發出方式</span>
         <a-select v-model="info.send_way">
@@ -115,7 +115,6 @@
 <script>
 import { get_sub_contractor } from "@/api/pmaster.js";
 import { created_in_form } from "@/api/form.js";
-import moment from "moment";
 export default {
   data() {
     return {
@@ -149,6 +148,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
+          console.log(res.list);
           this.contractor = res.list;
         })
         .catch(err => {});
@@ -159,8 +159,6 @@ export default {
           this.info[key] = "";
         }
       }
-      this.info.send_date = moment().format("YYYY-MM-DD");
-      console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -212,23 +210,23 @@ export default {
     }
   },
   computed: {
-    // link: function() {
-    //   let link = "http://34.92.29.165:8080/export-eso-in/?";
-    //   for (const key in this.info) {
-    //     let date = "";
-    //     if (typeof this.info[key] == "object") {
-    //       date = this.info[key]._isValid
-    //         ? this.info[key].format("DD/MM/YYYY")
-    //         : "";
-    //       link += `&${key}=${date}`;
-    //       continue;
-    //     }
-    //     if (this.info.hasOwnProperty(key)) {
-    //       link += `&${key}=${this.info[key]}`;
-    //     }
-    //   }
-    //   return link;
-    // },
+    link: function() {
+      let link = "http://34.92.29.165:8080/export-eso-in/?";
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          link += `&${key}=${date}`;
+          continue;
+        }
+        if (this.info.hasOwnProperty(key)) {
+          link += `&${key}=${this.info[key]}`;
+        }
+      }
+      return link;
+    },
     enableExportBtn: function() {
       return this.info.contractor_id == "" || this.info.sort == "";
     }

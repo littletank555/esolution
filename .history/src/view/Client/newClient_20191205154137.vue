@@ -238,7 +238,7 @@ export default {
       this.sub_sign_price = this.info.sub_sign_price;
     },
     onChangeInv(e) {
-      this.info.inv_no = this.info.inv_no + e.data;
+      this.info.inv_no = e;
     },
     filterOption(input, option) {
       return (

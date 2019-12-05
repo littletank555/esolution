@@ -3,21 +3,47 @@
     <p class="header">
       <a-input-search placeholder="search by client name" style="width: 200px" @search="onSearch" />
       <span>
-        <a :href="file_link" ref="download" hidden>下載</a>
-        <a-button type="primary" @click="downloadexcel">Download Record</a-button>
+        <!-- <a :href="file_link" ref="download" hidden>下載</a>
+        <a-button type="primary" @click="downloadexcel">download</a-button>
 
         <a-button
           type="primary"
           @click="()=>{
         this.$refs.uploadList.show()
         }"
-        >Add Record By Upload</a-button>
+        >Add Client By Upload</a-button>-->
+
         <a-button
           type="primary"
           @click="()=>{
         this.$refs.newClient.show(dataSource)
         }"
         >Add Client</a-button>
+        <a-dropdown @click="handleButtonClick">
+          <a-button style="margin-left: 8px" type="primary">
+            Upload / Download
+            <a-icon type="down" />
+          </a-button>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item
+              key="1"
+              @click="()=>{
+                this.$refs.downloadexcel
+              }"
+            >
+              <a :href="file_link" ref="download" hidden>下載</a>
+              <a-icon type="file" />Add Record By Upload
+            </a-menu-item>
+            <a-menu-item
+              key="2"
+              @click="()=>{
+                this.$refs.newClient.show(tableData)
+              }"
+            >
+              <a-icon type="file" />Download Record
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </span>
     </p>
     <a-table :columns="columns" :dataSource="tableData" :loading="onLoading">

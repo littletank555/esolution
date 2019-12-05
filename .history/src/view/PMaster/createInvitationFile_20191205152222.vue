@@ -159,7 +159,7 @@ export default {
           this.info[key] = "";
         }
       }
-      this.info.send_date = moment().format("YYYY-MM-DD");
+      this.info.send_date = moment("YYYY-MM-DD").format();
       console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;

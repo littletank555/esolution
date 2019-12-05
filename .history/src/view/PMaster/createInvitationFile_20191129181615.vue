@@ -1,6 +1,34 @@
 <template>
   <a-modal v-model="visible" :footer="null" title="Create Invitation For Tender" width="800px">
     <div class="created_invitation">
+      <!-- <p class="item">
+        <span class="label">分包商</span>
+        <a-select v-model="info.contractor_id">
+          <a-select-option
+            v-for="(item,i) in contractor"
+            :key="i"
+            :value="item.sub_contractor_id"
+          >{{item.name}}</a-select-option>
+        </a-select>
+      </p>-->
+      <p class="item">
+        <span class="label">分包商</span>
+        <a-auto-complete
+          style="width: 100%"
+          @change="onContractorSel"
+          :filterOption="filterOption"
+          :value="info.contractor_id"
+          placeholder="input for select"
+        >
+          <template slot="dataSource">
+            <a-select-option
+              v-for="(item,i) in contractor"
+              :key="i"
+              :value="item.sub_contractor_id"
+            >{{item.name}}</a-select-option>
+          </template>
+        </a-auto-complete>
+      </p>
       <p class="item">
         <span class="label">排序</span>
         <a-auto-complete
@@ -20,27 +48,9 @@
         </a-auto-complete>
       </p>
       <p class="item">
-        <span class="label">分包商</span>
-        <a-auto-complete
-          style="width: 100%"
-          @change="onContractorSel"
-          :filterOption="filterOption"
-          :value="info.contractor_id"
-          placeholder="input for select"
-        >
-          <template slot="dataSource">
-            <a-select-option
-              v-for="(item,i) in contractor"
-              :key="i"
-              :value="item.sub_contractor_id"
-            >{{item.name}}</a-select-option>
-          </template>
-        </a-auto-complete>
-      </p>
-      <!-- <p class="item">
         <span class="label">發出時間</span>
         <a-date-picker v-model="info.send_date" format="DD/MM/YYYY"></a-date-picker>
-      </p>-->
+      </p>
       <p class="item">
         <span class="label">發出方式</span>
         <a-select v-model="info.send_way">
@@ -115,7 +125,6 @@
 <script>
 import { get_sub_contractor } from "@/api/pmaster.js";
 import { created_in_form } from "@/api/form.js";
-import moment from "moment";
 export default {
   data() {
     return {
@@ -149,6 +158,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
+          console.log(res.list);
           this.contractor = res.list;
         })
         .catch(err => {});
@@ -159,8 +169,6 @@ export default {
           this.info[key] = "";
         }
       }
-      this.info.send_date = moment().format("YYYY-MM-DD");
-      console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -212,23 +220,23 @@ export default {
     }
   },
   computed: {
-    // link: function() {
-    //   let link = "http://34.92.29.165:8080/export-eso-in/?";
-    //   for (const key in this.info) {
-    //     let date = "";
-    //     if (typeof this.info[key] == "object") {
-    //       date = this.info[key]._isValid
-    //         ? this.info[key].format("DD/MM/YYYY")
-    //         : "";
-    //       link += `&${key}=${date}`;
-    //       continue;
-    //     }
-    //     if (this.info.hasOwnProperty(key)) {
-    //       link += `&${key}=${this.info[key]}`;
-    //     }
-    //   }
-    //   return link;
-    // },
+    link: function() {
+      let link = "http://34.92.29.165:8080/export-eso-in/?";
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          link += `&${key}=${date}`;
+          continue;
+        }
+        if (this.info.hasOwnProperty(key)) {
+          link += `&${key}=${this.info[key]}`;
+        }
+      }
+      return link;
+    },
     enableExportBtn: function() {
       return this.info.contractor_id == "" || this.info.sort == "";
     }

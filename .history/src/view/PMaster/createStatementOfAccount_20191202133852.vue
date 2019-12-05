@@ -48,8 +48,7 @@
           <a-input v-model="record.invno"></a-input>
         </template>
         <template slot="date" slot-scope="text,record">
-          <!-- <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker> -->
-          <a-input v-model="record.date"></a-input>
+          <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker>
         </template>
         <template slot="jobdetail" slot-scope="text,record">
           <a-textarea v-model="record.jobdetail"></a-textarea>
@@ -199,9 +198,9 @@ export default {
         values[key] = this.info[key];
       }
 
-      // this.dataSource.forEach(element => {
-      //   element.date = element.date.format("D-MMM-YYYY");
-      // });
+      this.dataSource.forEach(element => {
+        element.date = element.date.format("D-MMM-YYYY");
+      });
       values.job = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
       this.created_form_loading = true;

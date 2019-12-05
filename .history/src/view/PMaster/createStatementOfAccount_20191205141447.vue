@@ -199,9 +199,9 @@ export default {
         values[key] = this.info[key];
       }
 
-      // this.dataSource.forEach(element => {
-      //   element.date = element.date.format("D-MMM-YYYY");
-      // });
+      this.dataSource.forEach(element => {
+        element.date = element.date.format("D-MMM-YYYY");
+      });
       values.job = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
       this.created_form_loading = true;

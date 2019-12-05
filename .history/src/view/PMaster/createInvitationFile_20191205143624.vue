@@ -37,6 +37,7 @@
           </template>
         </a-auto-complete>
       </p>
+
       <!-- <p class="item">
         <span class="label">發出時間</span>
         <a-date-picker v-model="info.send_date" format="DD/MM/YYYY"></a-date-picker>
@@ -44,7 +45,6 @@
       <p class="item">
         <span class="label">發出方式</span>
         <a-select v-model="info.send_way">
-          <a-select-option value=" ">-</a-select-option>
           <a-select-option value="電郵">電郵</a-select-option>
           <a-select-option value="傳真">傳真</a-select-option>
           <a-select-option value="傳真+電郵">傳真+電郵</a-select-option>
@@ -128,8 +128,8 @@ export default {
       info: {
         sort: "",
         contractor_id: "",
-        send_date: "",
-        send_way: "",
+        send_date: moment(),
+        send_way: "電郵",
         is_min_project: "",
         p_contact: "",
         p_contact_tell: "",
@@ -149,6 +149,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
+          console.log(res.list);
           this.contractor = res.list;
         })
         .catch(err => {});
@@ -159,8 +160,6 @@ export default {
           this.info[key] = "";
         }
       }
-      this.info.send_date = moment().format("YYYY-MM-DD");
-      console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -212,23 +211,23 @@ export default {
     }
   },
   computed: {
-    // link: function() {
-    //   let link = "http://34.92.29.165:8080/export-eso-in/?";
-    //   for (const key in this.info) {
-    //     let date = "";
-    //     if (typeof this.info[key] == "object") {
-    //       date = this.info[key]._isValid
-    //         ? this.info[key].format("DD/MM/YYYY")
-    //         : "";
-    //       link += `&${key}=${date}`;
-    //       continue;
-    //     }
-    //     if (this.info.hasOwnProperty(key)) {
-    //       link += `&${key}=${this.info[key]}`;
-    //     }
-    //   }
-    //   return link;
-    // },
+    link: function() {
+      let link = "http://34.92.29.165:8080/export-eso-in/?";
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          link += `&${key}=${date}`;
+          continue;
+        }
+        if (this.info.hasOwnProperty(key)) {
+          link += `&${key}=${this.info[key]}`;
+        }
+      }
+      return link;
+    },
     enableExportBtn: function() {
       return this.info.contractor_id == "" || this.info.sort == "";
     }

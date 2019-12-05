@@ -2,19 +2,17 @@
   <div>
     <p class="search-container">
       <a-input-search placeholder="Search by name" style="width: 200px" @search="search" />
-      <span>
-        <a-button
-          type="primary"
-          @click="
+      <a-button
+        type="primary"
+        @click="
           () => {
             this.$refs.uploadfile.showDrawer(this.pmaster_id);
           }
         "
-        >Upload File</a-button>
-        <router-link to="/home/p_master">
-          <a-button type="primary">Back to P-Master</a-button>
-        </router-link>
-      </span>
+      >Upload File</a-button>
+      <router-link to="p_master">
+        <a-button type="primary">Back to P-Master</a-button>
+      </router-link>
     </p>
     <a-table :columns="columns" :dataSource="tableData" :loading="onTableLoading">
       <template slot="download" slot-scope="record">

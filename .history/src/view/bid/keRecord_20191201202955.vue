@@ -2,9 +2,6 @@
   <div>
     <p class="header">
       <a-input-search placeholder="search by client name" style="width: 200px" @search="onSearch" />
-      <router-link to="/home/bid">
-        <a-button type="primary">Back to 中</a-button>
-      </router-link>
     </p>
     <a-table
       :columns="columns"

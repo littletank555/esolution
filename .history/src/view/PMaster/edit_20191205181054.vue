@@ -1,89 +1,62 @@
 <template>
-  <a-drawer
-    title="Add PMaster Record"
-    placement="right"
-    :closable="false"
-    @close="onClose"
-    :visible="visible"
+  <a-modal
+    title="PMaster Info"
+    :footer="null"
+    v-model="visible"
+    :afterClose="onCloseModal"
     width="1200px"
   >
     <div class="new-pmaster-modal">
       <a-row>
         <a-col span="11">
           <p class="item">
-            <span class="label">工程地點</span>
-            <a-auto-complete
-              style="width: 100%"
-              @change="onlsnSelect"
-              :filterOption="filterOption"
-              :value="info.pl"
-              placeholder="input for select"
-            >
-              <template slot="dataSource">
-                <a-select-option
-                  v-for="(item,i) in client_data_list"
-                  :key="i"
-                  :value="item.lc"
-                >{{item.lc}}</a-select-option>
-              </template>
-            </a-auto-complete>
-          </p>
-          <p class="item">
-            <span class="label">客戶編碼</span>
-            <a-input v-model="this.select_client_data.csn" disabled="true" />
+            <span class="label">工程單編號</span>
+            <a-input disabled="true" v-model="info.p_no"></a-input>
           </p>
           <p class="item">
             <span class="label">排序</span>
-            <a-input v-model="info.sort"></a-input>
-          </p>
-          <p class="item">
-            <span class="label">工程標號</span>
-            <a-input v-model="project_no"></a-input>
+            <a-input v-model="info.sort" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">工程地址短寫</span>
-            <a-input v-model="this.select_client_data.project_area" disabled="true"></a-input>
+            <a-input v-model="info.pshort" disabled="true"></a-input>
           </p>
-
+          <p class="item">
+            <span class="label">工程地點</span>
+            <a-input v-model="info.pl" disabled="true"></a-input>
+          </p>
           <p class="item">
             <span class="label">客戶</span>
-            <a-input v-model="this.select_client_data.ccn" disabled="true"></a-input>
+            <a-input v-model="this.info.ccn" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">負責同事</span>
-            <a-input v-model="this.select_client_data.sales_code" disabled="true"></a-input>
+            <a-input v-model="this.info.sales_code" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">SITE location</span>
-            <a-input v-model="this.select_client_data.jca" disabled="true"></a-input>
+            <a-input v-model="this.info.jca" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">BILL TO</span>
-            <a-input v-model="this.select_client_data.bt" disabled="true"></a-input>
+            <a-input v-model="this.info.bt" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">客戶聯絡電話</span>
-            <a-input v-model="this.select_client_data.ct" disabled="true"></a-input>
+            <a-input v-model="this.info.ct" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">客戶傳真號碼</span>
-            <a-input v-model="this.select_client_data.cf" disabled="true"></a-input>
+            <a-input v-model="this.info.cf" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">客戶電郵</span>
-            <a-input v-model="this.select_client_data.ce" disabled="true"></a-input>
+            <a-input v-model="this.info.ce" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">客戶聯絡人</span>
-            <a-input v-model="this.select_client_data.ccp" disabled="true"></a-input>
+            <a-input v-model="this.info.ccp" disabled="true"></a-input>
           </p>
-
-          <!-- <p class="item">
-            <span class="label">交標日期</span>
-            <a-date-picker format="DD/MM/YYYY" v-model="info.send_bid_date"></a-date-picker>
-          </p>-->
-        </a-col>
-        <a-col span="11" offset="1">
           <p class="item">
             <span class="label">工程標題</span>
             <a-input v-model="info.pt"></a-input>
@@ -99,10 +72,18 @@
           <p class="item">
             <span class="label">截標時間</span>
             <!-- <a-input v-model="info.end_bid_time"></a-input> -->
-            <a-time-picker style="width:100%" v-model="info.end_bid_time" format="HH:mm" />
+            <a-time-picker style="width:100%" v-model="end_bid_time" format="HH:mm" />
           </p>
-          <!-- <p class="item">
+          <p class="item">
+            <span class="label">交標日期</span>
+            <a-date-picker format="DD/MM/YYYY" v-model="info.send_bid_date"></a-date-picker>
+          </p>
+        </a-col>
+
+        <a-col span="11" offset="1">
+          <p class="item">
             <span class="label">交標方法</span>
+            <!-- <a-input v-model="info.send_bid_way"></a-input> -->
             <a-select v-model="info.send_bid_way">
               <a-select-option
                 v-for="(item,i) in option"
@@ -118,7 +99,7 @@
           <p class="item">
             <span class="label">是否中標</span>
             <span style="width:100%;text-align:left">
-              <a-radio-group v-model="info.is_bidding">
+              <a-radio-group v-model="info.is_bidding" @change="onBid">
                 <a-radio :value="'1'">是</a-radio>
                 <a-radio :value="'0'">否</a-radio>
               </a-radio-group>
@@ -131,7 +112,7 @@
           <p class="item">
             <span class="label">中標價錢</span>
             <a-input v-model="info.biding_price"></a-input>
-          </p>-->
+          </p>
           <p class="item">
             <span class="label">報價分判資料</span>
             <a-card style="width:100%">
@@ -172,7 +153,7 @@
               </a-button>
             </a-card>
           </p>
-          <!-- <p class="item">
+          <p class="item">
             <span class="label">中標分判名稱</span>
             <a-input v-model="info.sub_bid_name"></a-input>
           </p>
@@ -213,57 +194,29 @@
           <p class="item">
             <span class="label">投標書付款條款</span>
             <a-input v-model="info.regulation"></a-input>
-          </p>-->
+          </p>
         </a-col>
       </a-row>
 
       <p style="text-align:right">
-        <a-button type="primary" :loading="onSubmiting" @click="onSubmit">Submit</a-button>
+        <a-button type="primary" :loading="onSubmiting" @click="onSubmint">Submit</a-button>
       </p>
     </div>
-  </a-drawer>
+  </a-modal>
 </template>
 <script>
 import moment from "moment";
-import { get_client_data } from "@/api/client_data";
-import { new_pmaster } from "@/api/pmaster";
+import { getDate } from "@/utils/validate.js";
+import { update_pmaster } from "@/api/pmaster.js";
 export default {
   data() {
     return {
       visible: false,
       onSubmiting: false,
-      info: {
-        sort: "",
-        p_no: "",
-        pl: "",
-        pt: "",
-        pshort: "",
-        in_price_date: "",
-        end_bid_date: "",
-        end_bid_time: "",
-        send_bid_date: "",
-        send_bid_way: "",
-        out_price: "",
-        is_bidding: "",
-        re_bidding_date: "",
-        biding_price: "",
-        sub_price_name: "",
-        sub_price: "",
-        spn_date: "",
-        sub_bid_name: "",
-        sub_re_bid_date: "",
-        sub_bid_price: "",
-        sub_bid_number: "",
-        start_date: "",
-        end_date: "",
-        min_project: "",
-        declare_number: "",
-        regulation: ""
-      },
-      client_data_list: [],
-      select_client_data: {}, //選中的工程單對應的client data
-      itemkey: 0,
+      info: {},
       subinfo: [],
+      itemkey: 0,
+      end_bid_time: null,
       option: [
         { value: "", label: "-" },
         { value: "不報不需回", label: "不報不需回" },
@@ -279,59 +232,49 @@ export default {
       ]
     };
   },
-  created() {
-    this.get_client();
-  },
-  computed: {
-    project_no: function() {
-      let no_string =
-        "19-" +
-        this.select_client_data.csn +
-        "-" +
-        this.info.sort +
-        this.select_client_data.sales_code;
-      if (no_string.indexOf("undefined") > -1) {
-        return "";
-      }
-      return no_string;
-    }
-  },
+  created() {},
   methods: {
-    show() {
-      this.select_client_data = {};
-      this.subinfo = [];
-      for (const key in this.info) {
-        if (key != "sort") {
-          if (this.info.hasOwnProperty(key)) {
-            this.info[key] = "";
-          }
-        }
-      }
-      this.visible = true;
-      this.onSubmiting = false;
-    },
     moment,
+    show(info) {
+      // debugger;
+      this.info = info;
+      this.info.in_price_date = getDate(this.info.in_price_date);
+      this.info.end_bid_date = getDate(this.info.end_bid_date);
+      this.info.send_bid_date = getDate(this.info.send_bid_date);
+      this.info.re_bidding_date = getDate(this.info.re_bidding_date);
+      this.info.sub_re_bid_date = getDate(this.info.sub_re_bid_date);
+      this.info.start_date = getDate(this.info.start_date);
+      this.info.end_date = getDate(this.info.end_date);
+      this.end_bid_time = moment(this.info.end_bid_time, "hh:mm");
+      this.subinfo = [];
+      let spn = this.info.sub_price_name.split("\n");
+      let sp = this.info.sub_price.split("\n");
+      let sd = this.info.spn_date.split("\n");
+      for (let i = 1; i < spn.length; i++) {
+        this.subinfo.push({
+          sub_price_name: spn[i - 1],
+          sub_price: sp[i - 1],
+          spn_date: sd[i - 1],
+          itemkey: i
+        });
+      }
+      this.itemkey = spn.length;
+      this.visible = true;
+    },
+    onBid(e) {
+      if (e.target.value == 1) {
+        this.info.sub_bid_number = "SA" + this.info.sort;
+      } else {
+        this.info.sub_bid_number = "";
+      }
+    },
     onClose() {
       this.visible = false;
     },
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text
-          .toUpperCase()
-          .indexOf(input.toUpperCase()) >= 0
-      );
+    onCloseModal() {
+      this.$emit("done", {});
     },
-    onlsnSelect(key) {
-      this.client_data_list.some(item => {
-        if (item.lc == key) {
-          this.select_client_data = item;
-          // this.info.client_data_id = item.client_data_id;
-          this.info.pl = item.lc;
-          this.info.pshort = item.project_area;
-          return true;
-        }
-      });
-    },
+    onSelect(e) {},
     addSubInfo() {
       this.itemkey++;
       this.subinfo.push({
@@ -344,9 +287,11 @@ export default {
     onDelete(e) {
       this.subinfo = this.subinfo.filter(item => item.itemkey != e.itemkey);
     },
-    onSubmit() {
+    onSubmint() {
+      this.info.end_bid_time = this.end_bid_time;
       for (const key in this.info) {
         if (this.info.hasOwnProperty(key)) {
+          this.info[key];
           if (typeof this.info[key] == "object") {
             if (key == "end_bid_time") {
               this.info[key] = this.info[key]._isValid
@@ -360,56 +305,40 @@ export default {
           }
         }
       }
-      if (this.info.lc == "") {
-        this.$message.error("請選擇工程地點");
-        return;
-      }
-      this.info.p_no = this.project_no;
+      this.info.spn_date = "";
+      this.info.sub_price_name = "";
+      this.info.sub_price = "";
+      this.subinfo.forEach((element, i) => {
+        if (i == 0) {
+          this.info.sub_price_name =
+            this.info.sub_price_name + element.sub_price_name;
+          this.info.sub_price = this.info.sub_price + element.sub_price;
+          this.info.spn_date = this.info.spn_date + element.spn_date;
+        } else {
+          this.info.sub_price_name =
+            this.info.sub_price_name + "\n" + element.sub_price_name;
+          this.info.sub_price = this.info.sub_price + "\n" + element.sub_price;
+          this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
+        }
+      });
       this.onSubmiting = true;
-      if (this.itemkey != 0) {
-        this.subinfo.forEach((element, i) => {
-          if (i == 0) {
-            this.info.sub_price_name =
-              this.info.sub_price_name + element.sub_price_name;
-            this.info.sub_price = this.info.sub_price + element.sub_price;
-            this.info.spn_date = this.info.spn_date + element.spn_date;
-          } else {
-            this.info.sub_price_name =
-              this.info.sub_price_name + "\n" + element.sub_price_name;
-            this.info.sub_price =
-              this.info.sub_price + "\n" + element.sub_price;
-            this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
-          }
-        });
-      } else {
-        this.info.sub_price_name = "";
-        this.info.sub_price = "";
-        this.info.spn_date = "";
-      }
-      console.log(this.info);
-      new_pmaster(this.info)
+      update_pmaster(this.info)
         .then(res => {
-          console.log(res.status);
+          this.onSubmiting = false;
           if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
+            this.$message.success("更新成功");
             this.$emit("done", {});
+            this.visible = false;
           } else {
-            this.$message.error("添加失敗");
+            this.$message.error("更新失敗");
           }
         })
         .catch(err => {
-          this.$message.error("添加失敗");
+          this.onSubmiting = false;
         });
-    },
-    get_client() {
-      get_client_data()
-        .then(res => {
-          this.client_data_list = res.list;
-        })
-        .catch(err => {});
     }
-  }
+  },
+  watch: {}
 };
 </script>
 <style lang="scss">
@@ -417,7 +346,7 @@ export default {
   .item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+
     .label {
       min-width: 160px;
     }

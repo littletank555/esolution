@@ -386,7 +386,6 @@ export default {
         this.info.sub_price = "";
         this.info.spn_date = "";
       }
-      console.log(this.info);
       new_pmaster(this.info)
         .then(res => {
           console.log(res.status);

@@ -366,27 +366,19 @@ export default {
       }
       this.info.p_no = this.project_no;
       this.onSubmiting = true;
-      if (this.itemkey != 0) {
-        this.subinfo.forEach((element, i) => {
-          if (i == 0) {
-            this.info.sub_price_name =
-              this.info.sub_price_name + element.sub_price_name;
-            this.info.sub_price = this.info.sub_price + element.sub_price;
-            this.info.spn_date = this.info.spn_date + element.spn_date;
-          } else {
-            this.info.sub_price_name =
-              this.info.sub_price_name + "\n" + element.sub_price_name;
-            this.info.sub_price =
-              this.info.sub_price + "\n" + element.sub_price;
-            this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
-          }
-        });
-      } else {
-        this.info.sub_price_name = "";
-        this.info.sub_price = "";
-        this.info.spn_date = "";
-      }
-      console.log(this.info);
+      this.subinfo.forEach((element, i) => {
+        if (i == 0) {
+          this.info.sub_price_name =
+            this.info.sub_price_name + element.sub_price_name;
+          this.info.sub_price = this.info.sub_price + element.sub_price;
+          this.info.spn_date = this.info.spn_date + element.spn_date;
+        } else {
+          this.info.sub_price_name =
+            this.info.sub_price_name + "&" + element.sub_price_name;
+          this.info.sub_price = this.info.sub_price + "&" + element.sub_price;
+          this.info.spn_date = this.info.spn_date + "&" + element.spn_date;
+        }
+      });
       new_pmaster(this.info)
         .then(res => {
           console.log(res.status);

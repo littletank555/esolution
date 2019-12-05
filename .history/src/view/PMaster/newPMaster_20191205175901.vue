@@ -387,20 +387,20 @@ export default {
         this.info.spn_date = "";
       }
       console.log(this.info);
-      new_pmaster(this.info)
-        .then(res => {
-          console.log(res.status);
-          if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
-            this.$emit("done", {});
-          } else {
-            this.$message.error("添加失敗");
-          }
-        })
-        .catch(err => {
-          this.$message.error("添加失敗");
-        });
+      // new_pmaster(this.info)
+      //   .then(res => {
+      //     console.log(res.status);
+      //     if (res.status) {
+      //       this.$message.success("成功添加");
+      //       this.visible = false;
+      //       this.$emit("done", {});
+      //     } else {
+      //       this.$message.error("添加失敗");
+      //     }
+      //   })
+      //   .catch(err => {
+      //     this.$message.error("添加失敗");
+      //   });
     },
     get_client() {
       get_client_data()

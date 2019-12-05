@@ -366,7 +366,7 @@ export default {
       }
       this.info.p_no = this.project_no;
       this.onSubmiting = true;
-      if (this.itemkey != 0) {
+      if (!this.itemkey) {
         this.subinfo.forEach((element, i) => {
           if (i == 0) {
             this.info.sub_price_name =
@@ -381,12 +381,7 @@ export default {
             this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
           }
         });
-      } else {
-        this.info.sub_price_name = "";
-        this.info.sub_price = "";
-        this.info.spn_date = "";
       }
-      console.log(this.info);
       new_pmaster(this.info)
         .then(res => {
           console.log(res.status);

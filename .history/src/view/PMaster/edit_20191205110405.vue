@@ -258,7 +258,7 @@ export default {
           itemkey: i
         });
       }
-      this.itemkey = spn.length;
+      this.itemkey = spn.length - 1;
       this.visible = true;
     },
     onBid(e) {

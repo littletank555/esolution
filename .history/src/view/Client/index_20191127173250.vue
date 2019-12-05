@@ -87,7 +87,6 @@ const columns = [
   },
   { title: "ES收款金額", dataIndex: "receipt_price", width: 400 },
   { title: "客戶尚未支付餘額", dataIndex: "client_no_pay", width: 400 },
-  { title: "分水嶺", dataIndex: "watershed", width: 200 },
   { title: "中標分判名稱", dataIndex: "sub_bid_name", width: 400 },
   { title: "分判中標價錢", dataIndex: "sub_bid_price", width: 400 },
   { title: "分判上單日期", dataIndex: "sub_sign_date", width: 400 },

@@ -77,7 +77,7 @@
         <a-col span="11">
           <p class="item">
             <span class="label">分水嶺</span>
-            <a-input v-model="info.watershed"></a-input>
+            <a-input v-model="info.watershed" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">中標分判名稱</span>

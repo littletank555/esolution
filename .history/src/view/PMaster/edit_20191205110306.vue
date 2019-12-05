@@ -216,7 +216,7 @@ export default {
       info: {},
       subinfo: [],
       itemkey: 0,
-      end_bid_time: null,
+      end_bid_time: "11:59",
       option: [
         { value: "", label: "-" },
         { value: "不報不需回", label: "不報不需回" },
@@ -237,6 +237,7 @@ export default {
     moment,
     show(info) {
       // debugger;
+
       this.info = info;
       this.info.in_price_date = getDate(this.info.in_price_date);
       this.info.end_bid_date = getDate(this.info.end_bid_date);
@@ -246,6 +247,7 @@ export default {
       this.info.start_date = getDate(this.info.start_date);
       this.info.end_date = getDate(this.info.end_date);
       this.end_bid_time = moment(this.info.end_bid_time, "hh:mm");
+      console.log(this.info);
       this.subinfo = [];
       let spn = this.info.sub_price_name.split("\n");
       let sp = this.info.sub_price.split("\n");
@@ -258,7 +260,7 @@ export default {
           itemkey: i
         });
       }
-      this.itemkey = spn.length;
+      this.itemkey = spn.length - 1;
       this.visible = true;
     },
     onBid(e) {
@@ -322,6 +324,7 @@ export default {
         }
       });
       this.onSubmiting = true;
+      console.log(this.info);
       update_pmaster(this.info)
         .then(res => {
           this.onSubmiting = false;

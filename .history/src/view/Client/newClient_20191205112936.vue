@@ -1,14 +1,32 @@
 <template>
-  <a-modal title="KE" :footer="null" v-model="visible" width="1200px">
-    <div class="new-ke-modal">
+  <a-drawer
+    title="Add Client"
+    placement="right"
+    :closable="false"
+    @close="onClose"
+    :visible="visible"
+    width="1200px"
+  >
+    <div class="new_client_container">
       <a-row>
         <a-col span="11">
           <p class="item">
-            <span class="label">选择排序序號/Select Sort</span>
-            <!-- <a-select v-model="info.sort" @change="onClientSelect">
-          <a-select-option v-for="(item,i) in ke_list" :key="i" :value="item.sort">{{item.sort}}</a-select-option>
-            </a-select>-->
-            <a-input v-model="info.sort" disabled="true"></a-input>
+            <span class="label">排序序號</span>
+            <a-auto-complete
+              style="width: 100%"
+              @change="onClientSelect"
+              :value="info.sort"
+              :filterOption="filterOption"
+              placeholder="input for select"
+            >
+              <template slot="dataSource">
+                <a-select-option
+                  v-for="(item,i) in this.ke_list"
+                  :key="i"
+                  :value="item.sort"
+                >{{item.sort+'/'+item.ccn+'/'+item.pl}}</a-select-option>
+              </template>
+            </a-auto-complete>
           </p>
           <p class="item">
             <span class="label">中標資料編號</span>
@@ -16,23 +34,23 @@
           </p>
           <p class="item">
             <span class="label">負責同事</span>
-            <a-input v-model="info.sales_code" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.sales_code" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">工程單編號</span>
-            <a-input v-model="info.p_no" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.p_no" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">客戶</span>
-            <a-input v-model="info.ccn" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.ccn" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">工程地點</span>
-            <a-input v-model="info.pl" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.pl" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">工程金額</span>
-            <a-input v-model="info.biding_price" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.biding_price" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">狀態</span>
@@ -49,13 +67,12 @@
           </p>
           <p class="item">
             <span class="label">百分比注釋</span>
-            <a-input v-model="info.percent" @change="onChangePercent" addonAfter="%"></a-input>
+            <a-input v-model="info.percent" addonAfter="%" @change="onChangePercent"></a-input>
           </p>
           <p class="item">
             <span class="label">上單金額</span>
             <a-input v-model="sign_price"></a-input>
           </p>
-
           <p class="item">
             <span class="label">收款日期</span>
             <!-- <a-input v-model="info.receipt_date"></a-input> -->
@@ -81,11 +98,11 @@
           </p>
           <p class="item">
             <span class="label">中標分判名稱</span>
-            <a-input v-model="info.sub_bid_name" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.sub_bid_name" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">分判中標價錢</span>
-            <a-input v-model="info.sub_bid_price" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.sub_bid_price" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">分判上單日期</span>
@@ -101,8 +118,8 @@
             <a-input v-model="sub_sign_price"></a-input>
           </p>
           <p class="item">
-            <span class="label">百分之注釋</span>
-            <a-input v-model="info.sub_percent" @change="onChangeSubPercent" addonAfter="%"></a-input>
+            <span class="label">百分比注釋</span>
+            <a-input v-model="info.sub_percent" @change="onChangeSubPercent" addonAfter="%" />
           </p>
           <p class="item">
             <span class="label">分判收款日期</span>
@@ -131,31 +148,55 @@
           </p>
           <p class="item">
             <span class="label">分判中標日期</span>
-            <a-input v-model="info.sub_re_bid_date" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.sub_re_bid_date" disabled="true"></a-input>
           </p>
           <p class="item">
             <span class="label">分判中標通知書編號</span>
-            <a-input v-model="info.sub_bid_number" disabled="true"></a-input>
+            <a-input v-model="select_pmaster_data.sub_bid_number" disabled="true"></a-input>
           </p>
         </a-col>
       </a-row>
+
       <p style="text-align:right">
-        <a-button type="primary" :loading="onSubmiting" @click="onSubmint">Submit</a-button>
+        <a-button type="primary" :loading="onSubmiting" @click="onSubmit">Submit</a-button>
       </p>
     </div>
-  </a-modal>
+  </a-drawer>
 </template>
-
 <script>
+import { get_pmasters } from "@/api/pmaster";
+import { new_ke } from "@/api/ke.js";
 import moment from "moment";
-import { getDate } from "@/utils/validate.js";
-import { update_ke } from "@/api/ke.js";
 export default {
   data() {
     return {
+      info: {
+        sort: "",
+        ke_num: "",
+        status: "",
+        inv_no: "",
+        sign_date: "",
+        percent: 100,
+        sign_price: 0,
+        receipt_date: "",
+        receipt_way: "",
+        receipt_price: 0,
+        client_no_pay: 0,
+        sub_sign_date: "",
+        sub_inv_no: "",
+        sub_sign_price: 0,
+        sub_percent: 100,
+        sub_receipt_date: "",
+        pay_way: "",
+        discount: 0,
+        pay_price: 0,
+        pay_record_no: "",
+        no_pay: 0
+      },
+      ke_list: [],
       visible: false,
       onSubmiting: false,
-      info: {},
+      select_pmaster_data: {}, //选择sort
       receipt_price: 0,
       sign_price: 0,
       sub_sign_price: 0,
@@ -163,37 +204,73 @@ export default {
       pay_price: 0
     };
   },
+  created() {
+    this.get_pmaster_data();
+  },
   methods: {
-    show(info) {
-      this.info = info;
-      this.info.sign_date = getDate(this.info.sign_date);
-      this.info.receipt_date = getDate(this.info.receipt_date);
-      this.info.sub_sign_date = getDate(this.info.sub_sign_date);
-      this.info.sub_receipt_date = getDate(this.info.sub_receipt_date);
-      //   this.info.sub_re_bid_date = getDate(this.info.sub_re_bid_date);
-      this.sign_price = info.sign_price;
-      this.sub_sign_price = info.sub_sign_price;
+    show() {
+      // this.ke_list = {};
+      // for (const key in this.info) {
+      //   if (this.info.hasOwnProperty(key)) {
+      //     this.info[key] = "";
+      //   }
+      // }
+      // for (const key in this.select_pmaster_data) {
+      //   if (this.select_pmaster_data.hasOwnProperty(key)) {
+      //     this.select_pmaster_data[key] = "";
+      //   }
+      // }
       this.visible = true;
+      this.onSubmiting = false;
     },
     onClose() {
       this.visible = false;
     },
-    onSelect(e) {
-      console.log(e);
-    },
     onChangePercent(val) {
-      this.info.sign_price = (this.info.biding_price * this.info.percent) / 100;
+      this.info.sign_price =
+        (this.select_pmaster_data.biding_price * this.info.percent) / 100;
       this.sign_price = this.info.sign_price;
     },
     onChangeSubPercent(val) {
       this.info.sub_sign_price =
-        (this.info.sub_bid_price * this.info.sub_percent) / 100;
+        (this.select_pmaster_data.sub_bid_price * this.info.sub_percent) / 100;
       this.sub_sign_price = this.info.sub_sign_price;
     },
-    onSubmint() {
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toUpperCase()
+          .indexOf(input.toUpperCase()) >= 0
+      );
+    },
+    onClientSelect(e) {
+      this.get_pmaster_data();
+      this.ke_list.some(item => {
+        if (item.sort == e) {
+          this.select_pmaster_data = item;
+          this.info.sort = item.sort;
+          this.info.inv_no = "INV-" + item.sort;
+          this.info.ke_num = this.info.sort;
+          this.info.sign_price = (item.biding_price * this.info.percent) / 100;
+          this.sign_price = (item.biding_price * this.info.percent) / 100;
+          this.info.sub_sign_price =
+            (item.sub_bid_price * this.info.sub_percent) / 100;
+          this.sub_sign_price =
+            (item.sub_bid_price * this.info.sub_percent) / 100;
+          return true;
+        }
+      });
+    },
+    get_pmaster_data() {
+      get_pmasters()
+        .then(res => {
+          this.ke_list = res.list;
+        })
+        .catch(err => {});
+    },
+    onSubmit() {
       for (const key in this.info) {
         if (this.info.hasOwnProperty(key)) {
-          this.info[key];
           if (typeof this.info[key] == "object") {
             this.info[key] = this.info[key]._isValid
               ? this.info[key].format("YYYY-MM-DD")
@@ -201,21 +278,27 @@ export default {
           }
         }
       }
-      console.log(this.info);
+      if (this.info.sort == "") {
+        this.$message.error("請選擇中標資料編號");
+        return;
+      }
       this.onSubmiting = true;
-      update_ke(this.info)
+      new_ke(this.info)
         .then(res => {
-          this.onSubmiting = false;
-          if (res.status) {
-            this.$message.success("更新成功");
-            this.$emit("done", {});
-            this.visible = false;
+          if (res.sta == false) {
+            this.$message.error("中標資料編號已存在");
           } else {
-            this.$message.error("更新失敗");
+            if (res.status) {
+              this.$message.success("成功添加");
+              this.visible = false;
+              this.$emit("done", {});
+            } else {
+              this.$message.error("添加失敗");
+            }
           }
         })
         .catch(err => {
-          this.onSubmiting = false;
+          this.$message.error("添加失敗");
         });
     }
   },
@@ -256,9 +339,8 @@ export default {
   }
 };
 </script>
-
 <style lang="scss">
-.new-ke-modal {
+.new_client_container {
   .item {
     display: flex;
     align-items: center;

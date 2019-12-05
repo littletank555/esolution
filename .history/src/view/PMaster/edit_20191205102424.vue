@@ -72,7 +72,11 @@
           <p class="item">
             <span class="label">截標時間</span>
             <!-- <a-input v-model="info.end_bid_time"></a-input> -->
-            <a-time-picker style="width:100%" v-model="end_bid_time" format="HH:mm" />
+            <a-time-picker
+              style="width:100%"
+              :defaultValue="moment(end_bid_time, 'HH:mm')"
+              format="HH:mm"
+            />
           </p>
           <p class="item">
             <span class="label">交標日期</span>
@@ -216,7 +220,7 @@ export default {
       info: {},
       subinfo: [],
       itemkey: 0,
-      end_bid_time: null,
+      end_bid_time: "",
       option: [
         { value: "", label: "-" },
         { value: "不報不需回", label: "不報不需回" },
@@ -237,6 +241,7 @@ export default {
     moment,
     show(info) {
       // debugger;
+      console.log(info);
       this.info = info;
       this.info.in_price_date = getDate(this.info.in_price_date);
       this.info.end_bid_date = getDate(this.info.end_bid_date);
@@ -245,7 +250,7 @@ export default {
       this.info.sub_re_bid_date = getDate(this.info.sub_re_bid_date);
       this.info.start_date = getDate(this.info.start_date);
       this.info.end_date = getDate(this.info.end_date);
-      this.end_bid_time = moment(this.info.end_bid_time, "hh:mm");
+      this.end_bid_time = this.info.end_bid_time;
       this.subinfo = [];
       let spn = this.info.sub_price_name.split("\n");
       let sp = this.info.sub_price.split("\n");
@@ -258,7 +263,7 @@ export default {
           itemkey: i
         });
       }
-      this.itemkey = spn.length;
+      this.itemkey = spn.length - 1;
       this.visible = true;
     },
     onBid(e) {
@@ -288,20 +293,13 @@ export default {
       this.subinfo = this.subinfo.filter(item => item.itemkey != e.itemkey);
     },
     onSubmint() {
-      this.info.end_bid_time = this.end_bid_time;
       for (const key in this.info) {
         if (this.info.hasOwnProperty(key)) {
           this.info[key];
           if (typeof this.info[key] == "object") {
-            if (key == "end_bid_time") {
-              this.info[key] = this.info[key]._isValid
-                ? this.info[key].format("HH:mm")
-                : "";
-            } else {
-              this.info[key] = this.info[key]._isValid
-                ? this.info[key].format("YYYY-MM-DD")
-                : "";
-            }
+            this.info[key] = this.info[key]._isValid
+              ? this.info[key].format("YYYY-MM-DD")
+              : "";
           }
         }
       }
@@ -321,7 +319,9 @@ export default {
           this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
         }
       });
+      this.info.end_bid_time = this.end_bid_time;
       this.onSubmiting = true;
+      console.log(this.info);
       update_pmaster(this.info)
         .then(res => {
           this.onSubmiting = false;

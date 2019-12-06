@@ -33,7 +33,6 @@
       <span>客戶組別</span>
       <a-auto-complete
         :dataSource="client_group"
-        :value="client.c_group"
         style="width: 100%"
         placeholder="input for select"
         :filterOption="filterOption"
@@ -81,6 +80,13 @@ export default {
         if (this.client.hasOwnProperty(key)) {
           this.client[key] = "";
         }
+        this.client_group = [];
+        let list = new Set();
+        group.forEach(item => {
+          if (!item.c_group == "") {
+            list.add(item.c_group);
+          }
+        });
       }
     },
     onClose() {

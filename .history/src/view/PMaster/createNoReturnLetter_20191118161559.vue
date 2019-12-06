@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="visible" :footer="null" title="Declined Return Letter" width="1000px">
+  <a-modal v-model="visible" :footer="null" title="No Return Letter" width="1000px">
     <div class="created_invitation">
       <p class="item">
         <span class="label">排序</span>

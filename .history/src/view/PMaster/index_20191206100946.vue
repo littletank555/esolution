@@ -90,6 +90,10 @@
       <template slot="sub_price" slot-scope="record">
         <span>{{record.sub_price.split("\n")}}</span>
       </template>
+      <template slot="bid" slot-scope="record">
+        <span v-show="record.is_bidding == 1">是</span>
+        <span v-show="record.is_bidding == 0">否</span>
+      </template>
       <template slot="detail" slot-scope="record">
         <a @click="()=>{
           $refs.edit.show(record)
@@ -163,11 +167,9 @@ const columns = [
   { title: "工程標題", dataIndex: "pt", key: "address", width: "400px" },
   {
     title: "是否中標",
-    width: "150px",
-    dataIndex: "is_bidding",
-    filter: [],
-    filterMultiple: true,
-    onFilter: (value, record) => record.is_bidding.indexOf(value) === 0
+    width: "100px",
+    scopedSlots: { customRender: "bid" },
+    filters: [{ text: "是", value: "是" }, { text: "否", value: "否" }]
   },
   { title: "報價分判名稱", scopedSlots: { customRender: "sub_name" } },
   { title: "分判報價金額", scopedSlots: { customRender: "sub_price" } },
@@ -205,28 +207,10 @@ export default {
       this.onTableLoading = true;
       get_pmasters()
         .then(res => {
+          this.onTableLoading = false;
+
           this.tableData = res.list;
           this.dataSource = res.list;
-          let is_bidding = new Set();
-          res.list.forEach((item, i) => {
-            is_bidding.add(item.is_bidding);
-            if (item.is_bidding == 1) {
-              this.tableData[i].is_bidding = "是";
-              this.dataSource[i].is_bidding = "是";
-            } else {
-              this.tableData[i].is_bidding = "否";
-              this.dataSource[i].is_bidding = "否";
-            }
-          });
-          this.columns[4].filters = [];
-          is_bidding.forEach(item => {
-            if (item == 1) {
-              this.columns[4].filters.push({ text: "是", value: "是" });
-            } else {
-              this.columns[4].filters.push({ text: "否", value: "否" });
-            }
-          });
-          this.onTableLoading = false;
         })
         .catch(err => {});
     },

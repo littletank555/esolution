@@ -77,10 +77,10 @@ const columns = [
   {
     title: "狀態",
     dataIndex: "status",
-    width: 250,
+    width: 200,
     filters: [],
     filterMultiple: true,
-    onFilter: (value, record) => record.status.indexOf(value) === 0
+    onFilter: (value, record) => record.type.indexOf(value) === 0
   },
   { title: "ES發票號碼", dataIndex: "inv_no", width: 400 },
   { title: "ES上單日期", dataIndex: "sign_date", width: 400 },
@@ -143,14 +143,7 @@ export default {
       this.onTableLoading = true;
       get_ke()
         .then(res => {
-          let status = new Set();
-          res.list.forEach((item, i) => {
-            status.add(item.status);
-          });
-          this.columns[7].filters = [];
-          status.forEach(item => {
-            this.columns[7].filters.push({ text: item, value: item });
-          });
+          console.log(res);
           this.onTableLoading = false;
           this.tableData = res.list;
           this.dataSource = res.list;

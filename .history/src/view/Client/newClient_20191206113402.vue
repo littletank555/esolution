@@ -239,13 +239,6 @@ export default {
           this.select_pmaster_data[key] = "";
         }
       }
-      this.info.percent = 100;
-      this.info.sub_percent = 100;
-      this.receipt_price = 0;
-      this.sign_price = 0;
-      this.sub_sign_price = 0;
-      this.discount = 0;
-      this.pay_price = 0;
     },
     onChangePercent(val) {
       this.info.sign_price =

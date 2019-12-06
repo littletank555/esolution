@@ -196,7 +196,6 @@ export default {
         }
       ];
       this.number = 0;
-      this.project = 2;
       this.dataSource = this.tableData;
       this.visible = true;
     },

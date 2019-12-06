@@ -90,6 +90,10 @@
       <template slot="sub_price" slot-scope="record">
         <span>{{record.sub_price.split("\n")}}</span>
       </template>
+      <template slot="bid" slot-scope="record">
+        <span v-show="record.is_bidding == 1">是</span>
+        <span v-show="record.is_bidding == 0">否</span>
+      </template>
       <template slot="detail" slot-scope="record">
         <a @click="()=>{
           $refs.edit.show(record)

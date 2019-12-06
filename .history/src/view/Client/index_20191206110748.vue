@@ -77,7 +77,7 @@ const columns = [
   {
     title: "狀態",
     dataIndex: "status",
-    width: 250,
+    width: 200,
     filters: [],
     filterMultiple: true,
     onFilter: (value, record) => record.status.indexOf(value) === 0

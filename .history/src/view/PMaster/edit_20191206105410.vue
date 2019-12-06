@@ -301,14 +301,13 @@ export default {
               this.info[key] = this.info[key]._isValid
                 ? this.info[key].format("HH:mm")
                 : "";
+            } else if (key == "is_bidding") {
+              this.info[key] = this.info[key] == "是" ? 1 : 0;
             } else {
               this.info[key] = this.info[key]._isValid
                 ? this.info[key].format("YYYY-MM-DD")
                 : "";
             }
-          }
-          if (key == "is_bidding") {
-            this.info[key] = this.info[key] == "是" ? 1 : 0;
           }
         }
       }
@@ -329,7 +328,6 @@ export default {
         }
       });
       this.onSubmiting = true;
-      console.log(this.info);
       update_pmaster(this.info)
         .then(res => {
           this.onSubmiting = false;

@@ -79,12 +79,7 @@
               v-model="number"
             ></a-input>
             <a-button size="small" type="primary" @click="AddColumns" style="float:left">Add</a-button>
-            <a-button
-              size="small"
-              type="primary"
-              @click="onClear"
-              style="float:left;margin-left:10px"
-            >Clear</a-button>
+            <a-button size="small" type="primary" @click="onClear" style="float:left">Clear</a-button>
             總金額：${{
             dataSource|get_sum
             }}
@@ -196,7 +191,6 @@ export default {
         }
       ];
       this.number = 0;
-      this.project = 2;
       this.dataSource = this.tableData;
       this.visible = true;
     },
@@ -212,7 +206,6 @@ export default {
         }
       ];
       this.number = 0;
-      this.project = 2;
       this.dataSource = this.tableData;
     },
     onSelect(e) {

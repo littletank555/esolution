@@ -266,7 +266,7 @@ export default {
       this.visible = true;
     },
     onBid(e) {
-      if (e.target.value == "是") {
+      if (e.target.value == 1) {
         this.info.sub_bid_number = "SA" + this.info.sort;
       } else {
         this.info.sub_bid_number = "";
@@ -301,14 +301,14 @@ export default {
               this.info[key] = this.info[key]._isValid
                 ? this.info[key].format("HH:mm")
                 : "";
+            }
+            if (key == "is_bidding") {
+              this.info[key] = this.info[key] == "是" ? 1 : 0;
             } else {
               this.info[key] = this.info[key]._isValid
                 ? this.info[key].format("YYYY-MM-DD")
                 : "";
             }
-          }
-          if (key == "is_bidding") {
-            this.info[key] = this.info[key] == "是" ? 1 : 0;
           }
         }
       }
@@ -329,7 +329,6 @@ export default {
         }
       });
       this.onSubmiting = true;
-      console.log(this.info);
       update_pmaster(this.info)
         .then(res => {
           this.onSubmiting = false;

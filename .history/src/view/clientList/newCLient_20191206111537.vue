@@ -33,7 +33,6 @@
       <span>客戶組別</span>
       <a-auto-complete
         :dataSource="client_group"
-        :value="client.c_group"
         style="width: 100%"
         placeholder="input for select"
         :filterOption="filterOption"

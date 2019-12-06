@@ -266,7 +266,7 @@ export default {
       this.visible = true;
     },
     onBid(e) {
-      if (e.target.value == "是") {
+      if (e.target.value == 1) {
         this.info.sub_bid_number = "SA" + this.info.sort;
       } else {
         this.info.sub_bid_number = "";
@@ -307,9 +307,6 @@ export default {
                 : "";
             }
           }
-          if (key == "is_bidding") {
-            this.info[key] = this.info[key] == "是" ? 1 : 0;
-          }
         }
       }
       this.info.spn_date = "";
@@ -329,7 +326,6 @@ export default {
         }
       });
       this.onSubmiting = true;
-      console.log(this.info);
       update_pmaster(this.info)
         .then(res => {
           this.onSubmiting = false;

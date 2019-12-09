@@ -112,7 +112,7 @@ export default {
           // console.log(res);
           if (res.status) {
             this.$message.success("成功添加客戶");
-            this.visible = false;
+            // this.visible = false;
             this.$emit("done", {});
           } else {
             this.$message.error("添加失敗");

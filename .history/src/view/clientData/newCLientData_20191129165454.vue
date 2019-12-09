@@ -146,7 +146,7 @@ export default {
         this.$message.error("請選擇客戶");
         return;
       }
-      if (this.client_data.lc == "" && this.client_data.le == "") {
+      if (this.client_data.lc == "" || this.client_data.le == "") {
         this.$message.error("請填寫施工地點");
         return;
       }

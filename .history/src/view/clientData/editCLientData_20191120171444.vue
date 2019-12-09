@@ -94,7 +94,7 @@ export default {
     },
     onUpdate() {
       this.record.cid = this.record.client_data_id;
-      if (this.record.lc == "" && this.record.le == "") {
+      if (this.record.lc == "" || this.record.le == "") {
         this.$message.error("請填寫施工地點");
         return;
       }

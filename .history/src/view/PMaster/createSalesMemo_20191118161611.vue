@@ -155,7 +155,6 @@ export default {
       console.log(values);
       created_sm_form(values)
         .then(res => {
-          console.log(res);
           this.created_form_loading = false;
           this.file_link = res.link;
           this.$nextTick(function() {

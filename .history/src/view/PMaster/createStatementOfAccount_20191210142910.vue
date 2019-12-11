@@ -167,7 +167,7 @@ export default {
             this.dataSource.push({
               job: this.jobs,
               invno: element.inv_no,
-              date: moment(element.sign_date).format("D-MMM-YYYY"),
+              date: element.sign_date.format("D-MMM-YYYY"),
               jobdetail: element.pt,
               price: element.sign_price
             });

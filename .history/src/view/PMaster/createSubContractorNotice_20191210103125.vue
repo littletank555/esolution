@@ -30,7 +30,7 @@
       </p>
       <p class="item">
         <span class="label">發出時間</span>
-        <a-input :value="sub_re_bid_date" disabled="true" />
+        <a-input :value="pmaster.sub_re_bid_date" disabled="true" />
       </p>
       <p class="item">
         <span class="label">發送方法</span>
@@ -53,10 +53,10 @@
         <span class="label">工程編號</span>
         <a-input :value="pmaster.p_no" disabled="true" />
       </p>
-      <p class="item">
+      <!-- <p class="item">
         <span class="label">工程負責同事</span>
         <a-input v-model="info.principle_workmate" />
-      </p>
+      </p>-->
       <p class="item">
         <span class="label">工程負責人</span>
         <a-input v-model="info.principle" />

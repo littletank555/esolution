@@ -228,7 +228,7 @@ export default {
               successString += item.csn + "/";
             }
           });
-          if (existString == "") {
+          if(existString == ""){
             existString = "無";
           }
           this.$notification.error({
@@ -283,9 +283,7 @@ export default {
               successString += item.lc + "/";
             }
           });
-          if (existString == "") {
-            existString = "無";
-          }
+
           this.$notification.error({
             message: "已存在",
             description: existString + "已存在",
@@ -339,9 +337,7 @@ export default {
               successString += item.sort + "/";
             }
           });
-          if (existString == "") {
-            existString = "無";
-          }
+
           this.$notification.error({
             message: "已存在",
             description: existString + "已存在",
@@ -395,9 +391,7 @@ export default {
               successString += item.ke_num + "/";
             }
           });
-          if (existString == "") {
-            existString = "無";
-          }
+
           this.$notification.error({
             message: "已存在",
             description: existString + "已存在",

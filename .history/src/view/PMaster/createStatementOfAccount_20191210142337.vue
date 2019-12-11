@@ -48,8 +48,8 @@
           <a-input v-model="record.invno"></a-input>
         </template>
         <template slot="date" slot-scope="text,record">
-          <!-- <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker> -->
-          <a-input v-model="record.date"></a-input>
+          <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker>
+          <!-- <a-input v-model="record.date"></a-input> -->
         </template>
         <template slot="jobdetail" slot-scope="text,record">
           <a-textarea v-model="record.jobdetail"></a-textarea>
@@ -167,7 +167,7 @@ export default {
             this.dataSource.push({
               job: this.jobs,
               invno: element.inv_no,
-              date: moment(element.sign_date).format("D-MMM-YYYY"),
+              date: element.sign_date,
               jobdetail: element.pt,
               price: element.sign_price
             });

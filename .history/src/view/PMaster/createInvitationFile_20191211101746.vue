@@ -2,6 +2,9 @@
   <a-modal v-model="visible" :footer="null" title="Create Invitation For Tender" width="800px">
     <div class="created_invitation">
       <p class="item">
+        <a-button type="primary">打印多份</a-button>
+      </p>
+      <p class="item">
         <span class="label">排序</span>
         <a-auto-complete
           style="width: 100%"
@@ -19,7 +22,7 @@
           </template>
         </a-auto-complete>
       </p>
-      <!-- <p class="item">
+      <p class="item">
         <span class="label">分包商</span>
         <a-auto-complete
           style="width: 100%"
@@ -36,7 +39,7 @@
             >{{item.name}}</a-select-option>
           </template>
         </a-auto-complete>
-      </p>-->
+      </p>
       <!-- <p class="item">
         <span class="label">發出時間</span>
         <a-date-picker v-model="info.send_date" format="DD/MM/YYYY"></a-date-picker>
@@ -160,6 +163,7 @@ export default {
         }
       }
       this.info.send_date = moment().format("YYYY-MM-DD");
+      console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -199,7 +203,6 @@ export default {
       this.created_form_loading = true;
       created_in_form(values)
         .then(res => {
-          console.log(res);
           this.created_form_loading = false;
           this.file_link = res.link;
           this.$nextTick(function() {
@@ -230,7 +233,7 @@ export default {
     //   return link;
     // },
     enableExportBtn: function() {
-      return this.info.sort == "";
+      return this.info.contractor_id == "" || this.info.sort == "";
     }
   },
   watch: {

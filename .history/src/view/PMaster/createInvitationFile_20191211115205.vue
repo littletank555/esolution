@@ -230,7 +230,7 @@ export default {
     //   return link;
     // },
     enableExportBtn: function() {
-      return this.info.sort == "";
+      return this.info.contractor_id == "" || this.info.sort == "";
     }
   },
   watch: {

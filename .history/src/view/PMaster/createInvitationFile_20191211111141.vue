@@ -160,6 +160,7 @@ export default {
         }
       }
       this.info.send_date = moment().format("YYYY-MM-DD");
+      console.log(this.info.send_date);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -199,7 +200,6 @@ export default {
       this.created_form_loading = true;
       created_in_form(values)
         .then(res => {
-          console.log(res);
           this.created_form_loading = false;
           this.file_link = res.link;
           this.$nextTick(function() {
@@ -230,7 +230,7 @@ export default {
     //   return link;
     // },
     enableExportBtn: function() {
-      return this.info.sort == "";
+      return this.info.contractor_id == "" || this.info.sort == "";
     }
   },
   watch: {

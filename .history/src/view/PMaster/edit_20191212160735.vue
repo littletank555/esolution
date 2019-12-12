@@ -1,5 +1,11 @@
 <template>
-  <a-modal title="PMaster Info" :footer="null" v-model="visible" width="1200px">
+  <a-modal
+    title="PMaster Info"
+    :footer="null"
+    v-model="visible"
+    :afterClose="onCloseModal"
+    width="1200px"
+  >
     <div class="new-pmaster-modal">
       <a-row>
         <a-col span="11">
@@ -269,6 +275,7 @@ export default {
     onClose() {
       this.visible = false;
     },
+
     onSelect(e) {},
     addSubInfo() {
       this.itemkey++;

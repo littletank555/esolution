@@ -71,8 +71,6 @@ export default {
         .then(res => {
           if (res.status) {
             this.$message.success("添加成功！");
-            this.visible = false;
-            this.$emit("done", {});
           } else {
             this.$message.error("添加失敗！");
           }

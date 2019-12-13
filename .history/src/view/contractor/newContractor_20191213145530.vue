@@ -9,7 +9,7 @@
   >
     <p class="item">
       <span>分包商名稱</span>
-      <a-input v-model="info.contractor_name"></a-input>
+      <a-input v-model="info.cintractor_name"></a-input>
     </p>
     <p class="item">
       <span>傳真</span>
@@ -71,8 +71,6 @@ export default {
         .then(res => {
           if (res.status) {
             this.$message.success("添加成功！");
-            this.visible = false;
-            this.$emit("done", {});
           } else {
             this.$message.error("添加失敗！");
           }

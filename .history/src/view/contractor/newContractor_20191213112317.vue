@@ -9,7 +9,7 @@
   >
     <p class="item">
       <span>分包商名稱</span>
-      <a-input v-model="info.cintractor_name"></a-input>
+      <a-input v-model="info.name"></a-input>
     </p>
     <p class="item">
       <span>傳真</span>
@@ -36,7 +36,6 @@ export default {
   data() {
     return {
       info: {
-        cintractor_name: "",
         fax: "",
         tel: "",
         email: ""

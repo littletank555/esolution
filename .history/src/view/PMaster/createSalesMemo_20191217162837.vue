@@ -46,7 +46,7 @@
       <p class="item">
         <span class="label">負責同事</span>
         <a-input v-model="info.chargepepole1"></a-input>
-        <span style="margin-left:10px;width:200px">佣金(公司)</span>
+        <span style="margin-left:10px">佣金(公司)</span>
         <a-input v-model="info.companycommiss"></a-input>
       </p>
       <p class="item">

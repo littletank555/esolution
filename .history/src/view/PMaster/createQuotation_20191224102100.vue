@@ -43,10 +43,10 @@
         <span class="label">電郵</span>
         <a-input v-model="pmaster.ce" disabled="true"></a-input>
       </p>
-      <!-- <p class="item">
+      <p class="item">
         <span class="label">日期</span>
         <a-date-picker v-model="info.date" format="DD/MM/YYYY"></a-date-picker>
-      </p>-->
+      </p>
       <p class="item">
         <span class="label">工程地點</span>
         <a-input v-model="pmaster.jca" disabled="true"></a-input>
@@ -93,7 +93,7 @@
       </a-table>
 
       <a :href="file_link" ref="download" hidden>下載</a>
-      <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+      <a :href="pdf_link" ref="downloadPdf" hidden>下載</a>
       <p style="text-align:right;margin-top:10px">
         <a-button
           type="primary"
@@ -108,7 +108,6 @@
 </template>
 <script>
 import { created_q_form } from "@/api/form.js";
-import { created_quotation_pdf } from "@/api/pdf.js";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
   {
@@ -307,6 +306,8 @@ export default {
 
       values.project = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
+      this.created_form_loading = true;
+      console.log(values);
       created_quotation_pdf(values)
         .then(res => {
           console.log(res);

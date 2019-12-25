@@ -108,8 +108,7 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
-        <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button>
+        <a-button type="primary" @click="exportPDF">PDF</a-button>
       </p>
     </div>
   </a-modal>
@@ -128,7 +127,6 @@ export default {
       pmaster_list: [],
       pmaster: {},
       file_link: "",
-      pdf_link: "",
       info: {
         sort: "",
         contractor_id: "",
@@ -203,6 +201,7 @@ export default {
       this.created_form_loading = true;
       created_in_form(values)
         .then(res => {
+          console.log(res);
           this.created_form_loading = false;
           this.file_link = res.link;
           this.$nextTick(function() {
@@ -226,12 +225,13 @@ export default {
         }
         values[key] = this.info[key];
       }
+      console.log(values);
       created_in_pdf(values)
         .then(res => {
-          console.log(res);
-          this.pdf_link = res.link;
+          console.log(res.link);
+          this.file_link = res.link;
           this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
+            this.$refs.download.click();
           });
         })
         .catch(err => {});

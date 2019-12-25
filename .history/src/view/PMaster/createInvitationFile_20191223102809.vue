@@ -108,8 +108,7 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
-        <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button>
+        <a-button type="primary" @click="exportPDF">PDF</a-button>
       </p>
     </div>
   </a-modal>
@@ -128,7 +127,6 @@ export default {
       pmaster_list: [],
       pmaster: {},
       file_link: "",
-      pdf_link: "",
       info: {
         sort: "",
         contractor_id: "",
@@ -228,10 +226,9 @@ export default {
       }
       created_in_pdf(values)
         .then(res => {
-          console.log(res);
-          this.pdf_link = res.link;
+          this.file_link = res.link;
           this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
+            this.$refs.download.click();
           });
         })
         .catch(err => {});

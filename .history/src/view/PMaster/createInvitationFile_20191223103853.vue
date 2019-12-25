@@ -228,7 +228,6 @@ export default {
       }
       created_in_pdf(values)
         .then(res => {
-          console.log(res);
           this.pdf_link = res.link;
           this.$nextTick(function() {
             this.$refs.downloadPdf.click();

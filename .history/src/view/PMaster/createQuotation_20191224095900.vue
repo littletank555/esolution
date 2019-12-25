@@ -43,10 +43,10 @@
         <span class="label">電郵</span>
         <a-input v-model="pmaster.ce" disabled="true"></a-input>
       </p>
-      <!-- <p class="item">
+      <p class="item">
         <span class="label">日期</span>
         <a-date-picker v-model="info.date" format="DD/MM/YYYY"></a-date-picker>
-      </p>-->
+      </p>
       <p class="item">
         <span class="label">工程地點</span>
         <a-input v-model="pmaster.jca" disabled="true"></a-input>
@@ -60,10 +60,10 @@
           <a-textarea v-model="record.describe"></a-textarea>
         </template>
         <template slot="count" slot-scope="text,record">
-          <a-input v-model="record.count"></a-input>
+          <a-input v-model="record.count" ></a-input>
         </template>
         <template slot="price" slot-scope="text,record">
-          <a-input v-model="record.price"></a-input>
+          <a-input v-model="record.price" ></a-input>
         </template>
         <template slot="total" slot-scope="text,record">
           {{
@@ -93,7 +93,7 @@
       </a-table>
 
       <a :href="file_link" ref="download" hidden>下載</a>
-      <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+      <a :href="pdf_link" ref="downloadPdf" hidden>下載</a>
       <p style="text-align:right;margin-top:10px">
         <a-button
           type="primary"
@@ -101,14 +101,17 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a-button type="primary" @click="exportPdf" :disabled="enableExportBtn">PDF</a-button>
+        <a-button
+          type="primary"
+          @click="exportPdf"
+          :disabled="enableExportBtn"
+        >PDF</a-button>
       </p>
     </div>
   </a-modal>
 </template>
 <script>
 import { created_q_form } from "@/api/form.js";
-import { created_quotation_pdf } from "@/api/pdf.js";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
   {
@@ -162,7 +165,6 @@ export default {
       pmaster_list: [],
       pmaster: {}, //選中的pmaster
       file_link: "",
-      pdf_link: "",
       info: {
         sort: "",
         date: ""
@@ -290,32 +292,6 @@ export default {
         .catch(err => {
           this.created_form_loading = false;
         });
-    },
-    exportPdf() {
-      let values = {};
-      for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
-        values[key] = this.info[key];
-      }
-
-      values.project = JSON.stringify(this.dataSource);
-      values.total = sum(this.dataSource);
-      created_quotation_pdf(values)
-        .then(res => {
-          console.log(res);
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
-          });
-        })
-        .catch(err => {});
     }
   },
   filters: {

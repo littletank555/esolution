@@ -110,7 +110,6 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a-button type="primary" @click="exportPdf" :disabled="enableExportBtn">PDF</a-button>
       </p>
     </div>
@@ -196,7 +195,7 @@ export default {
       created_SCN_form(values)
         .then(res => {
           this.created_form_loading = false;
-          this.file_link = res.link;
+          this.pdf_link = res.link;
           this.$nextTick(function() {
             this.$refs.download.click();
           });
@@ -206,32 +205,33 @@ export default {
         });
     },
     exportPdf() {
-      let values = {};
-      for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
-        values[key] = this.info[key];
-      }
-      console.log(values);
-      this.created_form_loading = true;
-      created_SCN_pdf(values)
-        .then(res => {
-          console.log(res);
-          this.created_form_loading = false;
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
+      // let values = {};
+      // console.log("object");
+      // for (const key in this.info) {
+      //   let date = "";
+      //   if (typeof this.info[key] == "object") {
+      //     date = this.info[key]._isValid
+      //       ? this.info[key].format("DD/MM/YYYY")
+      //       : "";
+      //     values[key] = date;
+      //     continue;
+      //   }
+      //   values[key] = this.info[key];
+      //   console.log(valeus);
+      //   this.created_form_loading = true;
+      //   created_SCN_pdf(values)
+      //     .then(res => {
+      //       this.created_form_loading = false;
+      //       this.pdf_link = res.link;
+      //       this.$nextTick(function() {
+      //         this.$refs.downloadPdf.click();
+      //       });
+      //     })
+      //     .catch(err => {
+      //       this.created_form_loading = false;
+      //     });
+      // }
+      console.log("object");
     }
   },
   computed: {

@@ -76,8 +76,6 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
-        <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button>
       </p>
     </div>
   </a-modal>
@@ -85,7 +83,6 @@
 
 <script>
 import { created_finished_form } from "@/api/form.js";
-import { created_finished_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
@@ -99,7 +96,7 @@ export default {
       pmaster: {},
       visible: false,
       file_link: "",
-      pdf_link: ""
+      pdf_link:""
     };
   },
   methods: {
@@ -154,32 +151,6 @@ export default {
           this.file_link = res.link;
           this.$nextTick(function() {
             this.$refs.download.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
-    },
-    exportPDF() {
-      let values = {};
-      for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
-        values[key] = this.info[key];
-      }
-      this.created_form_loading = true;
-      created_finished_pdf(values)
-        .then(res => {
-          this.created_form_loading = false;
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
           });
         })
         .catch(err => {

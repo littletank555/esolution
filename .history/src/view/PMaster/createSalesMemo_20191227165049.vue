@@ -96,7 +96,7 @@
 
 <script>
 import { created_sm_form } from "@/api/form.js";
-import { created_SM_pdf } from "@/api/pdf.js";
+import { created_sm_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
@@ -176,7 +176,7 @@ export default {
       }
       this.created_form_loading = true;
       console.log(values);
-      created_SM_pdf(values)
+      created_sm_pdf(values)
         .then(res => {
           console.log(res);
           this.created_form_loading = false;

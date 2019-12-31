@@ -46,12 +46,3 @@ export function created_SM_pdf(values) {//Sales Memo
         })
     })
 }
-export function created_INV_pdf(values) {//INV
-    return request({
-        url: "export-INV-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}

@@ -83,8 +83,6 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
-        <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button>
       </p>
     </div>
   </a-modal>
@@ -93,7 +91,6 @@
 <script>
 import { get_client_data } from "@/api/client_data.js";
 import { created_INV_form } from "@/api/form.js";
-import { created_INV_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
@@ -106,8 +103,7 @@ export default {
       client_data: {},
       commercial_data: {},
       visible: false,
-      file_link: "",
-      pdf_link: ""
+      file_link: ""
     };
   },
   methods: {
@@ -179,24 +175,6 @@ export default {
           this.file_link = res.link;
           this.$nextTick(function() {
             this.$refs.download.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
-    },
-    exportPDF() {
-      let values = {};
-      for (const key in this.info) {
-        values[key] = this.info[key];
-      }
-      this.created_form_loading = true;
-      created_INV_pdf(values)
-        .then(res => {
-          this.created_form_loading = false;
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
           });
         })
         .catch(err => {

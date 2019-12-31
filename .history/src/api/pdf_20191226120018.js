@@ -28,30 +28,3 @@ export function created_SCN_pdf(values) {//中標通知書
         })
     })
 }
-export function created_finished_pdf(values) {//完工纸
-    return request({
-        url: "export-finished-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}
-export function created_SM_pdf(values) {//Sales Memo
-    return request({
-        url: "export-SM-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}
-export function created_INV_pdf(values) {//INV
-    return request({
-        url: "export-INV-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}

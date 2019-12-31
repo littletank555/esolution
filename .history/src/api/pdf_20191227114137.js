@@ -37,21 +37,3 @@ export function created_finished_pdf(values) {//完工纸
         })
     })
 }
-export function created_SM_pdf(values) {//Sales Memo
-    return request({
-        url: "export-SM-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}
-export function created_INV_pdf(values) {//INV
-    return request({
-        url: "export-INV-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}

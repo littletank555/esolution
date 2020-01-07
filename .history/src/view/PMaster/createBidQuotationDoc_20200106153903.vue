@@ -57,7 +57,7 @@
                 v-for="(item,i) in pmaster_list"
                 :key="i"
                 :value="item.sort"
-              >{{item.sort}}</a-select-option>
+              >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
             </template>
           </a-auto-complete>
         </p>

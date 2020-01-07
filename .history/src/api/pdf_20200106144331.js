@@ -46,7 +46,7 @@ export function created_SM_pdf(values) {//Sales Memo
         })
     })
 }
-export function created_INV_pdf(values) {//Invoice
+export function created_INV_pdf(values) {//INV
     return request({
         url: "export-INV-pdf",
         method: "POST",
@@ -55,18 +55,9 @@ export function created_INV_pdf(values) {//Invoice
         })
     })
 }
-export function created_BQD_pdf(values) {//Bid Quotation Document
+export function created_BQD_pdf(values) {//INV
     return request({
         url: "export-BQD-pdf",
-        method: "POST",
-        data: Qs.stringify({
-            ...values
-        })
-    })
-}
-export function created_NRR_pdf(values) {//Decline return letter
-    return request({
-        url: "export-NRR-pdf",
         method: "POST",
         data: Qs.stringify({
             ...values

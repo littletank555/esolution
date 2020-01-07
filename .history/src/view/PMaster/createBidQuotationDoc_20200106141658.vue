@@ -57,7 +57,7 @@
                 v-for="(item,i) in pmaster_list"
                 :key="i"
                 :value="item.sort"
-              >{{item.sort}}</a-select-option>
+              >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
             </template>
           </a-auto-complete>
         </p>
@@ -196,8 +196,6 @@
           :disabled="enableExportBtn"
           :loading="created_form_loading"
         >export</a-button>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
-        <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button>
       </p>
     </div>
   </a-modal>
@@ -205,7 +203,6 @@
 
 <script>
 import { created_BQD_form } from "@/api/form.js";
-import { created_BQD_pdf } from "@/api/pdf.js";
 const columns = [
   { title: "", dataIndex: "sub", key: "1" },
   {
@@ -254,7 +251,6 @@ export default {
       created_form_loading: false,
       visible: false,
       file_link: "",
-      pdf_link: "",
       bid: { no_reply: true, replied: false, over: false },
       contract: { once: true, annual: false },
       handed: {
@@ -329,9 +325,10 @@ export default {
         filing: false
       };
       this.send = {
+        send_bid: false,
+        sales_memo: false,
         bid_notice: false,
-        finished: false,
-        format_finished: false
+        finished: false
       };
       this.sign = {
         sales: false,
@@ -409,36 +406,6 @@ export default {
         .catch(err => {
           this.created_form_loading = false;
         });
-    },
-    exportPDF() {
-      let values = {};
-      for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
-        values[key] = this.info[key];
-      }
-      values.subs = JSON.stringify(this.dataSource);
-      values.bid = JSON.stringify(this.bid);
-      values.handed = JSON.stringify(this.handed);
-      values.contract = JSON.stringify(this.contract);
-      values.invitation = JSON.stringify(this.invitation);
-      values.finish = JSON.stringify(this.finish);
-      values.send = JSON.stringify(this.send);
-      values.sign = JSON.stringify(this.sign);
-      created_BQD_pdf(values)
-        .then(res => {
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
-          });
-        })
-        .catch(err => {});
     }
   },
   computed: {

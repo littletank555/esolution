@@ -57,7 +57,7 @@
                 v-for="(item,i) in pmaster_list"
                 :key="i"
                 :value="item.sort"
-              >{{item.sort}}</a-select-option>
+              >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
             </template>
           </a-auto-complete>
         </p>
@@ -329,9 +329,10 @@ export default {
         filing: false
       };
       this.send = {
+        send_bid: false,
+        sales_memo: false,
         bid_notice: false,
-        finished: false,
-        format_finished: false
+        finished: false
       };
       this.sign = {
         sales: false,
@@ -431,14 +432,18 @@ export default {
       values.finish = JSON.stringify(this.finish);
       values.send = JSON.stringify(this.send);
       values.sign = JSON.stringify(this.sign);
+      this.created_form_loading = true;
       created_BQD_pdf(values)
         .then(res => {
+          this.created_form_loading = false;
           this.pdf_link = res.link;
           this.$nextTick(function() {
             this.$refs.downloadPdf.click();
           });
         })
-        .catch(err => {});
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     }
   },
   computed: {

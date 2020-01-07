@@ -1,13 +1,8 @@
 <template>
-  <a-modal
-    v-model="visible"
-    :footer="null"
-    title="Sub-Contractor Contract Award Notice"
-    width="1000px"
-  >
+  <a-modal v-model="visible" :footer="null" title="Declined Return Letter" width="1000px">
     <div class="created_invitation">
       <p class="item">
-        <span class="label">排序序号</span>
+        <span class="label">排序</span>
         <a-auto-complete
           style="width: 100%"
           @change="onSelect"
@@ -20,53 +15,49 @@
               v-for="(item,i) in pmaster_list"
               :key="i"
               :value="item.sort"
-            >{{item.sort}}</a-select-option>
+            >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>
       <p class="item">
+        <span class="label">送呈</span>
+        <a-input v-model="pmaster.ccn" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">編號</span>
+        <a-input v-model="pmaster.p_no" disabled="true"></a-input>
+      </p>
+      <!-- <p class="item">
         <span class="label">日期</span>
-        <a-date-picker format="DD/MM/YYYY" v-model="info.date"></a-date-picker>
+        <a-input v-model="info.date" disabled="true"></a-input>
+      </p>-->
+      <p class="item">
+        <span class="label">寄送地址</span>
+        <a-input v-model="pmaster.bt" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">本司工程單編號</span>
-        <a-input :value="pmaster.p_no" disabled="true" />
+        <span class="label">電話</span>
+        <a-input v-model="pmaster.ct" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">客戶名稱</span>
-        <a-input :value="pmaster.ccn" disabled="true" />
+        <span class="label">傳真</span>
+        <a-input v-model="pmaster.cf" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">聯絡人</span>
-        <a-input :value="pmaster.ccp" disabled="true" />
+        <span class="label">致</span>
+        <a-input v-model="pmaster.ccp" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">聯絡電話</span>
-        <a-input :value="pmaster.ct" disabled="true" />
+        <span class="label">電郵</span>
+        <a-input v-model="pmaster.ce" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">傳真號碼</span>
-        <a-input :value="pmaster.ce" disabled="true" />
+        <span class="label">工程地點</span>
+        <a-input v-model="pmaster.jca" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">管理處地址</span>
-        <a-input :value="pmaster.jca" disabled="true" />
-      </p>
-      <p class="item">
-        <span class="label">工作地點</span>
-        <a-input :value="pmaster.pl" disabled="true" />
-      </p>
-      <p class="item">
-        <span class="label">工作內容</span>
-        <a-input :value="pmaster.pt" disabled="true" />
-      </p>
-      <p class="item">
-        <span class="label">完工日期</span>
-        <a-date-picker format="DD/MM/YYYY" v-model="info.finishdate"></a-date-picker>
-      </p>
-      <p class="item">
-        <span class="label">備註</span>
-        <a-textarea v-model="info.ps" />
+        <span class="label">工程主旨</span>
+        <a-input v-model="pmaster.pt" disabled="true"></a-input>
       </p>
       <a :href="file_link" ref="download" hidden>下載</a>
       <p style="text-align:right;margin-top:10px">
@@ -84,19 +75,18 @@
 </template>
 
 <script>
-import { created_finished_form } from "@/api/form.js";
-import { created_finished_pdf } from "@/api/pdf.js";
+import moment from "moment";
+import { created_NRR_form } from "@/api/form.js";
+import { created_NRR_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
       info: {
         sort: "",
-        finishdate: "",
-        ps: "",
         date: ""
       },
       pmaster_list: [],
-      pmaster: {},
+      pmaster: {}, //選中的pmaster
       visible: false,
       file_link: "",
       pdf_link: ""
@@ -114,6 +104,7 @@ export default {
           this.pmaster[key] = "";
         }
       }
+      console.log(list);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -136,19 +127,13 @@ export default {
     },
     exportForm() {
       let values = {};
+      this.info.date = moment().format("D-MMM-YYYY");
       for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
         values[key] = this.info[key];
       }
       this.created_form_loading = true;
-      created_finished_form(values)
+      console.log(values);
+      created_NRR_form(values)
         .then(res => {
           this.created_form_loading = false;
           this.file_link = res.link;
@@ -162,18 +147,11 @@ export default {
     },
     exportPDF() {
       let values = {};
+      this.info.date = moment().format("D-MMM-YYYY");
       for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
         values[key] = this.info[key];
       }
-      created_finished_pdf(values)
+      created_NRR_pdf(values)
         .then(res => {
           this.pdf_link = res.link;
           this.$nextTick(function() {

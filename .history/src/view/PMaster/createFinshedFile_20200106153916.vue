@@ -20,7 +20,7 @@
               v-for="(item,i) in pmaster_list"
               :key="i"
               :value="item.sort"
-            >{{item.sort}}</a-select-option>
+            >{{item.sort+'/'+item.p_no+'/'+item.ccn}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>

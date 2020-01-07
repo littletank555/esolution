@@ -51,7 +51,7 @@
         style="width: 100%"
         placeholder="input for select"
         :filterOption="filterOption"
-        @change="onClientSelect"
+        @select="onClientSelect"
       />
     </p>
     <p style="text-align:right">
@@ -85,13 +85,15 @@ export default {
     get_client_group() {
       get_clients()
         .then(res => {
+          // this.client_group = res.list;
+          console.log(res.list);
           let list = new Set();
           res.list.forEach(item => {
             if (!item.c_group == "") {
               list.add(item.c_group);
             }
           });
-
+          console.log(list);
           this.client_group = Array.from(list);
         })
         .catch(err => {});
@@ -103,7 +105,11 @@ export default {
           .indexOf(input.toUpperCase()) >= 0
       );
     },
+    handleChange(value) {
+      this.client.c_group = value;
+    },
     onClientSelect(value) {
+      console.log("object", value);
       this.client.c_group = value;
     },
     onUpdate() {
@@ -111,12 +117,17 @@ export default {
         this.$message.error("Please fill client name");
         return;
       }
+      // if (this.client.cen == "" || this.client.cen.trim() == "") {
+      //   this.$message.error("Please fill client name");
+      //   return;
+      // }
       this.onSubmiting = true;
       this.client.cid = this.client.client_id;
+      console.log(this.client);
       update_client(this.client)
         .then(res => {
+          console.log(res);
           if (res.status) {
-            this.get_client_group();
             this.$message.success("更新成功");
             this.visible = false;
             this.$emit("done", {});
@@ -125,6 +136,7 @@ export default {
           }
         })
         .catch(err => {
+          console.log(err);
           this.$message.error("更新失敗");
         });
     }

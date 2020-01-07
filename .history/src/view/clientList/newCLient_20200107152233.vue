@@ -1,16 +1,12 @@
 <template>
   <a-drawer
-    title="Update Client"
+    title="Add Client"
     placement="right"
     :closable="false"
     @close="onClose"
     :visible="visible"
     width="500px"
   >
-    <p>
-      <span>客戶序號 (CSN) ClientSerial Number</span>
-      <a-input v-model="client.csn"></a-input>
-    </p>
     <p>
       <span>客戶中文名稱 (CCN) Client Chinese Name</span>
       <a-input v-model="client.ccn"></a-input>
@@ -27,74 +23,68 @@
       <span>客戶聯絡電話 (CT) Client Telephone</span>
       <a-input v-model="client.ct"></a-input>
     </p>
+    <!-- <p>
+      <span>客戶組別</span>
+      <a-select v-model="client.c_group" style="width:100%">
+        <a-select-option v-for="item in client_group" :value="item" :key="item">{{item}}</a-select-option>
+      </a-select>
+    </p>-->
     <p>
       <span>客戶組別</span>
-      <!-- <a-input v-model="client.c_group"></a-input> -->
-      <!-- <a-auto-complete
-        style="width: 100%"
-        @change="handleChange"
-        :filterOption="filterOption"
-        :value="client.c_group"
-        placeholder="input for select"
-      >
-        <template slot="dataSource">
-          <a-select-option
-            v-for="(item,i) in client_group"
-            :key="i"
-            :value="item.c_group"
-          >{{item.c_group}}</a-select-option>
-        </template>
-      </a-auto-complete>-->
       <a-auto-complete
         :dataSource="client_group"
         :value="client.c_group"
         style="width: 100%"
         placeholder="input for select"
         :filterOption="filterOption"
-        @change="onClientSelect"
+        @select="onClientSelect"
       />
     </p>
     <p style="text-align:right">
-      <a-button type="primary" :loading="onSubmiting" @click="onUpdate">Update</a-button>
+      <a-button type="primary" @click="onClear">Clear</a-button>
+      <a-button type="primary" :loading="onSubmiting" @click="onSubmit">Submit</a-button>
     </p>
   </a-drawer>
 </template>
 <script>
-import { get_clients, update_client } from "@/api/client.js";
+import { create_client } from "@/api/client.js";
 export default {
   data() {
     return {
       visible: false,
       onSubmiting: false,
-      client: {},
-      client_group: []
+      client: { ccn: "", cen: "", bt: "", ct: "", c_group: "" },
+      client_group: [], //客戶組別
+      dataSource: ["Burns Bay Road", "Downing Street", "Wall Street"]
     };
   },
-  created() {
-    this.get_client_group();
-  },
   methods: {
-    show(client) {
-      this.client = JSON.parse(JSON.stringify(client));
+    show(group) {
+      this.client_group = [];
+      let list = new Set();
+      group.forEach(item => {
+        if (!item.c_group == "") {
+          list.add(item.c_group);
+        }
+      });
+      this.client_group = Array.from(list);
+      // for (const key in this.client) {
+      //   if (this.client.hasOwnProperty(key)) {
+      //     this.client[key] = "";
+      //   }
+      // }
       this.onSubmiting = false;
       this.visible = true;
     },
+    onClear() {
+      for (const key in this.client) {
+        if (this.client.hasOwnProperty(key)) {
+          this.client[key] = "";
+        }
+      }
+    },
     onClose() {
       this.visible = false;
-    },
-    get_client_group() {
-      get_clients()
-        .then(res => {
-          let list = new Set();
-          res.list.forEach(item => {
-            if (!item.c_group == "") {
-              list.add(item.c_group);
-            }
-          });
-
-          this.client_group = Array.from(list);
-        })
-        .catch(err => {});
     },
     filterOption(input, option) {
       return (
@@ -106,26 +96,28 @@ export default {
     onClientSelect(value) {
       this.client.c_group = value;
     },
-    onUpdate() {
+    onSubmit() {
       if (this.client.ccn == "" || this.client.ccn.trim() == "") {
         this.$message.error("Please fill client name");
         return;
       }
+      // if (this.client.cen == "" || this.client.cen.trim() == "") {
+      //   this.$message.error("Please fill client name");
+      //   return;
+      // }
       this.onSubmiting = true;
-      this.client.cid = this.client.client_id;
-      update_client(this.client)
+      create_client(this.client)
         .then(res => {
           if (res.status) {
-            this.get_client_group();
-            this.$message.success("更新成功");
+            this.$message.success("成功添加客戶");
             this.visible = false;
             this.$emit("done", {});
           } else {
-            this.$message.error("更新失敗");
+            this.$message.error("添加失敗");
           }
         })
         .catch(err => {
-          this.$message.error("更新失敗");
+          this.$message.error("添加失敗");
         });
     }
   }

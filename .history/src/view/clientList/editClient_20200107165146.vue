@@ -85,13 +85,15 @@ export default {
     get_client_group() {
       get_clients()
         .then(res => {
+          // this.client_group = res.list;
+          console.log(res.list);
           let list = new Set();
           res.list.forEach(item => {
             if (!item.c_group == "") {
               list.add(item.c_group);
             }
           });
-
+          console.log(list);
           this.client_group = Array.from(list);
         })
         .catch(err => {});
@@ -125,6 +127,7 @@ export default {
           }
         })
         .catch(err => {
+          console.log(err);
           this.$message.error("更新失敗");
         });
     }

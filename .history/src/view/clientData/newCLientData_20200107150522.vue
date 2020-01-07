@@ -18,7 +18,11 @@
           placeholder="input for select"
         >
           <template slot="dataSource">
-            <a-select-option v-for="(item,i) in clients" :key="i" :value="item.csn">{{item.csn}}</a-select-option>
+            <a-select-option
+              v-for="(item,i) in clients"
+              :key="i"
+              :value="item.csn"
+            >{{item.csn+"/"+item.ccn+"/"+item.cen}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>

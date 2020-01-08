@@ -218,6 +218,7 @@
       </a-row>
 
       <p style="text-align:right">
+        <a-button type="primary" @click="onClear">Clear</a-button>
         <a-button type="primary" :loading="onSubmiting" @click="onSubmit">Submit</a-button>
       </p>
     </div>
@@ -298,19 +299,29 @@ export default {
   },
   methods: {
     show() {
-      this.select_client_data = {};
-      this.subinfo = [];
-      for (const key in this.info) {
-        if (key != "sort") {
-          if (this.info.hasOwnProperty(key)) {
-            this.info[key] = "";
-          }
-        }
-      }
+      // this.select_client_data = {};
+      // this.subinfo = [];
+      // for (const key in this.info) {
+      //   if (key != "sort") {
+      //     if (this.info.hasOwnProperty(key)) {
+      //       this.info[key] = "";
+      //     }
+      //   }
+      // }
       this.visible = true;
       this.onSubmiting = false;
     },
     moment,
+    onClear() {
+      this.select_client_data = {};
+      this.subinfo = [];
+      this.itemkey = 0;
+      for (const key in this.info) {
+        if (this.info.hasOwnProperty(key)) {
+          this.info[key] = "";
+        }
+      }
+    },
     onClose() {
       this.visible = false;
     },
@@ -366,19 +377,27 @@ export default {
       }
       this.info.p_no = this.project_no;
       this.onSubmiting = true;
-      this.subinfo.forEach((element, i) => {
-        if (i == 0) {
-          this.info.sub_price_name =
-            this.info.sub_price_name + element.sub_price_name;
-          this.info.sub_price = this.info.sub_price + element.sub_price;
-          this.info.spn_date = this.info.spn_date + element.spn_date;
-        } else {
-          this.info.sub_price_name =
-            this.info.sub_price_name + "\n" + element.sub_price_name;
-          this.info.sub_price = this.info.sub_price + "\n" + element.sub_price;
-          this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
-        }
-      });
+      if (this.itemkey != 0) {
+        this.subinfo.forEach((element, i) => {
+          if (i == 0) {
+            this.info.sub_price_name =
+              this.info.sub_price_name + element.sub_price_name;
+            this.info.sub_price = this.info.sub_price + element.sub_price;
+            this.info.spn_date = this.info.spn_date + element.spn_date;
+          } else {
+            this.info.sub_price_name =
+              this.info.sub_price_name + "\n" + element.sub_price_name;
+            this.info.sub_price =
+              this.info.sub_price + "\n" + element.sub_price;
+            this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
+          }
+        });
+      } else {
+        this.info.sub_price_name = "";
+        this.info.sub_price = "";
+        this.info.spn_date = "";
+      }
+      console.log(this.info);
       new_pmaster(this.info)
         .then(res => {
           console.log(res.status);

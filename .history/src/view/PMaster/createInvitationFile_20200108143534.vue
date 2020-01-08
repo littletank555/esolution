@@ -37,32 +37,9 @@
           </template>
         </a-auto-complete>
       </p>-->
-      <!-- <p class="item">
+      <p class="item">
         <span class="label">發出時間</span>
         <a-date-picker v-model="info.send_date" format="DD/MM/YYYY"></a-date-picker>
-      </p>-->
-      <p class="item">
-        <span class="label">分包商</span>
-        <a-card style="width:100%">
-          <p class="item" v-for="contractoritem in contractorarray" :key="contractoritem.itemkey">
-            <a-auto-complete
-              :dataSource="contractor"
-              :value="contractoritem.contractor_name"
-              style="width: 100%"
-              placeholder="input for select"
-              :filterOption="filterOption"
-              @select="onContractorSel"
-            />
-
-            <a-icon type="delete" @click="onDelete(contractoritem)" />
-          </p>
-          <a-button type="dashed" style="width:100%;margin-top:10px;" @click="addSubInfo">
-            <a-icon type="plus" />Add
-          </a-button>
-        </a-card>
-      </p>
-      <p class="item">
-        <span></span>
       </p>
       <p class="item">
         <span class="label">發出方式</span>
@@ -105,8 +82,7 @@
       </p>
       <p class="item">
         <span class="label">回傳報價期限:</span>
-        <!-- <a-input v-model="pmaster.end_bid_date"></a-input> -->
-        <a-date-picker v-model="info.end_bid_date" format="YYYY-MM-DD"></a-date-picker>
+        <a-input v-model="pmaster.end_bid_date" disabled="true"></a-input>
       </p>
       <p class="item" v-show="info.is_min_project=='1'">
         <span class="label">小型工程級別項目及編號:</span>
@@ -148,8 +124,6 @@ export default {
     return {
       visible: false,
       contractor: [],
-      itemkey: 0,
-      contractorarray: [{ itemkey: 0, contractor_name: "" }],
       created_form_loading: false,
       pmaster_list: [],
       pmaster: {},
@@ -157,7 +131,7 @@ export default {
       pdf_link: "",
       info: {
         sort: "",
-        contractor_name: "",
+        contractor_id: "",
         send_date: "",
         send_way: "",
         is_min_project: "",
@@ -167,8 +141,7 @@ export default {
         finish_days: "",
         remark1: "",
         remark2: "",
-        attachment1: "",
-        end_bid_date: ""
+        attachment1: ""
       }
     };
   },
@@ -180,12 +153,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
-          // this.contractor = res.list;
-          let list = new Set();
-          res.list.forEach(element => {
-            list.add(element.contractor_name);
-          });
-          this.contractor = Array.from(list);
+          this.contractor = res.list;
         })
         .catch(err => {});
     },
@@ -195,52 +163,23 @@ export default {
           this.info[key] = "";
         }
       }
-      this.contractorarray = [];
-      this.itemkey = 0;
       this.info.send_date = moment().format("YYYY-MM-DD");
+
       this.pmaster_list = list;
       this.visible = true;
-    },
-    addSubInfo() {
-      this.itemkey++;
-      this.contractorarray.push({
-        contractor_name: "",
-        itemkey: this.itemkey
-      });
-    },
-    onDelete(e) {
-      this.contractorarray = this.contractorarray.filter(
-        item => item.itemkey != e.itemkey
-      );
-      this.info.contractor_name = this.info.contractor_name.replace(
-        e.contractor_name + "/"
-      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
         if (item.sort == value) {
           this.pmaster = item;
           this.pmaster = JSON.parse(JSON.stringify(item));
-          if (
-            this.pmaster.end_bid_date == "0000-00-00" ||
-            this.pmaster.end_bid_date == null
-          ) {
-            this.info.end_bid_date = moment();
-          } else {
-            this.info.end_bid_date = moment(
-              this.pmaster.end_bid_date,
-              "YYYY-MM-DD"
-            );
-          }
-          this.info.p_contact = "何先生";
-          this.info.p_contact_tell = "9207 2127";
           return true;
         }
       });
       this.info.sort = value;
     },
     onContractorSel(val) {
-      this.info.contractor_name = this.info.contractor_name + val + "/";
+      this.info.contractor_id = val;
     },
     filterOption(input, option) {
       return (
@@ -262,19 +201,18 @@ export default {
         }
         values[key] = this.info[key];
       }
-      console.log(this.info.contractor_name);
-      // this.created_form_loading = true;
-      // created_in_form(values)
-      //   .then(res => {
-      //     this.created_form_loading = false;
-      //     this.file_link = res.link;
-      //     this.$nextTick(function() {
-      //       this.$refs.download.click();
-      //     });
-      //   })
-      //   .catch(err => {
-      //     this.created_form_loading = false;
-      //   });
+      this.created_form_loading = true;
+      created_in_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     },
     exportPDF() {
       let values = {};

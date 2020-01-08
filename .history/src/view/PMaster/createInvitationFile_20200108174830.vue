@@ -212,9 +212,6 @@ export default {
       this.contractorarray = this.contractorarray.filter(
         item => item.itemkey != e.itemkey
       );
-      this.info.contractor_name = this.info.contractor_name.replace(
-        e.contractor_name + "/"
-      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -240,7 +237,7 @@ export default {
       this.info.sort = value;
     },
     onContractorSel(val) {
-      this.info.contractor_name = this.info.contractor_name + val + "/";
+      this.info.contractor_name = this.info.contractor_name + val;
     },
     filterOption(input, option) {
       return (
@@ -261,8 +258,12 @@ export default {
           continue;
         }
         values[key] = this.info[key];
+        this.contractorarray.forEach(element => {
+          this.info.contractor_name =
+            this.info.contractor_name + element.contractor_name + "/";
+        });
       }
-      console.log(this.info.contractor_name);
+      console.log(this.contractorarray);
       // this.created_form_loading = true;
       // created_in_form(values)
       //   .then(res => {

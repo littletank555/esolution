@@ -47,7 +47,7 @@
           <p class="item" v-for="contractoritem in contractorarray" :key="contractoritem.itemkey">
             <a-auto-complete
               :dataSource="contractor"
-              :value="contractoritem.contractor_name"
+              :value="contractorarray.contractor_name"
               style="width: 100%"
               placeholder="input for select"
               :filterOption="filterOption"

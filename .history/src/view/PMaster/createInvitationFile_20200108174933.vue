@@ -212,9 +212,6 @@ export default {
       this.contractorarray = this.contractorarray.filter(
         item => item.itemkey != e.itemkey
       );
-      this.info.contractor_name = this.info.contractor_name.replace(
-        e.contractor_name + "/"
-      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -261,6 +258,10 @@ export default {
           continue;
         }
         values[key] = this.info[key];
+        this.contractorarray.forEach(element => {
+          this.info.contractor_name =
+            this.info.contractor_name + element.contractor_name + "/";
+        });
       }
       console.log(this.info.contractor_name);
       // this.created_form_loading = true;

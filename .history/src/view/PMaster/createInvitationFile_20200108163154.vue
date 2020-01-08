@@ -44,17 +44,22 @@
       <p class="item">
         <span class="label">分包商</span>
         <a-card style="width:100%">
-          <p class="item" v-for="contractoritem in contractorarray" :key="contractoritem.itemkey">
+          <p class="item">
             <a-auto-complete
-              :dataSource="contractor"
-              :value="contractoritem.contractor_name"
-              style="width: 100%"
-              placeholder="input for select"
+              @change="onContractorSel"
               :filterOption="filterOption"
-              @select="onContractorSel"
-            />
-
-            <a-icon type="delete" @click="onDelete(contractoritem)" />
+              :value="info.contractor_id"
+              placeholder="input for select"
+            >
+              <template slot="dataSource">
+                <a-select-option
+                  v-for="(item,i) in contractor"
+                  :key="i"
+                  :value="item.sub_contractor_id"
+                >{{item.contractor_name}}</a-select-option>
+              </template>
+            </a-auto-complete>
+            <a-icon type="delete" />
           </p>
           <a-button type="dashed" style="width:100%;margin-top:10px;" @click="addSubInfo">
             <a-icon type="plus" />Add
@@ -148,8 +153,6 @@ export default {
     return {
       visible: false,
       contractor: [],
-      itemkey: 0,
-      contractorarray: [{ itemkey: 0, contractor_name: "" }],
       created_form_loading: false,
       pmaster_list: [],
       pmaster: {},
@@ -157,7 +160,7 @@ export default {
       pdf_link: "",
       info: {
         sort: "",
-        contractor_name: "",
+        contractor_id: "",
         send_date: "",
         send_way: "",
         is_min_project: "",
@@ -180,12 +183,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
-          // this.contractor = res.list;
-          let list = new Set();
-          res.list.forEach(element => {
-            list.add(element.contractor_name);
-          });
-          this.contractor = Array.from(list);
+          this.contractor = res.list;
         })
         .catch(err => {});
     },
@@ -195,26 +193,9 @@ export default {
           this.info[key] = "";
         }
       }
-      this.contractorarray = [];
-      this.itemkey = 0;
       this.info.send_date = moment().format("YYYY-MM-DD");
       this.pmaster_list = list;
       this.visible = true;
-    },
-    addSubInfo() {
-      this.itemkey++;
-      this.contractorarray.push({
-        contractor_name: "",
-        itemkey: this.itemkey
-      });
-    },
-    onDelete(e) {
-      this.contractorarray = this.contractorarray.filter(
-        item => item.itemkey != e.itemkey
-      );
-      this.info.contractor_name = this.info.contractor_name.replace(
-        e.contractor_name + "/"
-      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -240,7 +221,7 @@ export default {
       this.info.sort = value;
     },
     onContractorSel(val) {
-      this.info.contractor_name = this.info.contractor_name + val + "/";
+      this.info.contractor_id = val;
     },
     filterOption(input, option) {
       return (
@@ -262,19 +243,18 @@ export default {
         }
         values[key] = this.info[key];
       }
-      console.log(this.info.contractor_name);
-      // this.created_form_loading = true;
-      // created_in_form(values)
-      //   .then(res => {
-      //     this.created_form_loading = false;
-      //     this.file_link = res.link;
-      //     this.$nextTick(function() {
-      //       this.$refs.download.click();
-      //     });
-      //   })
-      //   .catch(err => {
-      //     this.created_form_loading = false;
-      //   });
+      this.created_form_loading = true;
+      created_in_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     },
     exportPDF() {
       let values = {};

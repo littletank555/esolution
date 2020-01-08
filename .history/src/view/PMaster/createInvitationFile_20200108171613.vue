@@ -44,7 +44,11 @@
       <p class="item">
         <span class="label">分包商</span>
         <a-card style="width:100%">
-          <p class="item" v-for="contractoritem in contractorarray" :key="contractoritem.itemkey">
+          <p
+            class="item"
+            v-for="contractoritem in this.contractorarray"
+            :key="contractoritem.itemkey"
+          >
             <a-auto-complete
               :dataSource="contractor"
               :value="contractoritem.contractor_name"
@@ -53,7 +57,6 @@
               :filterOption="filterOption"
               @select="onContractorSel"
             />
-
             <a-icon type="delete" @click="onDelete(contractoritem)" />
           </p>
           <a-button type="dashed" style="width:100%;margin-top:10px;" @click="addSubInfo">
@@ -157,7 +160,7 @@ export default {
       pdf_link: "",
       info: {
         sort: "",
-        contractor_name: "",
+        contractor_id: "",
         send_date: "",
         send_way: "",
         is_min_project: "",
@@ -180,12 +183,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
-          // this.contractor = res.list;
-          let list = new Set();
-          res.list.forEach(element => {
-            list.add(element.contractor_name);
-          });
-          this.contractor = Array.from(list);
+          this.contractor = res.list;
         })
         .catch(err => {});
     },
@@ -212,9 +210,6 @@ export default {
       this.contractorarray = this.contractorarray.filter(
         item => item.itemkey != e.itemkey
       );
-      this.info.contractor_name = this.info.contractor_name.replace(
-        e.contractor_name + "/"
-      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -240,7 +235,7 @@ export default {
       this.info.sort = value;
     },
     onContractorSel(val) {
-      this.info.contractor_name = this.info.contractor_name + val + "/";
+      this.info.contractor_id = val;
     },
     filterOption(input, option) {
       return (
@@ -262,19 +257,18 @@ export default {
         }
         values[key] = this.info[key];
       }
-      console.log(this.info.contractor_name);
-      // this.created_form_loading = true;
-      // created_in_form(values)
-      //   .then(res => {
-      //     this.created_form_loading = false;
-      //     this.file_link = res.link;
-      //     this.$nextTick(function() {
-      //       this.$refs.download.click();
-      //     });
-      //   })
-      //   .catch(err => {
-      //     this.created_form_loading = false;
-      //   });
+      this.created_form_loading = true;
+      created_in_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     },
     exportPDF() {
       let values = {};

@@ -315,6 +315,7 @@ export default {
     onClear() {
       this.select_client_data = {};
       this.subinfo = [];
+      this.itemkey = 0;
       for (const key in this.info) {
         if (this.info.hasOwnProperty(key)) {
           this.info[key] = "";

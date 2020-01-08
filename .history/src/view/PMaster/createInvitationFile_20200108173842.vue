@@ -47,7 +47,7 @@
           <p class="item" v-for="contractoritem in contractorarray" :key="contractoritem.itemkey">
             <a-auto-complete
               :dataSource="contractor"
-              :value="contractoritem.contractor_name"
+              :value="contractorarray.contractor_name"
               style="width: 100%"
               placeholder="input for select"
               :filterOption="filterOption"
@@ -212,9 +212,6 @@ export default {
       this.contractorarray = this.contractorarray.filter(
         item => item.itemkey != e.itemkey
       );
-      this.info.contractor_name = this.info.contractor_name.replace(
-        e.contractor_name + "/"
-      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -240,7 +237,7 @@ export default {
       this.info.sort = value;
     },
     onContractorSel(val) {
-      this.info.contractor_name = this.info.contractor_name + val + "/";
+      this.info.contractor_id = val;
     },
     filterOption(input, option) {
       return (
@@ -261,20 +258,23 @@ export default {
           continue;
         }
         values[key] = this.info[key];
+        this.contractorarray.forEach(element => {
+          this.info.contractor_name =
+            this.info.contractor_name + element.contractor_name + "/";
+        });
       }
-      console.log(this.info.contractor_name);
-      // this.created_form_loading = true;
-      // created_in_form(values)
-      //   .then(res => {
-      //     this.created_form_loading = false;
-      //     this.file_link = res.link;
-      //     this.$nextTick(function() {
-      //       this.$refs.download.click();
-      //     });
-      //   })
-      //   .catch(err => {
-      //     this.created_form_loading = false;
-      //   });
+      this.created_form_loading = true;
+      created_in_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     },
     exportPDF() {
       let values = {};

@@ -245,45 +245,42 @@ export default {
     },
     exportForm() {
       let values = {};
-      this.contractorarray.forEach(element => {
-        this.info.contractor_name =
-          this.info.contractor_name + "/" + element.contractor_name;
-      });
       for (const key in this.info) {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;
         }
         values[key] = this.info[key];
       }
-      this.created_form_loading = true;
-      created_in_form(values)
-        .then(res => {
-          this.created_form_loading = false;
-          this.file_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.download.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
+      this.contractorarray.forEach(element => {
+        this.info.contractor_name =
+          this.info.contractor_name + element.contractor_name + "/";
+      });
+      console.log(this.info.contractor_name);
+      // this.created_form_loading = true;
+      // created_in_form(values)
+      //   .then(res => {
+      //     this.created_form_loading = false;
+      //     this.file_link = res.link;
+      //     this.$nextTick(function() {
+      //       this.$refs.download.click();
+      //     });
+      //   })
+      //   .catch(err => {
+      //     this.created_form_loading = false;
+      //   });
     },
     exportPDF() {
       let values = {};
-      this.contractorarray.forEach(element => {
-        this.info.contractor_name =
-          this.info.contractor_name + "/" + element.contractor_name;
-      });
       for (const key in this.info) {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;

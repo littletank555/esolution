@@ -253,7 +253,7 @@ export default {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;
@@ -283,7 +283,7 @@ export default {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;

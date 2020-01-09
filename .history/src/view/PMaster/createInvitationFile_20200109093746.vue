@@ -45,14 +45,15 @@
         <span class="label">分包商</span>
         <a-card style="width:100%">
           <p class="item" v-for="contractoritem in contractorarray" :key="contractoritem.itemkey">
-            <a-auto-complete
+            <!-- <a-auto-complete
               :dataSource="contractor"
-              v-model="contractoritem.contractor_name"
+              :value="contractoritem.contractor_name"
               style="width: 100%"
               placeholder="input for select"
               :filterOption="filterOption"
               @select="onContractorSel"
-            />
+            />-->
+            <a-input v-model="contractoritem.contractor_name" />
             <a-icon type="delete" @click="onDelete(contractoritem)" />
           </p>
           <a-button type="dashed" style="width:100%;margin-top:10px;" @click="addSubInfo">
@@ -211,6 +212,9 @@ export default {
       this.contractorarray = this.contractorarray.filter(
         item => item.itemkey != e.itemkey
       );
+      // this.info.contractor_name = this.info.contractor_name.replace(
+      //   e.contractor_name + "/"
+      // );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -235,7 +239,9 @@ export default {
       });
       this.info.sort = value;
     },
-    onContractorSel(val) {},
+    onContractorSel(val) {
+      this.info.contractor_name = this.info.contractor_name + val + "/";
+    },
     filterOption(input, option) {
       return (
         option.componentOptions.children[0].text
@@ -245,45 +251,38 @@ export default {
     },
     exportForm() {
       let values = {};
-      this.contractorarray.forEach(element => {
-        this.info.contractor_name =
-          this.info.contractor_name + "/" + element.contractor_name;
-      });
       for (const key in this.info) {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;
         }
         values[key] = this.info[key];
       }
-      this.created_form_loading = true;
-      created_in_form(values)
-        .then(res => {
-          this.created_form_loading = false;
-          this.file_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.download.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
+      console.log(this.info.contractor_name);
+      // this.created_form_loading = true;
+      // created_in_form(values)
+      //   .then(res => {
+      //     this.created_form_loading = false;
+      //     this.file_link = res.link;
+      //     this.$nextTick(function() {
+      //       this.$refs.download.click();
+      //     });
+      //   })
+      //   .catch(err => {
+      //     this.created_form_loading = false;
+      //   });
     },
     exportPDF() {
       let values = {};
-      this.contractorarray.forEach(element => {
-        this.info.contractor_name =
-          this.info.contractor_name + "/" + element.contractor_name;
-      });
       for (const key in this.info) {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;
@@ -292,6 +291,7 @@ export default {
       }
       created_in_pdf(values)
         .then(res => {
+          console.log(res);
           this.pdf_link = res.link;
           this.$nextTick(function() {
             this.$refs.downloadPdf.click();

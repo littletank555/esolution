@@ -211,6 +211,10 @@ export default {
       this.contractorarray = this.contractorarray.filter(
         item => item.itemkey != e.itemkey
       );
+      this.info.contractor_name = this.info.contractor_name.replace(
+        e.contractor_name + "/",
+        ""
+      );
     },
     onPNoSelect(value) {
       this.pmaster_list.some(item => {
@@ -235,7 +239,12 @@ export default {
       });
       this.info.sort = value;
     },
-    onContractorSel(val) {},
+    onContractorSel(val) {
+      let contractor = "";
+      this.contractorarray.forEach(element => {
+        contractor = contractor + element.contractor_name + "/";
+      });
+    },
     filterOption(input, option) {
       return (
         option.componentOptions.children[0].text
@@ -245,45 +254,38 @@ export default {
     },
     exportForm() {
       let values = {};
-      this.contractorarray.forEach(element => {
-        this.info.contractor_name =
-          this.info.contractor_name + "/" + element.contractor_name;
-      });
       for (const key in this.info) {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;
         }
         values[key] = this.info[key];
       }
-      this.created_form_loading = true;
-      created_in_form(values)
-        .then(res => {
-          this.created_form_loading = false;
-          this.file_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.download.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
+      console.log(this.info.contractor_name);
+      // this.created_form_loading = true;
+      // created_in_form(values)
+      //   .then(res => {
+      //     this.created_form_loading = false;
+      //     this.file_link = res.link;
+      //     this.$nextTick(function() {
+      //       this.$refs.download.click();
+      //     });
+      //   })
+      //   .catch(err => {
+      //     this.created_form_loading = false;
+      //   });
     },
     exportPDF() {
       let values = {};
-      this.contractorarray.forEach(element => {
-        this.info.contractor_name =
-          this.info.contractor_name + "/" + element.contractor_name;
-      });
       for (const key in this.info) {
         let date = "";
         if (typeof this.info[key] == "object") {
           date = this.info[key]._isValid
-            ? this.info[key].format("YYYY-MM-DD")
+            ? this.info[key].format("DD/MM/YYYY")
             : "";
           values[key] = date;
           continue;
@@ -292,6 +294,7 @@ export default {
       }
       created_in_pdf(values)
         .then(res => {
+          console.log(res);
           this.pdf_link = res.link;
           this.$nextTick(function() {
             this.$refs.downloadPdf.click();

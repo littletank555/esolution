@@ -2,18 +2,17 @@
   <a-modal v-model="visible" :footer="null" title="Statement Of Account" width="1000px">
     <div class="created_invitation">
       <p class="item">
-        <span class="label">工程地點</span>
+        <span class="label">排序</span>
         <a-auto-complete
-          :dataSource="ke_pl"
           style="width: 100%"
           @select="onSelect"
-          :value="info.pl"
+          :value="info.sort"
           :filterOption="filterOption"
           placeholder="input for select"
         >
-          <!-- <template slot="dataSource">
+          <template slot="dataSource">
             <a-select-option v-for="(item,i) in ke_list" :key="i" :value="item.pl">{{item.pl}}</a-select-option>
-          </template>-->
+          </template>
         </a-auto-complete>
       </p>
       <p class="item">
@@ -37,17 +36,8 @@
         <a-input v-model="pmaster.cf" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">Status</span>
-        <a-select v-model="status" @select="onSelectStatus">
-          <a-select-option value=" ">-</a-select-option>
-          <a-select-option value="未上">未上</a-select-option>
-          <a-select-option value="未到期上">未到期上</a-select-option>
-          <a-select-option value="未收未付">未收未付</a-select-option>
-          <a-select-option value="未收已付">未收已付</a-select-option>
-          <a-select-option value="已收已付">已收已付</a-select-option>
-          <a-select-option value="已收未付">已收未付</a-select-option>
-          <a-select-option value="未到期上已付">未到期上已付</a-select-option>
-        </a-select>
+        <span class="label">Service Site</span>
+        <a-input v-model="pmaster.pl" disabled="true"></a-input>
       </p>
       <a-table bordered :dataSource="dataSource" :columns="columns" :pagination="false">
         <template slot="invno" slot-scope="text,record">
@@ -88,6 +78,7 @@
 <script>
 import moment from "moment";
 import { created_SOA_form } from "@/api/form.js";
+import { get_ke_select } from "@/api/ke.js";
 import { get_pmasters } from "@/api/pmaster.js";
 const columns = [
   { title: "Job", dataIndex: "job", key: "1" },
@@ -129,15 +120,12 @@ export default {
       created_form_loading: false,
       pmaster_list: [],
       ke_list: [],
-      ke_pl: [],
       pmaster: {}, //選中的pmaster
       visible: false,
       file_link: "",
       columns: columns,
       jobs: 0,
-      dataSource: [],
-      status: "",
-      account: []
+      dataSource: []
     };
   },
   created() {
@@ -155,18 +143,9 @@ export default {
           this.pmaster[key] = "";
         }
       }
-      this.status = "";
       this.jobs = 0;
       this.dataSource = [];
       this.ke_list = list;
-      this.ke_pl = [];
-      let ke_pl = new Set();
-      list.forEach(item => {
-        if (!item.pl == "") {
-          ke_pl.add(item.pl);
-        }
-      });
-      this.ke_pl = Array.from(ke_pl);
       this.visible = true;
     },
     onSelect(e) {
@@ -175,33 +154,32 @@ export default {
         if (item.pl == e) {
           this.pmaster = item;
           this.pmaster = JSON.parse(JSON.stringify(item));
+          // this.onSelectSite(item.pl);
           return true;
         }
-      });
-    },
-    onSelectStatus(status) {
-      this.dataSource = [];
-      let filterstatus = this.ke_list.filter(
-        item => item.status.toLowerCase().indexOf(status.toLowerCase()) > -1
-      );
-      let filterpl = filterstatus.filter(
-        item => item.pl.toLowerCase().indexOf(this.info.pl.toLowerCase()) > -1
-      );
-      filterpl.forEach(element => {
-        this.jobs++;
-        this.dataSource.push({
-          job: this.jobs,
-          invno: element.inv_no,
-          date: moment(element.sign_date).format("D-MMM-YYYY"),
-          jobdetail: element.pt,
-          price: element.sign_price
-        });
       });
     },
     get_pmasters() {
       get_pmasters()
         .then(res => {
           this.pmaster_list = res.list;
+        })
+        .catch(err => {});
+    },
+    onSelectSite(pl) {
+      get_ke_select(pl)
+        .then(res => {
+          console.log(res);
+          res.list.forEach(element => {
+            this.jobs++;
+            this.dataSource.push({
+              job: this.jobs,
+              invno: element.inv_no,
+              date: moment(element.sign_date).format("D-MMM-YYYY"),
+              jobdetail: element.pt,
+              price: element.sign_price
+            });
+          });
         })
         .catch(err => {});
     },

@@ -17,6 +17,14 @@
             >
               <a-icon type="file" />Create COMMERCIAL INVOICE
             </a-menu-item>
+            <a-menu-item
+              key="2"
+              @click="()=>{
+                this.$refs.createstatement.show(tableData)
+              }"
+            >
+              <a-icon type="file" />Create Statement Of Account
+            </a-menu-item>
           </a-menu>
         </a-dropdown>
 
@@ -58,6 +66,7 @@
       this.getTableData();
       }" />
     <createcommercial ref="createcommercial" />
+    <createstatement ref="createstatement" />
   </div>
 </template>
 
@@ -65,6 +74,7 @@
 import { get_ke, delete_ke } from "@/api/ke";
 import newClient from "./newClient";
 import createcommercial from "./createcommercial";
+import createstatement from "./createStatementOfAccount";
 import edit from "./edit";
 const columns = [
   { title: "中標資料編號", dataIndex: "ke_num", width: 400 },
@@ -182,7 +192,7 @@ export default {
         .catch(err => {});
     }
   },
-  components: { newClient, edit, createcommercial }
+  components: { newClient, edit, createcommercial, createstatement }
 };
 </script>
 

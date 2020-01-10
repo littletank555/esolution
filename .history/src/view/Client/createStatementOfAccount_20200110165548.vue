@@ -88,6 +88,7 @@
 <script>
 import moment from "moment";
 import { created_SOA_form } from "@/api/form.js";
+import { get_ke_select } from "@/api/ke.js";
 import { get_pmasters } from "@/api/pmaster.js";
 const columns = [
   { title: "Job", dataIndex: "job", key: "1" },
@@ -180,23 +181,27 @@ export default {
       });
     },
     onSelectStatus(status) {
-      this.dataSource = [];
-      let filterstatus = this.ke_list.filter(
-        item => item.status.toLowerCase().indexOf(status.toLowerCase()) > -1
+      // get_ke_select(this.info.pl, status)
+      //   .then(res => {
+      //     console.log(res);
+      //     res.list.forEach(element => {
+      //       this.jobs++;
+      //       this.dataSource.push({
+      //         job: this.jobs,
+      //         invno: element.inv_no,
+      //         date: moment(element.sign_date).format("D-MMM-YYYY"),
+      //         jobdetail: element.pt,
+      //         price: element.sign_price
+      //       });
+      //     });
+      //   })
+      //   .catch(err => {});
+      this.account = ke_list.filter(
+        item =>
+          item.status.toLowerCase().indexOf(status.toLowerCase()) &&
+          item.pl.toLowerCase.indexOf(this.info.pl.toLowerCase()) > -1
       );
-      let filterpl = filterstatus.filter(
-        item => item.pl.toLowerCase().indexOf(this.info.pl.toLowerCase()) > -1
-      );
-      filterpl.forEach(element => {
-        this.jobs++;
-        this.dataSource.push({
-          job: this.jobs,
-          invno: element.inv_no,
-          date: moment(element.sign_date).format("D-MMM-YYYY"),
-          jobdetail: element.pt,
-          price: element.sign_price
-        });
-      });
+      console.log(this.account);
     },
     get_pmasters() {
       get_pmasters()

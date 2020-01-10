@@ -36,7 +36,15 @@ export function new_ke(value) {
         })
     });
 }
-
+export function get_ke_select(pl, status) {
+    return request({
+        url: "admin-index?page=ke&action=get_ke_select",
+        method: "POST",
+        data: Qs.stringify({
+            pl, status
+        })
+    });
+}
 export function c_ke_by_list(list) {
     return request({
         url: "admin-index?page=ke&action=c_ke_by_list",

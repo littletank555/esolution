@@ -125,7 +125,6 @@
 <script>
 import { created_q_form } from "@/api/form.js";
 import { created_quotation_pdf } from "@/api/pdf.js";
-import moment from "moment";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
   {

@@ -46,10 +46,10 @@
         <span class="label">電郵</span>
         <a-input v-model="pmaster.ce" disabled="true"></a-input>
       </p>
-      <!-- <p class="item">
+      <p class="item" hidden>
         <span class="label">日期</span>
-        <a-date-picker v-model="info.date" format="YYYY-MM-DD"></a-date-picker>
-      </p>-->
+        <a-date-picker v-model="info.date" format="DD/MM/YYYY"></a-date-picker>
+      </p>
       <p class="item">
         <span class="label">工程地點</span>
         <a-input v-model="pmaster.jca" disabled="true"></a-input>
@@ -125,7 +125,6 @@
 <script>
 import { created_q_form } from "@/api/form.js";
 import { created_quotation_pdf } from "@/api/pdf.js";
-import moment from "moment";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
   {
@@ -226,7 +225,6 @@ export default {
       ];
       this.number = 0;
       this.project = 2;
-      this.info.date = moment().format("YYYY-MM-DD");
       this.dataSource = this.tableData;
       this.visible = true;
     },

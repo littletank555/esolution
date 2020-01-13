@@ -48,7 +48,7 @@
       </p>
       <!-- <p class="item">
         <span class="label">日期</span>
-        <a-date-picker v-model="info.date" format="YYYY-MM-DD"></a-date-picker>
+        <a-date-picker v-model="info.date" format="DD/MM/YYYY"></a-date-picker>
       </p>-->
       <p class="item">
         <span class="label">工程地點</span>
@@ -64,19 +64,6 @@
         </template>
         <template slot="count" slot-scope="text,record">
           <a-input v-model="record.count"></a-input>
-        </template>
-        <template slot="unit" slot-scope="text,record">
-          <!-- <a-input v-model="record.unit"></a-input> -->
-          <a-select v-model="record.unit" style="min-width:80px">
-            <a-select-option value="單">單</a-select-option>
-            <a-select-option value="件">件</a-select-option>
-            <a-select-option value="次">次</a-select-option>
-            <a-select-option value="套">套</a-select-option>
-            <a-select-option value="Job">Job</a-select-option>
-            <a-select-option value="Nos">Nos</a-select-option>
-            <a-select-option value="Times">Times</a-select-option>
-            <a-select-option value="Sets">Sets</a-select-option>
-          </a-select>
         </template>
         <template slot="price" slot-scope="text,record">
           <a-input v-model="record.price"></a-input>
@@ -125,7 +112,6 @@
 <script>
 import { created_q_form } from "@/api/form.js";
 import { created_quotation_pdf } from "@/api/pdf.js";
-import moment from "moment";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
   {
@@ -226,7 +212,6 @@ export default {
       ];
       this.number = 0;
       this.project = 2;
-      this.info.date = moment().format("YYYY-MM-DD");
       this.dataSource = this.tableData;
       this.visible = true;
     },

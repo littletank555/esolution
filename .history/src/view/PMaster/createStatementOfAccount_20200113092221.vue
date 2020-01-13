@@ -15,7 +15,7 @@
               v-for="(item,i) in pmaster_list"
               :key="i"
               :value="item.sort"
-            >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
+            >{{item.sort}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>
@@ -82,7 +82,6 @@
 <script>
 import moment from "moment";
 import { created_SOA_form } from "@/api/form.js";
-import { get_ke_select } from "@/api/ke.js";
 const columns = [
   { title: "Job", dataIndex: "job", key: "1" },
   {
@@ -159,21 +158,21 @@ export default {
       });
     },
     onSelectSite(pl) {
-      get_ke_select(pl)
-        .then(res => {
-          console.log(res);
-          res.list.forEach(element => {
-            this.jobs++;
-            this.dataSource.push({
-              job: this.jobs,
-              invno: element.inv_no,
-              date: moment(element.sign_date).format("D-MMM-YYYY"),
-              jobdetail: element.pt,
-              price: element.sign_price
-            });
-          });
-        })
-        .catch(err => {});
+      // get_ke_select(pl)
+      //   .then(res => {
+      //     console.log(res);
+      //     res.list.forEach(element => {
+      //       this.jobs++;
+      //       this.dataSource.push({
+      //         job: this.jobs,
+      //         invno: element.inv_no,
+      //         date: moment(element.sign_date).format("D-MMM-YYYY"),
+      //         jobdetail: element.pt,
+      //         price: element.sign_price
+      //       });
+      //     });
+      //   })
+      //   .catch(err => {});
     },
     filterOption(input, option) {
       return (

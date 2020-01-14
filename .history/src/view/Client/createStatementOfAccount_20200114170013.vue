@@ -94,7 +94,6 @@
 <script>
 import moment from "moment";
 import { created_SOA_form } from "@/api/form.js";
-import { created_SOA_pdf } from "@/api/pdf.js";
 import { get_pmasters } from "@/api/pmaster.js";
 const columns = [
   { title: "Job", dataIndex: "job", key: "1" },
@@ -140,7 +139,6 @@ export default {
       pmaster: {}, //選中的pmaster
       visible: false,
       file_link: "",
-      pdf_link: "",
       columns: columns,
       jobs: 0,
       dataSource: [],
@@ -250,24 +248,6 @@ export default {
         .catch(err => {
           this.created_form_loading = false;
         });
-    },
-    exportPdf() {
-      let values = {};
-      this.info.date = moment().format("D-MMM-YYYY");
-      for (const key in this.info) {
-        values[key] = this.info[key];
-      }
-      values.job = JSON.stringify(this.dataSource);
-      values.total = sum(this.dataSource);
-
-      created_SOA_pdf(values)
-        .then(res => {
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
-          });
-        })
-        .catch(err => {});
     }
   },
   filters: {

@@ -259,15 +259,18 @@ export default {
       }
       values.job = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
-
+      this.created_form_loading = true;
       created_SOA_pdf(values)
         .then(res => {
+          this.created_form_loading = false;
           this.pdf_link = res.link;
           this.$nextTick(function() {
             this.$refs.downloadPdf.click();
           });
         })
-        .catch(err => {});
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     }
   },
   filters: {

@@ -133,6 +133,20 @@
         >export</a-button>
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button>
+        <!-- <a-dropdown>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item key="1">
+              <a-icon type="file" />Word
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a-icon type="file" />Pdf
+            </a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px">
+            export
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>-->
       </p>
     </div>
   </a-modal>

@@ -106,9 +106,17 @@
           </p>
         </template>
       </a-table>
+
+      <a :href="file_link" ref="download" hidden>下載</a>
+      <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
       <p style="text-align:right;margin-top:10px">
-        <a :href="file_link" ref="download" hidden>下載</a>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>
+        <a-button type="primary" @click="exportPdf" :disabled="enableExportBtn">PDF</a-button>-->
         <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="1">
@@ -335,6 +343,63 @@ export default {
           })
           .catch(err => {});
       }
+    },
+    exportForm() {
+      let values = {};
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+
+      values.project = JSON.stringify(this.dataSource);
+      values.total = sum(this.dataSource);
+      this.created_form_loading = true;
+      console.log(values);
+      created_q_form(values)
+        .then(res => {
+          console.log(res);
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPdf() {
+      let values = {};
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+
+      values.project = JSON.stringify(this.dataSource);
+      values.total = sum(this.dataSource);
+      created_quotation_pdf(values)
+        .then(res => {
+          console.log(res);
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {});
     }
   },
   filters: {

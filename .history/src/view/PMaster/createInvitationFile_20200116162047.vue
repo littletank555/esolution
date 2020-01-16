@@ -289,7 +289,7 @@ export default {
   },
   computed: {
     enableExportBtn: function() {
-      return this.info.sort == "";
+      return this.info.sort == "" || count(this.contractorarray) == 0;
     }
   },
   watch: {

@@ -106,9 +106,10 @@
           </p>
         </template>
       </a-table>
+
+      <a :href="file_link" ref="download" hidden>下載</a>
+      <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
       <p style="text-align:right;margin-top:10px">
-        <a :href="file_link" ref="download" hidden>下載</a>
-        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="1">

@@ -107,9 +107,17 @@
         <span class="label">預計施工完成日</span>
         <a-date-picker v-model="info.end_date" format="DD/MM/YYYY"></a-date-picker>
       </p>
+
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="file_link" ref="download" hidden>下載</a>
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <!-- <a-button type="primary" @click="exportPdf" :disabled="enableExportBtn">PDF</a-button> -->
         <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="1">

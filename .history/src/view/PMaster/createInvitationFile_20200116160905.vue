@@ -126,7 +126,7 @@
       <p style="text-align:right">
         <a :href="file_link" ref="download" hidden>下載</a>
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
-        <a-dropdown>
+        <a-dropdown :disable="enableExportBtn">
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="1">
               <a-icon type="file" />Word
@@ -135,7 +135,7 @@
               <a-icon type="file" />Pdf
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+          <a-button style="margin-left: 8px" type="primary">
             export
             <a-icon type="down" />
           </a-button>

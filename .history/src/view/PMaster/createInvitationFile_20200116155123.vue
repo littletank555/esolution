@@ -123,6 +123,7 @@
         <span class="label">分包商備註(如有):</span>
         <a-input v-model="info.remark2"></a-input>
       </p>
+
       <p style="text-align:right">
         <a :href="file_link" ref="download" hidden>下載</a>
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
@@ -135,7 +136,7 @@
               <a-icon type="file" />Pdf
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+          <a-button style="margin-left: 8px">
             export
             <a-icon type="down" />
           </a-button>
@@ -156,6 +157,7 @@ export default {
       contractor: [],
       itemkey: 0,
       contractorarray: [{ itemkey: 0, contractor_name: "" }],
+      created_form_loading: false,
       pmaster_list: [],
       pmaster: {},
       file_link: "",

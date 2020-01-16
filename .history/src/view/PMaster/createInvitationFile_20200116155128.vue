@@ -135,7 +135,7 @@
               <a-icon type="file" />Pdf
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+          <a-button style="margin-left: 8px">
             export
             <a-icon type="down" />
           </a-button>
@@ -156,6 +156,7 @@ export default {
       contractor: [],
       itemkey: 0,
       contractorarray: [{ itemkey: 0, contractor_name: "" }],
+      created_form_loading: false,
       pmaster_list: [],
       pmaster: {},
       file_link: "",

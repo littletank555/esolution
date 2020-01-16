@@ -135,7 +135,7 @@
               <a-icon type="file" />Pdf
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+          <a-button style="margin-left: 8px" type="primary" disabled>
             export
             <a-icon type="down" />
           </a-button>

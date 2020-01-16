@@ -106,6 +106,7 @@
           </p>
         </template>
       </a-table>
+
       <p style="text-align:right;margin-top:10px">
         <a :href="file_link" ref="download" hidden>下載</a>
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>

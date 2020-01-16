@@ -123,9 +123,16 @@
         <span class="label">分包商備註(如有):</span>
         <a-input v-model="info.remark2"></a-input>
       </p>
+      <a :href="file_link" ref="download" hidden>下載</a>
       <p style="text-align:right">
-        <a :href="file_link" ref="download" hidden>下載</a>
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
         <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="1">
@@ -135,7 +142,7 @@
               <a-icon type="file" />Pdf
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+          <a-button style="margin-left: 8px">
             export
             <a-icon type="down" />
           </a-button>
@@ -156,6 +163,7 @@ export default {
       contractor: [],
       itemkey: 0,
       contractorarray: [{ itemkey: 0, contractor_name: "" }],
+      created_form_loading: false,
       pmaster_list: [],
       pmaster: {},
       file_link: "",
@@ -185,6 +193,7 @@ export default {
     get_contractor() {
       get_sub_contractor()
         .then(res => {
+          // this.contractor = res.list;
           let list = new Set();
           res.list.forEach(element => {
             list.add(element.contractor_name);
@@ -250,7 +259,6 @@ export default {
     },
     handleMenuClick(e) {
       let values = {};
-      this.info.contractor_name = "";
       this.contractorarray.forEach(element => {
         this.info.contractor_name =
           this.info.contractor_name + "/" + element.contractor_name;
@@ -266,7 +274,7 @@ export default {
         }
         values[key] = this.info[key];
       }
-      if (e.key == 1) {
+      if (e == 1) {
         created_in_form(values)
           .then(res => {
             this.file_link = res.link;
@@ -275,7 +283,7 @@ export default {
             });
           })
           .catch(err => {});
-      } else if (e.key == 2) {
+      } else if (e == 2) {
         created_in_pdf(values)
           .then(res => {
             this.pdf_link = res.link;
@@ -285,9 +293,82 @@ export default {
           })
           .catch(err => {});
       }
+    },
+    exportForm() {
+      let values = {};
+      this.contractorarray.forEach(element => {
+        this.info.contractor_name =
+          this.info.contractor_name + "/" + element.contractor_name;
+      });
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("YYYY-MM-DD")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+      this.created_form_loading = true;
+      created_in_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPDF() {
+      let values = {};
+      this.contractorarray.forEach(element => {
+        this.info.contractor_name =
+          this.info.contractor_name + "/" + element.contractor_name;
+      });
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("YYYY-MM-DD")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+      created_in_pdf(values)
+        .then(res => {
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {});
     }
   },
   computed: {
+    // link: function() {
+    //   let link = "http://34.92.29.165:8080/export-eso-in/?";
+    //   for (const key in this.info) {
+    //     let date = "";
+    //     if (typeof this.info[key] == "object") {
+    //       date = this.info[key]._isValid
+    //         ? this.info[key].format("DD/MM/YYYY")
+    //         : "";
+    //       link += `&${key}=${date}`;
+    //       continue;
+    //     }
+    //     if (this.info.hasOwnProperty(key)) {
+    //       link += `&${key}=${this.info[key]}`;
+    //     }
+    //   }
+    //   return link;
+    // },
     enableExportBtn: function() {
       return this.info.sort == "";
     }

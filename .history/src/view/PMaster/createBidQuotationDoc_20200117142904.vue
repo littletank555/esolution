@@ -189,6 +189,12 @@
       </a-card>
 
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a :href="file_link" ref="download" hidden>下載</a>
         <a-dropdown>
@@ -205,6 +211,7 @@
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
       </p>
     </div>
   </a-modal>

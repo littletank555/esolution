@@ -15,7 +15,7 @@
               v-for="(item,i) in pmaster_list"
               :key="i"
               :value="item.sort"
-            >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
+            >{{item.sort}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>
@@ -46,13 +46,13 @@
       <p class="item">
         <span class="label">負責同事</span>
         <a-input v-model="info.chargepepole1"></a-input>
-        <span class="label">佣金(公司)</span>
+        <span style="margin-left:10px;width:200px">佣金(公司)</span>
         <a-input v-model="info.companycommiss"></a-input>
       </p>
       <p class="item">
         <span class="label"></span>
         <a-input v-model="info.chargepepole2"></a-input>
-        <span class="label" style="margin-left:10px">佣金(其他)</span>
+        <span style="margin-left:10px;width:200px">佣金(其他)</span>
         <a-input v-model="info.othercommiss"></a-input>
       </p>
       <p class="item">
@@ -79,14 +79,31 @@
         <span class="label">備註</span>
         <a-textarea v-model="info.ps"></a-textarea>
       </p>
-      <a :href="file_link" ref="download" hidden>下載</a>
+
       <p style="text-align:right;margin-top:10px">
-        <a-button
+        <!-- <a-button
           type="primary"
           @click="exportForm"
           :disabled="enableExportBtn"
           :loading="created_form_loading"
-        >export</a-button>
+        >export</a-button>-->
+        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <a :href="file_link" ref="download" hidden>下載</a>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
+        <a-dropdown>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item key="1">
+              <a-icon type="file" />Word
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a-icon type="file" />Pdf
+            </a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+            export
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
       </p>
     </div>
   </a-modal>
@@ -94,6 +111,7 @@
 
 <script>
 import { created_sm_form } from "@/api/form.js";
+import { created_SM_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
@@ -109,7 +127,8 @@ export default {
         contact: ""
       },
       visible: false,
-      file_link: ""
+      file_link: "",
+      pdf_link: ""
     };
   },
   methods: {
@@ -145,7 +164,50 @@ export default {
           .indexOf(input.toUpperCase()) >= 0
       );
     },
+    handleMenuClick(e) {
+      let values = {};
+      for (const key in this.info) {
+        values[key] = this.info[key];
+      }
+      if (e.key == 1) {
+        created_sm_form(values)
+          .then(res => {
+            this.file_link = res.link;
+            this.$nextTick(function() {
+              this.$refs.download.click();
+            });
+          })
+          .catch(err => {});
+      } else if (e.key == 2) {
+        created_SM_pdf(values)
+          .then(res => {
+            this.pdf_link = res.link;
+            this.$nextTick(function() {
+              this.$refs.downloadPdf.click();
+            });
+          })
+          .catch(err => {});
+      }
+    },
     exportForm() {
+      let values = {};
+      for (const key in this.info) {
+        values[key] = this.info[key];
+      }
+      this.created_form_loading = true;
+      created_sm_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPDF() {
       let values = {};
 
       for (const key in this.info) {
@@ -153,13 +215,13 @@ export default {
       }
       this.created_form_loading = true;
       console.log(values);
-      created_sm_form(values)
+      created_SM_pdf(values)
         .then(res => {
           console.log(res);
           this.created_form_loading = false;
-          this.file_link = res.link;
+          this.pdf_link = res.link;
           this.$nextTick(function() {
-            this.$refs.download.click();
+            this.$refs.downloadPdf.click();
           });
         })
         .catch(err => {

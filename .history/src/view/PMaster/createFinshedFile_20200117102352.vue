@@ -1,8 +1,8 @@
 <template>
-  <a-modal v-model="visible" :footer="null" title="Sales Mome" width="1000px">
+  <a-modal v-model="visible" :footer="null" title="完工紙" width="1000px">
     <div class="created_invitation">
       <p class="item">
-        <span class="label">排序</span>
+        <span class="label">排序序号</span>
         <a-auto-complete
           style="width: 100%"
           @change="onSelect"
@@ -15,101 +15,87 @@
               v-for="(item,i) in pmaster_list"
               :key="i"
               :value="item.sort"
-            >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
+            >{{item.sort}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>
       <p class="item">
-        <span class="label">客戶</span>
-        <a-input v-model="pmaster.ccn" disabled="true"></a-input>
+        <span class="label">日期</span>
+        <a-date-picker format="DD/MM/YYYY" v-model="info.date"></a-date-picker>
       </p>
       <p class="item">
-        <span class="label">工程單編號</span>
-        <a-input v-model="pmaster.p_no" disabled="true"></a-input>
+        <span class="label">本司工程單編號</span>
+        <a-input :value="pmaster.p_no" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">工程總金額</span>
-        <a-input v-model="pmaster.biding_price" disabled="true"></a-input>
+        <span class="label">客戶名稱</span>
+        <a-input :value="pmaster.ccn" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">中標日期</span>
-        <a-input v-model="pmaster.re_bidding_date" disabled="true"></a-input>
+        <span class="label">聯絡人</span>
+        <a-input :value="pmaster.ccp" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">工程地點</span>
-        <a-input v-model="pmaster.pl" disabled="true"></a-input>
+        <span class="label">聯絡電話</span>
+        <a-input :value="pmaster.ct" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">工程內容</span>
-        <a-input v-model="pmaster.pt" disabled="true"></a-input>
+        <span class="label">傳真號碼</span>
+        <a-input :value="pmaster.ce" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">負責同事</span>
-        <a-input v-model="info.chargepepole1"></a-input>
-        <span style="margin-left:10px">佣金(公司)</span>
-        <a-input v-model="info.companycommiss"></a-input>
+        <span class="label">管理處地址</span>
+        <a-input :value="pmaster.jca" disabled="true" />
       </p>
       <p class="item">
-        <span class="label"></span>
-        <a-input v-model="info.chargepepole2"></a-input>
-        <span style="margin-left:10px;width:170px">佣金(其他)</span>
-        <a-input v-model="info.othercommiss"></a-input>
+        <span class="label">工作地點</span>
+        <a-input :value="pmaster.pl" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">施工分判商名稱</span>
-        <a-input v-model="pmaster.sub_bid_name" disabled="true"></a-input>
+        <span class="label">工作內容</span>
+        <a-input :value="pmaster.pt" disabled="true" />
       </p>
       <p class="item">
-        <span class="label">分判商中標編號</span>
-        <a-input v-model="pmaster.sub_bid_number" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商報價資料</span>
-        <a-input v-model="pmaster.spn_date" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商中標金額</span>
-        <a-input v-model="pmaster.sub_bid_price" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商聯絡人</span>
-        <a-input v-model="info.contact"></a-input>
+        <span class="label">完工日期</span>
+        <a-date-picker format="DD/MM/YYYY" v-model="info.finishdate"></a-date-picker>
       </p>
       <p class="item">
         <span class="label">備註</span>
-        <a-textarea v-model="info.ps"></a-textarea>
+        <a-textarea v-model="info.ps" />
       </p>
-      <a :href="file_link" ref="download" hidden>下載</a>
+
       <p style="text-align:right;margin-top:10px">
-        <a-button
+        <!-- <a-button
           type="primary"
           @click="exportForm"
           :disabled="enableExportBtn"
           :loading="created_form_loading"
-        >export</a-button>
+        >export</a-button>-->
+        <a :href="file_link" ref="download" hidden>下載</a>
+        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
       </p>
     </div>
   </a-modal>
 </template>
 
 <script>
-import { created_sm_form } from "@/api/form.js";
+import { created_finished_form } from "@/api/form.js";
+import { created_finished_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
-      pmaster_list: [],
-      pmaster: {}, //選中的pmaster
       info: {
         sort: "",
+        finishdate: "",
         ps: "",
-        chargepepole1: "",
-        chargepepole2: "",
-        companycommiss: "",
-        othercommiss: "",
-        contact: ""
+        date: ""
       },
+      pmaster_list: [],
+      pmaster: {},
       visible: false,
-      file_link: ""
+      file_link: "",
+      pdf_link: ""
     };
   },
   methods: {
@@ -124,7 +110,6 @@ export default {
           this.pmaster[key] = "";
         }
       }
-      console.log(list);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -147,15 +132,20 @@ export default {
     },
     exportForm() {
       let values = {};
-
       for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          values[key] = date;
+          continue;
+        }
         values[key] = this.info[key];
       }
       this.created_form_loading = true;
-      console.log(values);
-      created_sm_form(values)
+      created_finished_form(values)
         .then(res => {
-          console.log(res);
           this.created_form_loading = false;
           this.file_link = res.link;
           this.$nextTick(function() {
@@ -165,6 +155,28 @@ export default {
         .catch(err => {
           this.created_form_loading = false;
         });
+    },
+    exportPDF() {
+      let values = {};
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+      created_finished_pdf(values)
+        .then(res => {
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {});
     }
   },
   computed: {

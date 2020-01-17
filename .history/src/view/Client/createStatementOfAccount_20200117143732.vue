@@ -10,7 +10,11 @@
           :value="info.pl"
           :filterOption="filterOption"
           placeholder="input for select"
-        ></a-auto-complete>
+        >
+          <!-- <template slot="dataSource">
+            <a-select-option v-for="(item,i) in ke_list" :key="i" :value="item.pl">{{item.pl}}</a-select-option>
+          </template>-->
+        </a-auto-complete>
       </p>
       <p class="item">
         <span class="label">To</span>
@@ -54,6 +58,7 @@
           <a-input v-model="record.invno"></a-input>
         </template>
         <template slot="date" slot-scope="text,record">
+          <!-- <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker> -->
           <a-input v-model="record.date"></a-input>
         </template>
         <template slot="jobdetail" slot-scope="text,record">
@@ -73,6 +78,12 @@
       </a-table>
 
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a :href="file_link" ref="download" hidden>下載</a>
         <a-dropdown>
@@ -89,6 +100,7 @@
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
+        <!-- <a-button type="primary" @click="exportPdf" :disabled="enableExportBtn">PDF</a-button> -->
       </p>
     </div>
   </a-modal>
@@ -233,7 +245,7 @@ export default {
         price: 0
       });
     },
-    handleMenuClick(e) {
+    exportForm() {
       let values = {};
       this.info.date = moment().format("D-MMM-YYYY");
       for (const key in this.info) {
@@ -241,25 +253,36 @@ export default {
       }
       values.job = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
-      if (e.key == 1) {
-        created_SOA_form(values)
-          .then(res => {
-            this.file_link = res.link;
-            this.$nextTick(function() {
-              this.$refs.download.click();
-            });
-          })
-          .catch(err => {});
-      } else if (e.key == 2) {
-        created_SOA_pdf(values)
-          .then(res => {
-            this.pdf_link = res.link;
-            this.$nextTick(function() {
-              this.$refs.downloadPdf.click();
-            });
-          })
-          .catch(err => {});
+      this.created_form_loading = true;
+      created_SOA_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPdf() {
+      let values = {};
+      this.info.date = moment().format("D-MMM-YYYY");
+      for (const key in this.info) {
+        values[key] = this.info[key];
       }
+      values.job = JSON.stringify(this.dataSource);
+      values.total = sum(this.dataSource);
+
+      created_SOA_pdf(values)
+        .then(res => {
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {});
     }
   },
   filters: {

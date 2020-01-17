@@ -77,22 +77,15 @@
       </p>
 
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a :href="file_link" ref="download" hidden>下載</a>
-        <a-dropdown>
-          <a-menu slot="overlay" @click="handleMenuClick">
-            <a-menu-item key="1">
-              <a-icon type="file" />Word
-            </a-menu-item>
-            <a-menu-item key="2">
-              <a-icon type="file" />Pdf
-            </a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
-            export
-            <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
       </p>
     </div>
   </a-modal>
@@ -135,6 +128,7 @@ export default {
           this.commercial_data[key] = "";
         }
       }
+      console.log(list);
       this.commercial_data_list = list;
       this.visible = true;
     },
@@ -164,30 +158,42 @@ export default {
         }
       });
     },
-    handleMenuClick(e) {
+    get_client_data() {},
+    exportForm() {
       let values = {};
       for (const key in this.info) {
         values[key] = this.info[key];
       }
-      if (e.key == 1) {
-        created_INV_form(values)
-          .then(res => {
-            this.file_link = res.link;
-            this.$nextTick(function() {
-              this.$refs.download.click();
-            });
-          })
-          .catch(err => {});
-      } else if (e.key == 2) {
-        created_INV_pdf(values)
-          .then(res => {
-            this.pdf_link = res.link;
-            this.$nextTick(function() {
-              this.$refs.downloadPdf.click();
-            });
-          })
-          .catch(err => {});
+      this.created_form_loading = true;
+      created_INV_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPDF() {
+      let values = {};
+      for (const key in this.info) {
+        values[key] = this.info[key];
       }
+      this.created_form_loading = true;
+      created_INV_pdf(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     }
   },
   computed: {

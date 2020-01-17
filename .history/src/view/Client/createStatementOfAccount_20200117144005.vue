@@ -10,7 +10,11 @@
           :value="info.pl"
           :filterOption="filterOption"
           placeholder="input for select"
-        ></a-auto-complete>
+        >
+          <!-- <template slot="dataSource">
+            <a-select-option v-for="(item,i) in ke_list" :key="i" :value="item.pl">{{item.pl}}</a-select-option>
+          </template>-->
+        </a-auto-complete>
       </p>
       <p class="item">
         <span class="label">To</span>
@@ -54,6 +58,7 @@
           <a-input v-model="record.invno"></a-input>
         </template>
         <template slot="date" slot-scope="text,record">
+          <!-- <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker> -->
           <a-input v-model="record.date"></a-input>
         </template>
         <template slot="jobdetail" slot-scope="text,record">

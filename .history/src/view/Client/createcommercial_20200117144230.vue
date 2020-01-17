@@ -77,6 +77,12 @@
       </p>
 
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a :href="file_link" ref="download" hidden>下載</a>
         <a-dropdown>
@@ -93,6 +99,7 @@
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
       </p>
     </div>
   </a-modal>
@@ -135,6 +142,7 @@ export default {
           this.commercial_data[key] = "";
         }
       }
+      console.log(list);
       this.commercial_data_list = list;
       this.visible = true;
     },
@@ -188,6 +196,42 @@ export default {
           })
           .catch(err => {});
       }
+    },
+    exportForm() {
+      let values = {};
+      for (const key in this.info) {
+        values[key] = this.info[key];
+      }
+      this.created_form_loading = true;
+      created_INV_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPDF() {
+      let values = {};
+      for (const key in this.info) {
+        values[key] = this.info[key];
+      }
+      this.created_form_loading = true;
+      created_INV_pdf(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
     }
   },
   computed: {

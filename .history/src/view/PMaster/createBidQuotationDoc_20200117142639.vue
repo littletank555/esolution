@@ -189,6 +189,12 @@
       </a-card>
 
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a :href="file_link" ref="download" hidden>下載</a>
         <a-dropdown>
@@ -205,6 +211,7 @@
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
       </p>
     </div>
   </a-modal>
@@ -421,6 +428,72 @@ export default {
           })
           .catch(err => {});
       }
+    },
+    exportForm() {
+      let values = {};
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+      values.subs = JSON.stringify(this.dataSource);
+      values.bid = JSON.stringify(this.bid);
+      values.handed = JSON.stringify(this.handed);
+      values.contract = JSON.stringify(this.contract);
+      values.invitation = JSON.stringify(this.invitation);
+      values.finish = JSON.stringify(this.finish);
+      values.send = JSON.stringify(this.send);
+      values.sign = JSON.stringify(this.sign);
+      this.created_form_loading = true;
+      console.log("val", values);
+      created_BQD_form(values)
+        .then(res => {
+          this.created_form_loading = false;
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+          console.log("res", res);
+        })
+        .catch(err => {
+          this.created_form_loading = false;
+        });
+    },
+    exportPDF() {
+      let values = {};
+      for (const key in this.info) {
+        let date = "";
+        if (typeof this.info[key] == "object") {
+          date = this.info[key]._isValid
+            ? this.info[key].format("DD/MM/YYYY")
+            : "";
+          values[key] = date;
+          continue;
+        }
+        values[key] = this.info[key];
+      }
+      values.subs = JSON.stringify(this.dataSource);
+      values.bid = JSON.stringify(this.bid);
+      values.handed = JSON.stringify(this.handed);
+      values.contract = JSON.stringify(this.contract);
+      values.invitation = JSON.stringify(this.invitation);
+      values.finish = JSON.stringify(this.finish);
+      values.send = JSON.stringify(this.send);
+      values.sign = JSON.stringify(this.sign);
+      created_BQD_pdf(values)
+        .then(res => {
+          this.pdf_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.downloadPdf.click();
+          });
+        })
+        .catch(err => {});
     }
   },
   computed: {

@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="visible" :footer="null" title="Sales Mome" width="1000px">
+  <a-modal v-model="visible" :footer="null" title="Declined Return Letter" width="1000px">
     <div class="created_invitation">
       <p class="item">
         <span class="label">排序</span>
@@ -20,69 +20,56 @@
         </a-auto-complete>
       </p>
       <p class="item">
-        <span class="label">客戶</span>
+        <span class="label">送呈</span>
         <a-input v-model="pmaster.ccn" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">工程單編號</span>
+        <span class="label">編號</span>
         <a-input v-model="pmaster.p_no" disabled="true"></a-input>
       </p>
+      <!-- <p class="item">
+        <span class="label">日期</span>
+        <a-input v-model="info.date" disabled="true"></a-input>
+      </p>-->
       <p class="item">
-        <span class="label">工程總金額</span>
-        <a-input v-model="pmaster.biding_price" disabled="true"></a-input>
+        <span class="label">寄送地址</span>
+        <a-input v-model="pmaster.bt" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">中標日期</span>
-        <a-input v-model="pmaster.re_bidding_date" disabled="true"></a-input>
+        <span class="label">電話</span>
+        <a-input v-model="pmaster.ct" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">傳真</span>
+        <a-input v-model="pmaster.cf" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">致</span>
+        <a-input v-model="pmaster.ccp" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">電郵</span>
+        <a-input v-model="pmaster.ce" disabled="true"></a-input>
       </p>
       <p class="item">
         <span class="label">工程地點</span>
-        <a-input v-model="pmaster.pl" disabled="true"></a-input>
+        <a-input v-model="pmaster.jca" disabled="true"></a-input>
       </p>
       <p class="item">
-        <span class="label">工程內容</span>
+        <span class="label">工程主旨</span>
         <a-input v-model="pmaster.pt" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">負責同事</span>
-        <a-input v-model="info.chargepepole1"></a-input>
-        <span style="margin-left:10px;width:200px">佣金(公司)</span>
-        <a-input v-model="info.companycommiss"></a-input>
-      </p>
-      <p class="item">
-        <span class="label"></span>
-        <a-input v-model="info.chargepepole2"></a-input>
-        <span style="margin-left:10px;width:200px">佣金(其他)</span>
-        <a-input v-model="info.othercommiss"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">施工分判商名稱</span>
-        <a-input v-model="pmaster.sub_bid_name" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商中標編號</span>
-        <a-input v-model="pmaster.sub_bid_number" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商報價資料</span>
-        <a-input v-model="pmaster.spn_date" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商中標金額</span>
-        <a-input v-model="pmaster.sub_bid_price" disabled="true"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">分判商聯絡人</span>
-        <a-input v-model="info.contact"></a-input>
-      </p>
-      <p class="item">
-        <span class="label">備註</span>
-        <a-textarea v-model="info.ps"></a-textarea>
       </p>
 
       <p style="text-align:right;margin-top:10px">
+        <!-- <a-button
+          type="primary"
+          @click="exportForm"
+          :disabled="enableExportBtn"
+          :loading="created_form_loading"
+        >export</a-button>-->
         <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
         <a :href="file_link" ref="download" hidden>下載</a>
+        <!-- <a-button type="primary" :disabled="enableExportBtn" @click="exportPDF">PDF</a-button> -->
         <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
             <a-menu-item key="1">
@@ -103,22 +90,18 @@
 </template>
 
 <script>
-import { created_sm_form } from "@/api/form.js";
-import { created_SM_pdf } from "@/api/pdf.js";
+import moment from "moment";
+import { created_NRR_form } from "@/api/form.js";
+import { created_NRR_pdf } from "@/api/pdf.js";
 export default {
   data() {
     return {
-      pmaster_list: [],
-      pmaster: {}, //選中的pmaster
       info: {
         sort: "",
-        ps: "",
-        chargepepole1: "",
-        chargepepole2: "",
-        companycommiss: "",
-        othercommiss: "",
-        contact: ""
+        date: ""
       },
+      pmaster_list: [],
+      pmaster: {}, //選中的pmaster
       visible: false,
       file_link: "",
       pdf_link: ""
@@ -136,6 +119,7 @@ export default {
           this.pmaster[key] = "";
         }
       }
+      console.log(list);
       this.pmaster_list = list;
       this.visible = true;
     },
@@ -158,11 +142,12 @@ export default {
     },
     handleMenuClick(e) {
       let values = {};
+      this.info.date = moment().format("D-MMM-YYYY");
       for (const key in this.info) {
         values[key] = this.info[key];
       }
       if (e.key == 1) {
-        created_sm_form(values)
+        created_NRR_form(values)
           .then(res => {
             this.file_link = res.link;
             this.$nextTick(function() {
@@ -171,7 +156,7 @@ export default {
           })
           .catch(err => {});
       } else if (e.key == 2) {
-        created_SM_pdf(values)
+        created_NRR_pdf(values)
           .then(res => {
             this.pdf_link = res.link;
             this.$nextTick(function() {

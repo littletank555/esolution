@@ -3,8 +3,8 @@
     <p class="header">
       <a-input-search placeholder="search by client name" style="width: 200px" @search="onSearch" />
       <span>
-        <a :href="file_link" ref="download" hidden>下載</a>
-        <!-- <a-button type="primary" @click="downloadexcel">Download Record</a-button>
+        <!-- <a :href="file_link" ref="download" hidden>下載</a>
+        <a-button type="primary" @click="downloadexcel">Download Record</a-button>
 
         <a-button
           type="primary"
@@ -21,8 +21,8 @@
               <a-icon type="upload" />Add Record By Upload
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px" type="primary">
-            Download / Upload
+          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+            Download/Upload
             <a-icon type="down" />
           </a-button>
         </a-dropdown>
@@ -161,22 +161,6 @@ export default {
           }
         })
         .catch(err => {});
-    },
-    handleMenuClick(e) {
-      if (e.key == 1) {
-        download_excel()
-          .then(res => {
-            this.file_link = res.link;
-            this.$nextTick(function() {
-              this.$refs.download.click();
-            });
-          })
-          .catch(err => {});
-      } else if (e.key == 2) {
-        this.$nextTick(function() {
-          this.$refs.uploadList.show();
-        });
-      }
     }
   },
   components: { newCLientList, editClient, uploadList }

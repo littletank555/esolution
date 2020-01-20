@@ -73,6 +73,7 @@ export default {
     },
     handleChange(info) {
       if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
         this.fileinfo = info.fileList[0].response;
@@ -89,6 +90,7 @@ export default {
       values.rename = this.rename;
       update_upload_file(values, this.pmaster_id)
         .then(res => {
+          console.log(res);
           if (values.fileid == res.status) {
             this.$message.success("Successfully upload file!");
             this.$emit("done");

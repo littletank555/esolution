@@ -22,7 +22,7 @@
             </a-menu-item>
           </a-menu>
           <a-button style="margin-left: 8px" type="primary">
-            Download / Upload
+            Download/Upload
             <a-icon type="down" />
           </a-button>
         </a-dropdown>

@@ -338,15 +338,6 @@ export default {
           })
           .catch(err => {});
       } else if (e.key == 3) {
-        created_quotation_excel(values)
-          .then(res => {
-            console.log(res);
-            // this.file_link = res.link;
-            // this.$nextTick(function() {
-            //   this.$refs.download.click();
-            // });
-          })
-          .catch(err => {});
       }
     }
   },

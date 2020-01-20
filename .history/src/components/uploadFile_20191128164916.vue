@@ -34,7 +34,7 @@ export default {
       this.value = info.fileList.filter(item => item.status !== "removed");
       this.$emit("input", this.value);
       if (info.file.status !== "uploading") {
-        //console.log(info.file, info.fileList);
+        console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
         info.fileList[info.fileList.length - 1].uid = info.file.response.id;
@@ -71,7 +71,7 @@ export default {
       immediate: true,
       handler(nval, oval) {
         this.List = nval;
-        // console.log(nval);
+        console.log(nval);
       }
     }
   }

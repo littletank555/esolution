@@ -133,7 +133,6 @@
 <script>
 import { created_q_form } from "@/api/form.js";
 import { created_quotation_pdf } from "@/api/pdf.js";
-import { created_quotation_excel } from "@/api/excel.js";
 import moment from "moment";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
@@ -335,16 +334,6 @@ export default {
             this.$nextTick(function() {
               this.$refs.downloadPdf.click();
             });
-          })
-          .catch(err => {});
-      } else if (e.key == 3) {
-        created_quotation_excel(values)
-          .then(res => {
-            console.log(res);
-            // this.file_link = res.link;
-            // this.$nextTick(function() {
-            //   this.$refs.download.click();
-            // });
           })
           .catch(err => {});
       }

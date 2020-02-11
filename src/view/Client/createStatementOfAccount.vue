@@ -83,6 +83,9 @@
             <a-menu-item key="2">
               <a-icon type="file" />Pdf
             </a-menu-item>
+            <a-menu-item key="3">
+              <a-icon type="file" />Excel
+            </a-menu-item>
           </a-menu>
           <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
             export
@@ -98,6 +101,7 @@
 import moment from "moment";
 import { created_SOA_form } from "@/api/form.js";
 import { created_SOA_pdf } from "@/api/pdf.js";
+import { created_SOA_excel } from "@/api/excel.js";
 import { get_pmasters } from "@/api/pmaster.js";
 const columns = [
   { title: "Job", dataIndex: "job", key: "1" },
@@ -259,6 +263,13 @@ export default {
             });
           })
           .catch(err => {});
+      } else if (e.key == 3) {
+        created_SOA_excel(values).then(res => {
+          this.file_link = res.link;
+          this.$nextTick(function() {
+            this.$refs.download.click();
+          });
+        });
       }
     }
   },

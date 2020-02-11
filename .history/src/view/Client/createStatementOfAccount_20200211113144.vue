@@ -4,17 +4,13 @@
       <p class="item">
         <span class="label">工程地點</span>
         <a-auto-complete
-          :dataSource="ke_list"
+          :dataSource="ke_pl"
           style="width: 100%"
           @select="onSelect"
           :value="info.pl"
           :filterOption="filterOption"
           placeholder="input for select"
-        >
-          <!-- <template slot="dataSource">
-            <a-select-option v-for="(item,i) in ke_list" :key="i" :value="item.pl">{{item.pl}}</a-select-option>
-          </template>-->
-        </a-auto-complete>
+        ></a-auto-complete>
       </p>
       <p class="item">
         <span class="label">To</span>
@@ -37,6 +33,10 @@
         <a-input v-model="pmaster.cf" disabled="true"></a-input>
       </p>
       <p class="item">
+        <span class="label">Email</span>
+        <a-input v-model="pmaster.ce" disabled="true"></a-input>
+      </p>
+      <p class="item">
         <span class="label">Status</span>
         <a-select v-model="status" @select="onSelectStatus">
           <a-select-option value=" ">-</a-select-option>
@@ -54,7 +54,6 @@
           <a-input v-model="record.invno"></a-input>
         </template>
         <template slot="date" slot-scope="text,record">
-          <!-- <a-date-picker format="D-MMM-YYYY" v-model="record.date"></a-date-picker> -->
           <a-input v-model="record.date"></a-input>
         </template>
         <template slot="jobdetail" slot-scope="text,record">
@@ -72,14 +71,27 @@
           </p>
         </template>
       </a-table>
-      <a :href="file_link" ref="download" hidden>下載</a>
+
       <p style="text-align:right;margin-top:10px">
-        <a-button
-          type="primary"
-          @click="exportForm"
-          :disabled="enableExportBtn"
-          :loading="created_form_loading"
-        >export</a-button>
+        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <a :href="file_link" ref="download" hidden>下載</a>
+        <a-dropdown>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item key="1">
+              <a-icon type="file" />Word
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a-icon type="file" />Pdf
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-icon type="file" />Excel
+            </a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+            export
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
       </p>
     </div>
   </a-modal>
@@ -88,7 +100,8 @@
 <script>
 import moment from "moment";
 import { created_SOA_form } from "@/api/form.js";
-import { get_ke_select } from "@/api/ke.js";
+import { created_SOA_pdf } from "@/api/pdf.js";
+import { created_SOA_excel } from "@/api/excel.js";
 import { get_pmasters } from "@/api/pmaster.js";
 const columns = [
   { title: "Job", dataIndex: "job", key: "1" },
@@ -134,6 +147,7 @@ export default {
       pmaster: {}, //選中的pmaster
       visible: false,
       file_link: "",
+      pdf_link: "",
       columns: columns,
       jobs: 0,
       dataSource: [],
@@ -181,27 +195,23 @@ export default {
       });
     },
     onSelectStatus(status) {
-      // get_ke_select(this.info.pl, status)
-      //   .then(res => {
-      //     console.log(res);
-      //     res.list.forEach(element => {
-      //       this.jobs++;
-      //       this.dataSource.push({
-      //         job: this.jobs,
-      //         invno: element.inv_no,
-      //         date: moment(element.sign_date).format("D-MMM-YYYY"),
-      //         jobdetail: element.pt,
-      //         price: element.sign_price
-      //       });
-      //     });
-      //   })
-      //   .catch(err => {});
-      this.account = ke_list.filter(
-        item =>
-          item.status.toLowerCase().indexOf(status.toLowerCase()) &&
-          item.pl.toLowerCase.indexOf(this.info.pl.toLowerCase()) > -1
+      this.dataSource = [];
+      let filterstatus = this.ke_list.filter(
+        item => item.status.toLowerCase().indexOf(status.toLowerCase()) > -1
       );
-      console.log(this.account);
+      let filterpl = filterstatus.filter(
+        item => item.pl.toLowerCase().indexOf(this.info.pl.toLowerCase()) > -1
+      );
+      filterpl.forEach(element => {
+        this.jobs++;
+        this.dataSource.push({
+          job: this.jobs,
+          invno: element.inv_no,
+          date: moment(element.sign_date).format("D-MMM-YYYY"),
+          jobdetail: element.pt,
+          price: element.sign_price
+        });
+      });
     },
     get_pmasters() {
       get_pmasters()
@@ -227,7 +237,7 @@ export default {
         price: 0
       });
     },
-    exportForm() {
+    handleMenuClick(e) {
       let values = {};
       this.info.date = moment().format("D-MMM-YYYY");
       for (const key in this.info) {
@@ -235,18 +245,32 @@ export default {
       }
       values.job = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
-      this.created_form_loading = true;
-      created_SOA_form(values)
-        .then(res => {
-          this.created_form_loading = false;
+      if (e.key == 1) {
+        created_SOA_form(values)
+          .then(res => {
+            this.file_link = res.link;
+            this.$nextTick(function() {
+              this.$refs.download.click();
+            });
+          })
+          .catch(err => {});
+      } else if (e.key == 2) {
+        created_SOA_pdf(values)
+          .then(res => {
+            this.pdf_link = res.link;
+            this.$nextTick(function() {
+              this.$refs.downloadPdf.click();
+            });
+          })
+          .catch(err => {});
+      } else if (e.key == 3) {
+        created_SOA_excel(values).then(res => {
           this.file_link = res.link;
           this.$nextTick(function() {
             this.$refs.download.click();
           });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
         });
+      }
     }
   },
   filters: {

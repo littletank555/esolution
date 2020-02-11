@@ -10,7 +10,7 @@
           v-model="activeItem"
         >
           <a-menu-item
-            v-for="(item,i) in memu"
+            v-for="item in memu"
             :key="item.r_name"
             @click="onMenuSelect(item)"
           >{{item.title}}</a-menu-item>
@@ -37,7 +37,7 @@
           <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item>
         </a-breadcrumb>
         <div
-          :style="{ background: '#fff',padding: '40px', minHeight: '80px' ,'margin-bottom':'50px','margin-top':'0px'}"
+          :style="{ background: '#fff',padding: '24px', minHeight: '80px' ,'margin-bottom':'50px','margin-top':'0px'}"
         >
           <router-view />
         </div>
@@ -59,7 +59,10 @@ export default {
           r_name: "client_data",
           title: "Client Data"
         },
-        { r_name: "p_master", title: "P Master" }
+        { r_name: "p_master", title: "P Master" },
+        { r_name: "bid", title: "中" },
+        { r_name: "Client", title: "客" }
+        // { r_name: "contractor", title: "分包商" }
         // { r_name: "invitationForTender", title: " Invitation for Tender" }
       ],
       breadcrumb: [],
@@ -75,6 +78,24 @@ export default {
         return true;
       }
     });
+    setInterval(() => {
+      if (this.breadcrumb.includes("中") && sessionStorage.kesort) {
+        if (!this.breadcrumb.includes(sessionStorage.kesort)) {
+          this.breadcrumb.push(sessionStorage.kesort);
+        }
+      } else if (
+        this.breadcrumb.includes("P Master") &&
+        sessionStorage.pmfile
+      ) {
+        if (!this.breadcrumb.includes(sessionStorage.pmfile)) {
+          this.breadcrumb.push(sessionStorage.pmfile);
+        }
+      } else {
+        if (this.breadcrumb.length > 2) {
+          this.breadcrumb.pop();
+        }
+      }
+    }, 500);
   },
   methods: {
     onMenuSelect(item) {
@@ -86,7 +107,7 @@ export default {
     admin_logout() {
       logout()
         .then(res => {
-          if (res.status) {
+          if (res.status == true) {
             sessionStorage.token = "";
             this.$router.push({ path: "/login" });
           } else {

@@ -15,7 +15,7 @@
               v-for="(item,i) in pmaster_list"
               :key="i"
               :value="item.sort"
-            >{{item.sort+'/'+item.ccn+'/'+item.sub_bid_name}}</a-select-option>
+            >{{item.sort}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>
@@ -25,7 +25,9 @@
       </p>
       <p class="item">
         <span class="label">寄送地址</span>
-        <a-input v-model="pmaster.bt" disabled="true"></a-input>
+        <a-select v-model="info.bt">
+          <a-select-option v-for="item in btArray" :key="item.key" :value="item.bt">{{item.bt}}</a-select-option>
+        </a-select>
       </p>
       <p class="item">
         <span class="label">致</span>
@@ -45,7 +47,7 @@
       </p>
       <!-- <p class="item">
         <span class="label">日期</span>
-        <a-date-picker v-model="info.date" format="DD/MM/YYYY"></a-date-picker>
+        <a-date-picker v-model="info.date" format="YYYY-MM-DD"></a-date-picker>
       </p>-->
       <p class="item">
         <span class="label">工程地點</span>
@@ -61,6 +63,19 @@
         </template>
         <template slot="count" slot-scope="text,record">
           <a-input v-model="record.count"></a-input>
+        </template>
+        <template slot="unit" slot-scope="text,record">
+          <!-- <a-input v-model="record.unit"></a-input> -->
+          <a-select v-model="record.unit" style="min-width:80px">
+            <a-select-option value="單">單</a-select-option>
+            <a-select-option value="件">件</a-select-option>
+            <a-select-option value="次">次</a-select-option>
+            <a-select-option value="套">套</a-select-option>
+            <a-select-option value="Job">Job</a-select-option>
+            <a-select-option value="Nos">Nos</a-select-option>
+            <a-select-option value="Times">Times</a-select-option>
+            <a-select-option value="Sets">Sets</a-select-option>
+          </a-select>
         </template>
         <template slot="price" slot-scope="text,record">
           <a-input v-model="record.price"></a-input>
@@ -91,17 +106,26 @@
           </p>
         </template>
       </a-table>
-
-      <a :href="file_link" ref="download" hidden>下載</a>
-      <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
       <p style="text-align:right;margin-top:10px">
-        <a-button
-          type="primary"
-          @click="exportForm"
-          :disabled="enableExportBtn"
-          :loading="created_form_loading"
-        >export</a-button>
-        <a-button type="primary" @click="exportPdf" :disabled="enableExportBtn">PDF</a-button>
+        <a :href="file_link" ref="download" hidden>下載</a>
+        <a :href="pdf_link" target="_blank" ref="downloadPdf" hidden></a>
+        <a-dropdown>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item key="1">
+              <a-icon type="file" />Word
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a-icon type="file" />Pdf
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-icon type="file" />Excel
+            </a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px" type="primary" :disabled="enableExportBtn">
+            export
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
       </p>
     </div>
   </a-modal>
@@ -109,6 +133,8 @@
 <script>
 import { created_q_form } from "@/api/form.js";
 import { created_quotation_pdf } from "@/api/pdf.js";
+import { created_quotation_excel } from "@/api/excel.js";
+import moment from "moment";
 const columns = [
   { title: "項目", dataIndex: "project", key: "1" },
   {
@@ -124,7 +150,12 @@ const columns = [
     key: "3",
     scopedSlots: { customRender: "count" }
   },
-  { title: "單位", dataIndex: "unit", key: "4" },
+  {
+    title: "單位",
+    dataIndex: "unit",
+    key: "4",
+    scopedSlots: { customRender: "unit" }
+  },
   {
     title: "單價",
     dataIndex: "price",
@@ -165,8 +196,10 @@ export default {
       pdf_link: "",
       info: {
         sort: "",
-        date: ""
+        date: "",
+        bt: ""
       },
+      btArray: [],
       title: "",
       dataSource: [],
       number: 0,
@@ -189,6 +222,7 @@ export default {
       }
       this.title = "";
       this.pmaster_list = list;
+      this.btArray = [];
       this.tableData = [
         {
           project: "1",
@@ -201,6 +235,7 @@ export default {
       ];
       this.number = 0;
       this.project = 2;
+      this.info.date = moment().format("YYYY-MM-DD");
       this.dataSource = this.tableData;
       this.visible = true;
     },
@@ -226,6 +261,15 @@ export default {
           this.pmaster = item;
           this.pmaster = JSON.parse(JSON.stringify(item));
           this.title = this.pmaster.pl + "-" + this.pmaster.pt;
+          this.btArray = [];
+          this.btArray.push({
+            key: 0,
+            bt: this.pmaster.bt
+          });
+          this.btArray.push({
+            key: 1,
+            bt: this.pmaster.jca
+          });
           return true;
         }
       });
@@ -260,7 +304,7 @@ export default {
         }
       }
     },
-    exportForm() {
+    handleMenuClick(e) {
       let values = {};
       for (const key in this.info) {
         let date = "";
@@ -273,49 +317,38 @@ export default {
         }
         values[key] = this.info[key];
       }
-
       values.project = JSON.stringify(this.dataSource);
       values.total = sum(this.dataSource);
-      this.created_form_loading = true;
-      console.log(values);
-      created_q_form(values)
-        .then(res => {
-          console.log(res);
-          this.created_form_loading = false;
-          this.file_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.download.click();
-          });
-        })
-        .catch(err => {
-          this.created_form_loading = false;
-        });
-    },
-    exportPdf() {
-      let values = {};
-      for (const key in this.info) {
-        let date = "";
-        if (typeof this.info[key] == "object") {
-          date = this.info[key]._isValid
-            ? this.info[key].format("DD/MM/YYYY")
-            : "";
-          values[key] = date;
-          continue;
-        }
-        values[key] = this.info[key];
-      }
-
-      values.project = JSON.stringify(this.dataSource);
-      values.total = sum(this.dataSource);
-      created_quotation_pdf(values)
-        .then(res => {
-          console.log(res);
-          this.pdf_link = res.link;
-          this.$nextTick(function() {
-            this.$refs.downloadPdf.click();
-          });
-        })
-        .catch(err => {});
+      if (e.key == 1) {
+        created_q_form(values)
+          .then(res => {
+            this.file_link = res.link;
+            this.$nextTick(function() {
+              this.$refs.download.click();
+            });
+          })
+          .catch(err => {});
+      } else if (e.key == 2) {
+        created_quotation_pdf(values)
+          .then(res => {
+            this.pdf_link = res.link;
+            this.$nextTick(function() {
+              this.$refs.downloadPdf.click();
+            });
+          })
+          .catch(err => {});
+      } 
+      // else if (e.key == 3) {
+      //   created_quotation_excel(values)
+      //     .then(res => {
+      //       console.log(res);
+      //       this.file_link = res.link;
+      //       this.$nextTick(function() {
+      //         this.$refs.download.click();
+      //       });
+      //     })
+      //     .catch(err => {});
+      // }
     }
   },
   filters: {

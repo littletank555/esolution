@@ -61,8 +61,8 @@ export default {
         },
         { r_name: "p_master", title: "P Master" },
         { r_name: "bid", title: "中" },
-        { r_name: "Client", title: "客" },
-        { r_name: "contractor", title: "分包商" }
+        { r_name: "Client", title: "客" }
+        // { r_name: "contractor", title: "分包商" }
         // { r_name: "invitationForTender", title: " Invitation for Tender" }
       ],
       breadcrumb: [],

@@ -24,6 +24,7 @@ export default {
     };
   },
   created() {
+    this.List = [];
     if (location.hostname == "localhost") {
       this.action_url = "api/upload-file/";
     }
@@ -34,13 +35,16 @@ export default {
       this.value = info.fileList.filter(item => item.status !== "removed");
       this.$emit("input", this.value);
       if (info.file.status !== "uploading") {
-        //console.log(info.file, info.fileList);
+        console.log(info.file, info.fileList);
       }
-      if (info.file.status === "done") {
+      if (
+        info.file.status === "done" &&
+        Object.keys(info.file.response).length != 0
+      ) {
         info.fileList[info.fileList.length - 1].uid = info.file.response.id;
         info.fileList[info.fileList.length - 1].url = info.file.response.url;
         delete info.file.lastModified;
-        this.$message.success(`${info.file.name} file uploaded successfully`);
+        // this.$message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
         this.$message.error(`${info.file.name} file upload failed.`);
       }

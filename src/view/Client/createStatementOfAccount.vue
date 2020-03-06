@@ -280,7 +280,7 @@ export default {
   },
   computed: {
     enableExportBtn: function() {
-      return this.info.sort == "";
+      return this.info.pl == "";
     }
   }
 };

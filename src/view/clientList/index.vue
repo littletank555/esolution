@@ -62,14 +62,14 @@
       get_tableData();
       }" />
 
-    <uploadList ref="uploadList" @done="()=>{
+    <uploadData ref="uploadData" @done="()=>{
       get_tableData();
       }" />
   </div>
 </template>
 <script>
 import newCLientList from "./newCLient.vue";
-import uploadList from "./uploadList.vue";
+import uploadData from "./uploadData.vue";
 import editClient from "./editClient.vue";
 import { get_clients, delete_client, download_excel } from "@/api/client.js";
 const columns = [
@@ -174,12 +174,12 @@ export default {
           .catch(err => {});
       } else if (e.key == 2) {
         this.$nextTick(function() {
-          this.$refs.uploadList.show();
+          this.$refs.uploadData.show();
         });
       }
     }
   },
-  components: { newCLientList, editClient, uploadList }
+  components: { newCLientList, editClient, uploadData }
 };
 </script>
 <style lang="scss">

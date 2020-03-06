@@ -51,6 +51,7 @@
             :value="info.sort"
             :filterOption="filterOption"
             placeholder="input for select"
+            @focus="onFocus"
           >
             <template slot="dataSource">
               <a-select-option
@@ -101,7 +102,14 @@
         </p>
         <a-table bordered :dataSource="dataSource" :columns="columns" :pagination="false">
           <template slot="sub_name" slot-scope="text,record">
-            <a-input v-model="record.sub_name"></a-input>
+            <!-- <a-input v-model="record.sub_name"></a-input> -->
+            <a-select v-model="record.sub_name" style="width:150px">
+              <a-select-option
+                :value="contractorname.contractor_name"
+                v-for="contractorname in contractor"
+                :key="contractorname.itemkey"
+              >{{contractorname.contractor_name}}</a-select-option>
+            </a-select>
           </template>
           <template slot="price_back" slot-scope="text,record">
             <a-checkbox v-model="record.price_back">已回</a-checkbox>
@@ -213,6 +221,7 @@
 <script>
 import { created_BQD_form } from "@/api/form.js";
 import { created_BQD_pdf } from "@/api/pdf.js";
+import { get_sub_contractor } from "@/api/pmaster.js";
 const columns = [
   { title: "", dataIndex: "sub", key: "1" },
   {
@@ -285,6 +294,7 @@ export default {
       sign: { sales: false, boss: false, send_doc: false, allfile: false },
       columns: columns,
       subs: 1,
+      contractor: [],
       dataSource: [
         {
           sub: 1,
@@ -297,7 +307,27 @@ export default {
       ]
     };
   },
+  created() {
+    this.get_contractor();
+  },
   methods: {
+    get_contractor() {
+      get_sub_contractor()
+        .then(res => {
+          // console.log(res.list);
+          let list = new Array();
+          res.list.forEach(element => {
+            // list.add(element.contractor_name);
+            list.push({
+              contractor_name: element.contractor_name,
+              itemkey: element.sub_contractor_id
+            });
+          });
+          this.contractor = list;
+          console.log(this.contractor);
+        })
+        .catch(err => {});
+    },
     show(list) {
       for (const key in this.info) {
         if (this.info.hasOwnProperty(key)) {
@@ -381,6 +411,10 @@ export default {
         });
       }
     },
+    onFocus() {
+      let roll = document.getElementsByClassName(ant - modal - wrap);
+      roll.style.overflow = "hidden";
+    },
     handleMenuClick(e) {
       let values = {};
       for (const key in this.info) {
@@ -403,6 +437,7 @@ export default {
       values.send = JSON.stringify(this.send);
       values.sign = JSON.stringify(this.sign);
       if (e.key == 1) {
+        console.log(values);
         created_BQD_form(values)
           .then(res => {
             this.file_link = res.link;

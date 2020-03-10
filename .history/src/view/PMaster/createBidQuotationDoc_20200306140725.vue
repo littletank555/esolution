@@ -51,7 +51,7 @@
             :value="info.sort"
             :filterOption="filterOption"
             placeholder="input for select"
-            :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
+            @focus="onFocus"
           >
             <template slot="dataSource">
               <a-select-option
@@ -103,11 +103,7 @@
         <a-table bordered :dataSource="dataSource" :columns="columns" :pagination="false">
           <template slot="sub_name" slot-scope="text,record">
             <!-- <a-input v-model="record.sub_name"></a-input> -->
-            <a-select
-              v-model="record.sub_name"
-              :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-              style="width:150px"
-            >
+            <a-select v-model="record.sub_name" style="width:150px">
               <a-select-option
                 :value="contractorname.contractor_name"
                 v-for="contractorname in contractor"
@@ -153,19 +149,11 @@
         </p>
         <p class="item">
           <span class="label">開工日期</span>
-          <a-date-picker
-            format="DD-MM-YYYY"
-            :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-            v-model="info.start_date"
-          ></a-date-picker>
+          <a-date-picker format="DD-MM-YYYY" v-model="info.start_date"></a-date-picker>
         </p>
         <p class="item">
           <span class="label">完工日期</span>
-          <a-date-picker
-            format="DD-MM-YYYY"
-            :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-            v-model="info.end_date"
-          ></a-date-picker>
+          <a-date-picker format="DD-MM-YYYY" v-model="info.end_date"></a-date-picker>
         </p>
         <p class="item">
           <span class="label">BD呈報編號</span>
@@ -183,18 +171,11 @@
         </p>
         <p class="item">
           <span class="label">遞交日期</span>
-          <a-date-picker
-            format="DD-MM-YYYY"
-            :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-            v-model="info.submit_date"
-          ></a-date-picker>
+          <a-date-picker format="DD-MM-YYYY" v-model="info.submit_date"></a-date-picker>
         </p>
         <p class="item">
           <span class="label">遞交方式</span>
-          <a-select
-            v-model="info.submit_way"
-            :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-          >
+          <a-select v-model="info.submit_way">
             <a-select-option value=" ">-</a-select-option>
             <a-select-option value="EMAIL">EMAIL</a-select-option>
             <a-select-option value="FAX">FAX</a-select-option>
@@ -430,6 +411,7 @@ export default {
         });
       }
     },
+
     handleMenuClick(e) {
       let values = {};
       for (const key in this.info) {

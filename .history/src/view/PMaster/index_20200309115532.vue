@@ -160,7 +160,7 @@ const columns = [
   { title: "排序", dataIndex: "sort", key: "name" },
   { title: "負責同事", dataIndex: "sales_code", key: "address" },
   { title: "工程地點", dataIndex: "pl", key: "address" },
-  { title: "工程標題", dataIndex: "pt", key: "address", width: "550px" },
+  { title: "工程標題", dataIndex: "pt", key: "address", width: "500px" },
   {
     title: "是否中標",
     width: "150px",

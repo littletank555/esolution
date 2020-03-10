@@ -51,6 +51,7 @@
             :value="info.sort"
             :filterOption="filterOption"
             placeholder="input for select"
+            @focus="onFocus"
             :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
           >
             <template slot="dataSource">
@@ -155,7 +156,7 @@
           <span class="label">開工日期</span>
           <a-date-picker
             format="DD-MM-YYYY"
-            :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
+            :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
             v-model="info.start_date"
           ></a-date-picker>
         </p>
@@ -183,11 +184,7 @@
         </p>
         <p class="item">
           <span class="label">遞交日期</span>
-          <a-date-picker
-            format="DD-MM-YYYY"
-            :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-            v-model="info.submit_date"
-          ></a-date-picker>
+          <a-date-picker format="DD-MM-YYYY" v-model="info.submit_date"></a-date-picker>
         </p>
         <p class="item">
           <span class="label">遞交方式</span>

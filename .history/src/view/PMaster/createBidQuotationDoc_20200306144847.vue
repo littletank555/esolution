@@ -51,6 +51,7 @@
             :value="info.sort"
             :filterOption="filterOption"
             placeholder="input for select"
+            @focus="onFocus"
             :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
           >
             <template slot="dataSource">

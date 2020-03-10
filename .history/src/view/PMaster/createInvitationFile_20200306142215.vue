@@ -9,7 +9,6 @@
           :value="info.sort"
           :filterOption="filterOption"
           placeholder="input for select"
-          :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
         >
           <template slot="dataSource">
             <a-select-option
@@ -67,10 +66,7 @@
       </p>
       <p class="item">
         <span class="label">發出方式</span>
-        <a-select
-          v-model="info.send_way"
-          :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-        >
+        <a-select v-model="info.send_way">
           <a-select-option value=" ">-</a-select-option>
           <a-select-option value="電郵">電郵</a-select-option>
           <a-select-option value="傳真">傳真</a-select-option>
@@ -110,11 +106,7 @@
       <p class="item">
         <span class="label">回傳報價期限:</span>
         <!-- <a-input v-model="pmaster.end_bid_date"></a-input> -->
-        <a-date-picker
-          v-model="info.end_bid_date"
-          :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-          format="YYYY-MM-DD"
-        ></a-date-picker>
+        <a-date-picker v-model="info.end_bid_date" format="YYYY-MM-DD"></a-date-picker>
       </p>
       <p class="item" v-show="info.is_min_project=='1'">
         <span class="label">小型工程級別項目及編號:</span>

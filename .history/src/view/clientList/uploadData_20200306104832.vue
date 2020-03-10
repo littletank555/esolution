@@ -99,7 +99,7 @@ export default {
         .catch(err => {
           this.$notification.error({
             message: "上傳失敗",
-            description: "數據上傳不成功",
+            description: "成功插入0條數據",
             style: {
               width: "600px",
               marginLeft: `${335 - 600}px`

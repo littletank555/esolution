@@ -67,11 +67,7 @@
         </template>
         <template slot="unit" slot-scope="text,record">
           <!-- <a-input v-model="record.unit"></a-input> -->
-          <a-select
-            v-model="record.unit"
-            style="min-width:80px"
-            :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-          >
+          <a-select v-model="record.unit" style="min-width:80px">
             <a-select-option value="單">單</a-select-option>
             <a-select-option value="件">件</a-select-option>
             <a-select-option value="次">次</a-select-option>

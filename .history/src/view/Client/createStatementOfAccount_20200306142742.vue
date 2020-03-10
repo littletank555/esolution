@@ -39,11 +39,7 @@
       </p>
       <p class="item">
         <span class="label">Status</span>
-        <a-select
-          v-model="status"
-          @select="onSelectStatus"
-          :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-        >
+        <a-select v-model="status" @select="onSelectStatus">
           <a-select-option value=" ">-</a-select-option>
           <a-select-option value="未上">未上</a-select-option>
           <a-select-option value="未到期上">未到期上</a-select-option>

@@ -110,11 +110,7 @@
       <p class="item">
         <span class="label">回傳報價期限:</span>
         <!-- <a-input v-model="pmaster.end_bid_date"></a-input> -->
-        <a-date-picker
-          v-model="info.end_bid_date"
-          :getCalendarContainer="(triggerNode)=>{ return triggerNode.parentNode}"
-          format="YYYY-MM-DD"
-        ></a-date-picker>
+        <a-date-picker v-model="info.end_bid_date" format="YYYY-MM-DD"></a-date-picker>
       </p>
       <p class="item" v-show="info.is_min_project=='1'">
         <span class="label">小型工程級別項目及編號:</span>

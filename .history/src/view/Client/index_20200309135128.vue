@@ -80,9 +80,9 @@ const columns = [
   { title: "中標資料編號", dataIndex: "ke_num", width: 400 },
   { title: "負責同事", dataIndex: "sales_code", width: 200 },
   { title: "工程單編號", dataIndex: "p_no", width: 400 },
-  { title: "客戶", dataIndex: "ccn", width: 1100 },
-  { title: "工程地點", dataIndex: "pl", width: 400 },
-  { title: "工程標題", dataIndex: "pt", width: 1500 },
+  { title: "客戶", dataIndex: "ccn", width: 800 },
+  { title: "工程地點", dataIndex: "pl", width: 600 },
+  { title: "工程標題", dataIndex: "pt", width: 800 },
   { title: "工程金額", dataIndex: "biding_price", width: 300 },
   {
     title: "狀態",
@@ -100,7 +100,7 @@ const columns = [
   {
     title: "ES收款方式 支票-號碼 入賬-資料",
     dataIndex: "receipt_way",
-    width: 300
+    width: 600
   },
   { title: "ES收款金額", dataIndex: "receipt_price", width: 400 },
   { title: "客戶尚未支付餘額", dataIndex: "client_no_pay", width: 400 },
@@ -115,11 +115,11 @@ const columns = [
   {
     title: "ES支付方式 支票-號碼 入賬-資料",
     dataIndex: "pay_way",
-    width: 300
+    width: 600
   },
   { title: "分判折扣優惠", dataIndex: "discount", width: 200 },
   { title: "ES支付金額", dataIndex: "pay_price", width: 400 },
-  { title: "支付記錄編號", dataIndex: "pay_record_no", width: 300 },
+  { title: "支付記錄編號", dataIndex: "pay_record_no", width: 400 },
   { title: "ES尚未支付餘額", dataIndex: "no_pay", width: 400 },
   { title: "分判中標日期", dataIndex: "sub_re_bid_date", width: 400 },
   { title: "分判中標通知書編號", dataIndex: "sub_bid_number", width: 800 },

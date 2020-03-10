@@ -82,7 +82,7 @@ const columns = [
   { title: "工程單編號", dataIndex: "p_no", width: 400 },
   { title: "客戶", dataIndex: "ccn", width: 1100 },
   { title: "工程地點", dataIndex: "pl", width: 400 },
-  { title: "工程標題", dataIndex: "pt", width: 1500 },
+  { title: "工程標題", dataIndex: "pt", width: 1200 },
   { title: "工程金額", dataIndex: "biding_price", width: 300 },
   {
     title: "狀態",
@@ -100,7 +100,7 @@ const columns = [
   {
     title: "ES收款方式 支票-號碼 入賬-資料",
     dataIndex: "receipt_way",
-    width: 300
+    width: 400
   },
   { title: "ES收款金額", dataIndex: "receipt_price", width: 400 },
   { title: "客戶尚未支付餘額", dataIndex: "client_no_pay", width: 400 },
@@ -115,7 +115,7 @@ const columns = [
   {
     title: "ES支付方式 支票-號碼 入賬-資料",
     dataIndex: "pay_way",
-    width: 300
+    width: 400
   },
   { title: "分判折扣優惠", dataIndex: "discount", width: 200 },
   { title: "ES支付金額", dataIndex: "pay_price", width: 400 },

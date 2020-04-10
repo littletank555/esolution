@@ -4,6 +4,7 @@
       <p class="item">
         <span class="label">工程地點</span>
         <a-auto-complete
+          :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
           :dataSource="ke_pl"
           style="width: 100%"
           @select="onSelect"
@@ -38,7 +39,11 @@
       </p>
       <p class="item">
         <span class="label">Status</span>
-        <a-select v-model="status" @select="onSelectStatus">
+        <a-select
+          v-model="status"
+          @select="onSelectStatus"
+          :getPopupContainer="(triggerNode)=>{ return triggerNode.parentNode}"
+        >
           <a-select-option value=" ">-</a-select-option>
           <a-select-option value="未上">未上</a-select-option>
           <a-select-option value="未到期上">未到期上</a-select-option>
@@ -54,7 +59,8 @@
           <a-input v-model="record.invno"></a-input>
         </template>
         <template slot="date" slot-scope="text,record">
-          <a-input v-model="record.date"></a-input>
+          <!-- <a-input v-model="record.date"></a-input> -->
+          {{record.date}}
         </template>
         <template slot="jobdetail" slot-scope="text,record">
           <a-textarea v-model="record.jobdetail"></a-textarea>
@@ -204,7 +210,7 @@ export default {
       );
       filterpl.forEach(element => {
         this.jobs++;
-        this.dataSource.push({
+        this.dataSource.unshift({
           job: this.jobs,
           invno: element.inv_no,
           date: moment(element.sign_date).format("D-MMM-YYYY"),

@@ -209,7 +209,7 @@ export default {
       );
       filterpl.forEach(element => {
         this.jobs++;
-        this.dataSource.push({
+        this.dataSource.unshift({
           job: this.jobs,
           invno: element.inv_no,
           date: moment(element.sign_date).format("D-MMM-YYYY"),

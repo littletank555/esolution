@@ -9,6 +9,15 @@ export function get_clients() {
         })
     });
 }
+export function get_client_by_csn(csn) {
+    return request({
+        url: "admin-index?page=client&action=get_client_by_csn",
+        method: "POST",
+        data: Qs.stringify({
+            csn
+        })
+    });
+}
 export function upload_client_list(file_id) {
     return request({
         url: "upload-client/",

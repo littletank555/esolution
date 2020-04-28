@@ -28,6 +28,11 @@ const router = new Router({
         component: () => import("@/view/PMaster")
       },
       {
+        path: "project",
+        name: "project",
+        component: () => import("@/view/project/index.vue")
+      },
+      {
         path: "invitationForTender",
         name: "invitationForTender",
         component: () => import("@/view/invitationForTender")

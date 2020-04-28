@@ -1,0 +1,88 @@
+<template>
+  <div>
+    <p class="header">
+      <a-input-search placeholder="search by Project site" style="width: 200px" @search="onSearch" />
+      <span>
+        <a-dropdown @click="handleButtonClick">
+          <a-button style="margin-left: 8px" type="primary">
+            Create form
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
+        <a-button
+          type="primary"
+          @click="()=>{
+        this.$refs.newPMaster.show()
+        }"
+        >Add Record</a-button>
+      </span>
+    </p>
+    <a-table :columns="columns" :dataSource="tableData" :loading="onTableLoading"></a-table>
+  </div>
+</template>
+<script>
+import { get_project } from "@/api/project.js";
+const columns = [
+  { title: "排序", dataIndex: "sort" },
+  { title: "負責同事", dataIndex: "sales_code" },
+  { title: "工程地點", dataIndex: "pl" },
+  { title: "工程標題", dataIndex: "pt", width: "550px" },
+  {
+    title: "是否中標",
+    width: "150px",
+    dataIndex: "is_bidding",
+    filter: [],
+    filterMultiple: true,
+    onFilter: (value, record) => record.is_bidding.indexOf(value) === 0
+  },
+  { title: "報價分判名稱", scopedSlots: { customRender: "sub_name" } },
+  { title: "分判報價金額", scopedSlots: { customRender: "sub_price" } },
+  { title: "中標分判名稱", dataIndex: "sub_bid_name", key: "sub_bid_name" },
+  { scopedSlots: { customRender: "file" } },
+  { scopedSlots: { customRender: "detail" } },
+  { scopedSlots: { customRender: "delete" } }
+];
+export default {
+  data() {
+    return {
+      tableData: [],
+      dataSource: [],
+      columns,
+      onTableLoading: false
+    };
+  },
+  created() {
+    this.getTableData();
+  },
+  methods: {
+    onSearch(val) {
+      const dataSource = [...this.dataSource];
+      this.tableData = dataSource.filter(
+        item =>
+          (item.pl + item.sort + item.ccn)
+            .toLowerCase()
+            .indexOf(val.toLowerCase()) > -1
+      );
+      if (val == "") {
+        this.tableData = this.dataSource;
+      }
+    },
+    getTableData() {
+      this.onTableLoading = true;
+      get_project()
+        .then(res => {
+          this.tableData = res.list;
+          this.dataSource = res.list;
+          this.onTableLoading = false;
+        })
+        .catch(err => {});
+    }
+  }
+};
+</script>
+<style lang="scss">
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

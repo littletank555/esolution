@@ -62,7 +62,7 @@ export default {
           r_name: "client_data",
           title: "施工地點"
         },
-        { r_name: "project", title: "項目資料" },
+        { r_name: "p_master", title: "項目資料" },
         { r_name: "bid", title: "中標資料" }
         // { r_name: "Client", title: "客" }
         // { r_name: "invitationForTender", title: " Invitation for Tender" }
@@ -116,7 +116,7 @@ export default {
     onMenuSelect(item) {
       this.$router.push({ name: item.r_name });
       this.breadcrumb = [];
-      // this.breadcrumb.push("Home");
+      this.breadcrumb.push("Home");
       this.breadcrumb.push(item.title);
     },
     admin_logout() {

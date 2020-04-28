@@ -16,7 +16,7 @@
       :dataSource="tableData"
       :loading="onLoading"
       :pagination="pagination"
-      :rowKey="record => record.sub_contractor_id"
+      :rowKey="record => record.id"
     >
       <template slot="edit" slot-scope="record">
         <a>

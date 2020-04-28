@@ -8,15 +8,6 @@ const router = new Router({
       redirect: "login  "
     },
     {
-      path: "/tank",
-      name: "tank",
-      component: () => import("@/view/tank")
-    }, {
-      path: "/test",
-      name: "test",
-      component: () => import("@/view/test")
-    },
-    {
       path: "/home",
       name: "home",
       redirect: "home/client_list",
@@ -37,12 +28,43 @@ const router = new Router({
         component: () => import("@/view/PMaster")
       },
       {
+        path: "project",
+        name: "project",
+        component: () => import("@/view/project/index.vue")
+      },
+      {
         path: "invitationForTender",
         name: "invitationForTender",
         component: () => import("@/view/invitationForTender")
       },
+      {
+        path: "Client",
+        name: "Client",
+        component: () => import("@/view/Client")
+      },
+      {
+        path: "bid",
+        name: "bid",
+        component: () => import("@/view/bid/index.vue"),
+      },
+      {
+        path: "contractor",
+        name: "contractor",
+        component: () => import("@/view/contractor/index.vue"),
+      },
+      {//kerecord
+        path: "/home/bid/:sort",
+        name: "keRecord",
+        component: () => import("@/view/bid/keRecord"),
+      },
+      {//uploadFile
+        path: "/home/pmaster/:pmaster_id",
+        name: "fileIndex",
+        component: () => import("@/view/PMaster/fileIndex.vue"),
+      },
       ]
     },
+
     {
       path: "/login",
       component: () => import("@/view/login.vue"),

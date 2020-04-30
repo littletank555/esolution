@@ -97,7 +97,20 @@ export default {
       client_data_list: [],
       select_client_data: {}, //選中的工程單對應的client data
       itemkey: 0,
-      subinfo: []
+      subinfo: [],
+      option: [
+        { value: "", label: "-" },
+        { value: "不報不需回", label: "不報不需回" },
+        { value: "不報已回", label: "不報已回" },
+        { value: "過期未報", label: "過期未報" },
+        { value: "Fax", label: "Fax" },
+        { value: "Email", label: "Email" },
+        { value: "Post", label: "Post" },
+        { value: "親身", label: "親身" },
+        { value: "速遞", label: "速遞" },
+        { value: "Online", label: "Online" },
+        { value: "WSAPP", label: "WSAPP" }
+      ]
     };
   },
   created() {

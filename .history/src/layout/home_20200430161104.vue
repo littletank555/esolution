@@ -38,9 +38,14 @@
         <a-breadcrumb style="margin:76px 0px 16px 0px" :routes="routes">
           <!-- <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item> -->
           <template slot="itemRender" slot-scope="{ route, params, routes, paths }">
+            <!-- <span v-if="routes.indexOf(route) === routes.length - 1">{{ routes.indexOf(route) }}</span> -->
+            <p>{{route.breadcrumbName}}</p>
+            <!-- <p>{{route}}</p> -->
             <span v-if="basePath+route.path == $route.path">{{route.breadcrumbName}}</span>
+            <!-- <router-link v-else :to="`${basePath}/${paths.join('/')}`">{{ route.breadcrumbName }}</router-link> -->
           </template>
         </a-breadcrumb>
+        <p>{{ $route.path }}</p>
         <div
           :style="{ background: '#fff',padding: '24px', minHeight: '80px' ,'margin-bottom':'50px','margin-top':'0px'}"
         >
@@ -86,6 +91,10 @@ export default {
       ],
       basePath: "/home",
       routes: [
+        // {
+        //   path: "/home",
+        //   breadcrumbName: "home"
+        // },
         {
           path: "/client_list",
           breadcrumbName: "客戶資料"
@@ -101,10 +110,6 @@ export default {
         {
           path: "/project",
           breadcrumbName: "項目資料"
-        },
-        {
-          path: "/bid",
-          breadcrumbName: "中標資料"
         }
       ],
       breadcrumb: [],

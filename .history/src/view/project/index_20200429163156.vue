@@ -14,9 +14,7 @@
     <a-table :columns="columns" :dataSource="tableData" :loading="onTableLoading">
       <template slot="is_bid" slot-scope="record">
         <span v-if="record.is_bid == '是'" style="color:blue;">是</span>
-        <span v-if="record.is_bid == '否'" @click="bidClick(record.project_id)">
-          <a style="color:red;">否</a>
-        </span>
+        <span v-if="record.is_bid == '否'" style="color:red;" @click="bidClick">否</span>
         <a-modal
           title="Title"
           :visible="visible"
@@ -26,12 +24,6 @@
         >
           <p>{{ ModalText }}</p>
         </a-modal>
-      </template>
-      <template slot="send_contractor" slot-scope="record">
-        <span v-for="(item,i) in record.contractor_data" :key="i">
-          <a-tag color="#2db7f5" v-if="item.receipt_date == '0000-00-00'">{{item.s_name}}</a-tag>
-          <a-tag color="red" v-else>{{item.s_name}}</a-tag>
-        </span>
       </template>
     </a-table>
     <newProject ref="newProject" @done="()=>{
@@ -70,10 +62,7 @@ export default {
       tableData: [],
       dataSource: [],
       columns,
-      onTableLoading: false,
-      ModalText: "Content of the modal",
-      visible: false,
-      confirmLoading: false
+      onTableLoading: false
     };
   },
   created() {
@@ -92,21 +81,7 @@ export default {
         this.tableData = this.dataSource;
       }
     },
-    bidClick(project_id) {
-      this.visible = true;
-    },
-    handleOk(e) {
-      this.ModalText = "The modal will be closed after two seconds";
-      this.confirmLoading = true;
-      setTimeout(() => {
-        this.visible = false;
-        this.confirmLoading = false;
-      }, 2000);
-    },
-    handleCancel(e) {
-      console.log("Clicked cancel button");
-      this.visible = false;
-    },
+    bidClick() {},
     getTableData() {
       this.onTableLoading = true;
       get_project()

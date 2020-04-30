@@ -28,10 +28,7 @@
         </a-modal>
       </template>
       <template slot="send_contractor" slot-scope="record">
-        <span v-for="(item,i) in record.contractor_data" :key="i">
-          <a-tag color="#2db7f5" v-if="item.receipt_date == '0000-00-00'">{{item.s_name}}</a-tag>
-          <a-tag color="red" v-else>{{item.s_name}}</a-tag>
-        </span>
+        <a-tag color="#2db7f5">{{record.contractor[0].s_name}}</a-tag>
       </template>
     </a-table>
     <newProject ref="newProject" @done="()=>{

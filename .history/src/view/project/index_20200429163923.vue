@@ -14,8 +14,8 @@
     <a-table :columns="columns" :dataSource="tableData" :loading="onTableLoading">
       <template slot="is_bid" slot-scope="record">
         <span v-if="record.is_bid == '是'" style="color:blue;">是</span>
-        <span v-if="record.is_bid == '否'" @click="bidClick(record.project_id)">
-          <a style="color:red;">否</a>
+        <span v-if="record.is_bid == '否'" style="color:red;" @click="bidClick(record.project_id)">
+          <a>否</a>
         </span>
         <a-modal
           title="Title"
@@ -26,12 +26,6 @@
         >
           <p>{{ ModalText }}</p>
         </a-modal>
-      </template>
-      <template slot="send_contractor" slot-scope="record">
-        <span v-for="(item,i) in record.contractor_data" :key="i">
-          <a-tag color="#2db7f5" v-if="item.receipt_date == '0000-00-00'">{{item.s_name}}</a-tag>
-          <a-tag color="red" v-else>{{item.s_name}}</a-tag>
-        </span>
       </template>
     </a-table>
     <newProject ref="newProject" @done="()=>{

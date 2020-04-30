@@ -38,7 +38,8 @@
         <a-breadcrumb style="margin:76px 0px 16px 0px" :routes="routes">
           <!-- <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item> -->
           <template slot="itemRender" slot-scope="{ route, params, routes, paths }">
-            <span v-if="basePath+route.path == $route.path">{{route.breadcrumbName}}</span>
+            <span v-if="routes.indexOf(route) === routes.length - 1">{{ route.breadcrumbName }}</span>
+            <router-link v-else :to="`${basePath}/${paths.join('/')}`">{{ route.breadcrumbName }}</router-link>
           </template>
         </a-breadcrumb>
         <div
@@ -54,7 +55,6 @@
 import { logout } from "@/api/user.js";
 export default {
   data() {
-    const { lang } = this.$route.params;
     return {
       memu: [
         {
@@ -84,27 +84,14 @@ export default {
         { r_name: "p_master", title: "項目資料" },
         { r_name: "bid", title: "中標資料" }
       ],
-      basePath: "/home",
       routes: [
         {
-          path: "/client_list",
+          path: "/home",
+          breadcrumbName: "home"
+        },
+        {
+          path: "client_list",
           breadcrumbName: "客戶資料"
-        },
-        {
-          path: "/client_data",
-          breadcrumbName: "施工地點"
-        },
-        {
-          path: "/contractor",
-          breadcrumbName: "承辦商"
-        },
-        {
-          path: "/project",
-          breadcrumbName: "項目資料"
-        },
-        {
-          path: "/bid",
-          breadcrumbName: "中標資料"
         }
       ],
       breadcrumb: [],

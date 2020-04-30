@@ -36,7 +36,7 @@
       </a-layout-header>
       <a-layout-content :style="{ padding: '0 50px' }">
         <a-breadcrumb style="margin:76px 0px 16px 0px" :routes="routes">
-          <!-- <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item> -->
+          <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item>
           <template slot="itemRender" slot-scope="{ route, params, routes, paths }">
             <span v-if="basePath+route.path == $route.path">{{route.breadcrumbName}}</span>
           </template>

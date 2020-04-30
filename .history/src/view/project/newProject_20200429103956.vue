@@ -14,25 +14,66 @@
           style="width: 100%"
           @change="onlsnSelect"
           :filterOption="filterOption"
-          :value="info.lsn"
+          :value="info.pl"
           placeholder="input for select"
         >
           <template slot="dataSource">
             <a-select-option
               v-for="(item,i) in client_data_list"
               :key="i"
-              :value="item.lsn"
-            >{{item.lsn +'/'+item.lc}}</a-select-option>
+              :value="item.lc"
+            >{{item.lc}}</a-select-option>
           </template>
         </a-auto-complete>
       </p>
       <p class="item">
-        <span class="label">工程序號</span>
-        <a-input v-model="info.p_num" :disabled="true"></a-input>
+        <span class="label">客戶編碼</span>
+        <a-input v-model="this.select_client_data.csn" disabled="true" />
+      </p>
+      <p class="item">
+        <span class="label">排序</span>
+        <a-input v-model="info.sort"></a-input>
       </p>
       <p class="item">
         <span class="label">工程標號</span>
-        <a-input v-model="info.p_no"></a-input>
+        <a-input v-model="project_no"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">工程地址短寫</span>
+        <a-input v-model="this.select_client_data.project_area" disabled="true"></a-input>
+      </p>
+
+      <p class="item">
+        <span class="label">客戶</span>
+        <a-input v-model="this.select_client_data.ccn" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">負責同事</span>
+        <a-input v-model="this.select_client_data.sales_code" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">SITE location</span>
+        <a-input v-model="this.select_client_data.jca" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">BILL TO</span>
+        <a-input v-model="this.select_client_data.bt" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">客戶聯絡電話</span>
+        <a-input v-model="this.select_client_data.ct" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">客戶傳真號碼</span>
+        <a-input v-model="this.select_client_data.cf" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">客戶電郵</span>
+        <a-input v-model="this.select_client_data.ce" disabled="true"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">客戶聯絡人</span>
+        <a-input v-model="this.select_client_data.ccp" disabled="true"></a-input>
       </p>
       <p class="item">
         <span class="label">工程標題</span>
@@ -40,35 +81,20 @@
       </p>
       <p class="item">
         <span class="label">被邀請報價日期</span>
-        <a-date-picker format="DD/MM/YYYY" v-model="info.in_bid_date"></a-date-picker>
+        <a-date-picker format="DD/MM/YYYY" v-model="info.in_price_date"></a-date-picker>
       </p>
       <p class="item">
         <span class="label">截標日期</span>
         <a-date-picker format="DD/MM/YYYY" v-model="info.end_bid_date"></a-date-picker>
       </p>
-      <p>
-        <span>標書資料</span>
-        <a-upload
-          name="orm_file"
-          :multiple="false"
-          :action="action_url"
-          :directory="false"
-          @change="handleChange"
-          :remove="onfileRemove"
-          style="margin-left:90px"
-        >
-          <a-button :disabled="canUpload">
-            <a-icon type="upload" />上傳標書
-          </a-button>
-        </a-upload>
-      </p>
       <p class="item">
-        <span class="label">填寫標書資料</span>
-        <a-textarea style="height:100px"></a-textarea>
+        <span class="label">截標時間</span>
+        <!-- <a-input v-model="info.end_bid_time"></a-input> -->
+        <a-time-picker style="width:100%" v-model="info.end_bid_time" format="HH:mm" />
       </p>
       <p style="text-align:right">
-        <a-button type="primary" @click="onClear">清除</a-button>
-        <a-button type="primary" :loading="onSubmiting" @click="onSubmit">提交</a-button>
+        <a-button type="primary" @click="onClear">Clear</a-button>
+        <a-button type="primary" :loading="onSubmiting" @click="onSubmit">Submit</a-button>
       </p>
     </div>
   </a-drawer>
@@ -83,21 +109,50 @@ export default {
       visible: false,
       onSubmiting: false,
       info: {
-        p_num: "",
+        sort: "",
         p_no: "",
-        lsn: "",
-        p_title: "",
-        in_bid_date: "",
-        is_bid: "",
-        re_tender_date: "",
-        end_tender_date: "",
-        tender_file_id: 0,
-        tender_text: ""
+        pl: "",
+        pt: "",
+        pshort: "",
+        in_price_date: "",
+        end_bid_date: "",
+        end_bid_time: "",
+        send_bid_date: "",
+        send_bid_way: "",
+        out_price: "",
+        is_bidding: "",
+        re_bidding_date: "",
+        biding_price: "",
+        sub_price_name: "",
+        sub_price: "",
+        spn_date: "",
+        sub_bid_name: "",
+        sub_re_bid_date: "",
+        sub_bid_price: "",
+        sub_bid_number: "",
+        start_date: "",
+        end_date: "",
+        min_project: "",
+        declare_number: "",
+        regulation: ""
       },
       client_data_list: [],
       select_client_data: {}, //選中的工程單對應的client data
       itemkey: 0,
-      subinfo: []
+      subinfo: [],
+      option: [
+        { value: "", label: "-" },
+        { value: "不報不需回", label: "不報不需回" },
+        { value: "不報已回", label: "不報已回" },
+        { value: "過期未報", label: "過期未報" },
+        { value: "Fax", label: "Fax" },
+        { value: "Email", label: "Email" },
+        { value: "Post", label: "Post" },
+        { value: "親身", label: "親身" },
+        { value: "速遞", label: "速遞" },
+        { value: "Online", label: "Online" },
+        { value: "WSAPP", label: "WSAPP" }
+      ]
     };
   },
   created() {
@@ -251,7 +306,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     .label {
-      min-width: 150px;
+      min-width: 160px;
     }
     .ant-calendar-picker {
       width: 100%;

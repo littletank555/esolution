@@ -38,7 +38,8 @@
         <a-breadcrumb style="margin:76px 0px 16px 0px" :routes="routes">
           <!-- <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item> -->
           <template slot="itemRender" slot-scope="{ route, params, routes, paths }">
-            <span v-if="basePath+route.path == $route.path">{{route.breadcrumbName}}</span>
+            <!-- <span v-if="basePath+route.path == $route.path">{{route.breadcrumbName}}</span> -->
+            <router-link :to="`${basePath}/${paths.join('/')}`">{{ route.breadcrumbName }}</router-link>
           </template>
         </a-breadcrumb>
         <div
@@ -85,26 +86,54 @@ export default {
         { r_name: "bid", title: "中標資料" }
       ],
       basePath: "/home",
+      // routes: [
+      //   {
+      //     path: "/client_list",
+      //     breadcrumbName: "客戶資料"
+      //   },
+      //   {
+      //     path: "/client_data",
+      //     breadcrumbName: "施工地點"
+      //   },
+      //   {
+      //     path: "/contractor",
+      //     breadcrumbName: "承辦商"
+      //   },
+      //   {
+      //     path: "/project",
+      //     breadcrumbName: "項目資料"
+      //   },
+      //   {
+      //     path: "/bid",
+      //     breadcrumbName: "中標資料"
+      //   }
+      // ],
       routes: [
         {
-          path: "/client_list",
-          breadcrumbName: "客戶資料"
+          path: "index",
+          breadcrumbName: "home"
         },
         {
-          path: "/client_data",
-          breadcrumbName: "施工地點"
+          path: "first",
+          breadcrumbName: "first",
+          children: [
+            {
+              path: "/general",
+              breadcrumbName: "General"
+            },
+            {
+              path: "/layout",
+              breadcrumbName: "Layout"
+            },
+            {
+              path: "/navigation",
+              breadcrumbName: "Navigation"
+            }
+          ]
         },
         {
-          path: "/contractor",
-          breadcrumbName: "承辦商"
-        },
-        {
-          path: "/project",
-          breadcrumbName: "項目資料"
-        },
-        {
-          path: "/bid",
-          breadcrumbName: "中標資料"
+          path: "second",
+          breadcrumbName: "second"
         }
       ],
       breadcrumb: [],

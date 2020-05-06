@@ -11,7 +11,13 @@
         >新增項目資料</a-button>
       </span>
     </p>
-    <a-table :columns="columns" :dataSource="tableData" :loading="onTableLoading">
+    <a-table
+      :columns="columns"
+      :dataSource="tableData"
+      :loading="onTableLoading"
+      :rowKey="record => record.project_id"
+      :pagination="pagination"
+    >
       <template slot="is_bid" slot-scope="record">
         <span v-if="record.is_bid == '是'" style="color:blue;">是</span>
         <span v-if="record.is_bid == '否'" @click="bidClick(record.project_id)">
@@ -33,20 +39,40 @@
           <a-tag color="red" v-else>{{item.s_name}}</a-tag>
         </span>
       </template>
+      <template slot="edit" slot-scope="record">
+        <a>
+          <a-icon type="edit" @click="()=>{
+            $refs.editProject.show(record)
+        }"></a-icon>
+        </a>
+      </template>
+      <template slot="delete" slot-scope="record">
+        <a-popconfirm
+          v-if="tableData.length"
+          title="Sure to delete?"
+          @confirm="() => onDelete(record.project_id)"
+        >
+          <a>
+            <a-icon type="delete"></a-icon>
+          </a>
+        </a-popconfirm>
+      </template>
     </a-table>
     <newProject ref="newProject" @done="()=>{
       this.getTableData();
       }" />
+    <editProject ref="editProject" @done="()=>{get_tableData();}" />
   </div>
 </template>
 <script>
 import newProject from "./newProject";
+import editProject from "./editProject";
 import { get_project } from "@/api/project.js";
 const columns = [
   { title: "工程序號", dataIndex: "p_num" },
   { title: "負責同事", dataIndex: "sales_code" },
   { title: "工程地點", dataIndex: "lc" },
-  { title: "工程標號和標題", dataIndex: "p_title", width: "550px" },
+  { title: "工程標號和標題", dataIndex: "titleandno", width: "550px" },
   { title: "收到標書日期", dataIndex: "re_tender_date" },
   { title: "截標日期", dataIndex: "end_tender_date" },
   // {
@@ -62,7 +88,9 @@ const columns = [
   // },
   { title: "是否中標", scopedSlots: { customRender: "is_bid" } },
   { title: "標書發送", scopedSlots: { customRender: "send_contractor" } },
-  { scopedSlots: { customRender: "contractor" } }
+  { scopedSlots: { customRender: "contractor" } },
+  { scopedSlots: { customRender: "edit" } },
+  { scopedSlots: { customRender: "delete" } }
 ];
 export default {
   data() {
@@ -73,7 +101,10 @@ export default {
       onTableLoading: false,
       ModalText: "Content of the modal",
       visible: false,
-      confirmLoading: false
+      confirmLoading: false,
+      pagination: {
+        defaultPageSize: 50
+      }
     };
   },
   created() {
@@ -119,7 +150,7 @@ export default {
         .catch(err => {});
     }
   },
-  components: { newProject }
+  components: { newProject, editProject }
 };
 </script>
 <style lang="scss">

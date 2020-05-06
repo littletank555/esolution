@@ -73,8 +73,10 @@ export default {
     },
     handleChange(info) {
       if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
+        console.log("file", info);
         this.fileinfo = info.fileList[0].response;
         this.disable = false;
         this.$message.success(`${info.file.name} file uploaded successfully`);

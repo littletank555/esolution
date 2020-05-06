@@ -14,7 +14,7 @@
           style="width: 100%"
           @change="onlsnSelect"
           :filterOption="filterOption"
-          :value="info.lsn"
+          v-model="info.lsn"
           placeholder="input for select"
         >
           <template slot="dataSource">
@@ -36,7 +36,11 @@
       </p>
       <p class="item">
         <span class="label">工程標題</span>
-        <a-input v-model="info.pt"></a-input>
+        <a-input v-model="info.p_title"></a-input>
+      </p>
+      <p class="item">
+        <span class="label">收到標書日期</span>
+        <a-date-picker format="DD/MM/YYYY" v-model="info.re_tender_date"></a-date-picker>
       </p>
       <p class="item">
         <span class="label">被邀請報價日期</span>
@@ -44,7 +48,7 @@
       </p>
       <p class="item">
         <span class="label">截標日期</span>
-        <a-date-picker format="DD/MM/YYYY" v-model="info.end_bid_date"></a-date-picker>
+        <a-date-picker format="DD/MM/YYYY" v-model="info.end_tender_date"></a-date-picker>
       </p>
       <p>
         <span>標書資料</span>
@@ -64,7 +68,7 @@
       </p>
       <p class="item">
         <span class="label">填寫標書資料</span>
-        <a-textarea style="height:100px"></a-textarea>
+        <a-textarea v-model="info.tender_text" style="height:100px"></a-textarea>
       </p>
       <p style="text-align:right">
         <a-button type="primary" @click="onClear">清除</a-button>
@@ -76,7 +80,7 @@
 <script>
 import moment from "moment";
 import { get_client_data } from "@/api/client_data";
-import { new_pmaster } from "@/api/pmaster";
+import { get_project_num, new_project } from "@/api/project";
 export default {
   data() {
     return {
@@ -87,8 +91,8 @@ export default {
         p_no: "",
         lsn: "",
         p_title: "",
+        is_bid: "否",
         in_bid_date: "",
-        is_bid: "",
         re_tender_date: "",
         end_tender_date: "",
         tender_file_id: 0,
@@ -97,24 +101,15 @@ export default {
       client_data_list: [],
       select_client_data: {}, //選中的工程單對應的client data
       itemkey: 0,
-      subinfo: []
+      subinfo: [],
+      action_url: this.$store.getters.domain + "file-upload/",
+      canUpload: false
     };
   },
   created() {
     this.get_client();
-  },
-  computed: {
-    project_no: function() {
-      let no_string =
-        "19-" +
-        this.select_client_data.csn +
-        "-" +
-        this.info.sort +
-        this.select_client_data.sales_code;
-      if (no_string.indexOf("undefined") > -1) {
-        return "";
-      }
-      return no_string;
+    if (location.hostname == "localhost") {
+      this.action_url = "api/file-upload/";
     }
   },
   methods: {
@@ -128,6 +123,7 @@ export default {
       //     }
       //   }
       // }
+      this.get_project_num();
       this.visible = true;
       this.onSubmiting = false;
     },
@@ -142,6 +138,21 @@ export default {
         }
       }
     },
+    handleChange(info) {
+      if (info.file.status !== "uploading") {
+        // console.log(info.file, info.fileList);
+      }
+      if (info.file.status == "done") {
+        console.log("file", info.file.response.id);
+        this.info.tender_file_id = info.file.response.id;
+        this.fileinfo = info.fileList[0].response;
+        this.canUpload = false;
+        this.$message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onfileRemove() {},
     onClose() {
       this.visible = false;
     },
@@ -163,6 +174,13 @@ export default {
         }
       });
     },
+    get_project_num() {
+      get_project_num()
+        .then(res => {
+          this.info.p_num = res.list;
+        })
+        .catch(err => {});
+    },
     addSubInfo() {
       this.itemkey++;
       this.subinfo.push({
@@ -179,59 +197,40 @@ export default {
       for (const key in this.info) {
         if (this.info.hasOwnProperty(key)) {
           if (typeof this.info[key] == "object") {
-            if (key == "end_bid_time") {
-              this.info[key] = this.info[key]._isValid
-                ? this.info[key].format("HH:mm")
-                : "";
-            } else {
-              this.info[key] = this.info[key]._isValid
-                ? this.info[key].format("YYYY-MM-DD")
-                : "";
-            }
+            this.info[key] = this.info[key]._isValid
+              ? this.info[key].format("YYYY-MM-DD")
+              : "";
           }
         }
       }
-      if (this.info.lc == "") {
+      if (this.info.lsn == "") {
         this.$message.error("請選擇工程地點");
         return;
       }
-      this.info.p_no = this.project_no;
-      this.onSubmiting = true;
-      if (this.itemkey != 0) {
-        this.subinfo.forEach((element, i) => {
-          if (i == 0) {
-            this.info.sub_price_name =
-              this.info.sub_price_name + element.sub_price_name;
-            this.info.sub_price = this.info.sub_price + element.sub_price;
-            this.info.spn_date = this.info.spn_date + element.spn_date;
-          } else {
-            this.info.sub_price_name =
-              this.info.sub_price_name + "\n" + element.sub_price_name;
-            this.info.sub_price =
-              this.info.sub_price + "\n" + element.sub_price;
-            this.info.spn_date = this.info.spn_date + "\n" + element.spn_date;
-          }
-        });
-      } else {
-        this.info.sub_price_name = "";
-        this.info.sub_price = "";
-        this.info.spn_date = "";
+      if (
+        this.info.p_no == "" ||
+        this.p_title == "" ||
+        this.in_bid_date == "" ||
+        this.re_tender_date == "" ||
+        this.end_tender_date == ""
+      ) {
+        this.$message.error("請填寫必要的工程資料");
       }
       console.log(this.info);
-      new_pmaster(this.info)
-        .then(res => {
-          console.log(res.status);
-          if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
-            this.$emit("done", {});
-          } else {
-            this.$message.error("添加失敗");
-          }
-        })
-        .catch(err => {
-          this.$message.error("添加失敗");
-        });
+      // new_project(this.info)
+      //   .then(res => {
+      //     console.log(res.status);
+      //     if (res.status) {
+      //       this.$message.success("成功添加");
+      //       this.visible = false;
+      //       this.$emit("done", {});
+      //     } else {
+      //       this.$message.error("添加失敗");
+      //     }
+      //   })
+      //   .catch(res => {
+      //     this.$message.error("添加失敗");
+      //   });
     },
     get_client() {
       get_client_data()

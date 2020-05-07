@@ -48,7 +48,7 @@ const router = new Router({
         component: () => import("@/view/bid/index.vue"),
       },
       {
-        path: "/home/project/subContractor/:project_id",
+        path: "/home/project/subContractor:project_id",
         name: "subContractor",
         component: () => import("@/view/project/subContractor.vue"),
       },

@@ -63,12 +63,3 @@ export function new_sub_contractor(list) {
         })
     });
 }
-export function edit_sub_contractor(list) {
-    return request({
-        url: "admin-index?page=project&action=edit_sub_contractor",
-        method: "POST",
-        data: Qs.stringify({
-            ...list
-        })
-    });
-}

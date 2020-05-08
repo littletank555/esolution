@@ -43,7 +43,7 @@
           }"
           tag="a"
         >
-          <a-icon type="file" />
+          <a-icon type="file" />回傳報價文件
         </router-link>
       </template>
       <template slot="email">

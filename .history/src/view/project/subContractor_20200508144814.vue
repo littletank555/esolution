@@ -38,7 +38,7 @@
             name: 'file',
             params: { project_meta_id: record.id},
             query:{
-             file_cat:2,
+             file_cat:1,
             }
           }"
           tag="a"

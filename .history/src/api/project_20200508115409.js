@@ -81,12 +81,3 @@ export function get_project_file(project_meta_id, file_cat) {
         })
     });
 }
-export function new_project_file(list) {
-    return request({
-        url: "admin-index?page=project&action=new_project_file",
-        method: "POST",
-        data: Qs.stringify({
-            ...list
-        })
-    });
-}

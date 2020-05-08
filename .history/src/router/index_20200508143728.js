@@ -52,11 +52,11 @@ const router = new Router({
         name: "subContractor",
         component: () => import("@/view/project/subContractor.vue"),
       },
-      {
-        path: "/home/project/fileIndex/:project_meta_id",
-        name: "file",
-        component: () => import("@/view/project/fileIndex.vue"),
-      },
+      // {
+      //   path: "/home/project/fileIndex",
+      //   name: "fileIndex",
+      //   component: () => import("@/view/project/fileIndex.vue"),
+      // },
       {
         path: "contractor",
         name: "contractor",

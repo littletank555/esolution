@@ -53,8 +53,8 @@ const router = new Router({
         component: () => import("@/view/project/subContractor.vue"),
       },
       {
-        path: "/home/project/fileIndex/:project_meta_id",
-        name: "file",
+        path: "/home/project/subContractor/fileIndex",
+        name: "fileIndex",
         component: () => import("@/view/project/fileIndex.vue"),
       },
       {
@@ -68,9 +68,9 @@ const router = new Router({
         component: () => import("@/view/bid/keRecord"),
       },
       {//uploadFile
-        path: "/home/pmaster/:pmaster_id",
-        name: "fileIndex",
-        component: () => import("@/view/PMaster/fileIndex.vue"),
+        // path: "/home/pmaster/:pmaster_id",
+        // name: "fileIndex",
+        // component: () => import("@/view/PMaster/fileIndex.vue"),
       },
       ]
     },

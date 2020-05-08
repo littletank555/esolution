@@ -53,8 +53,8 @@ const router = new Router({
         component: () => import("@/view/project/subContractor.vue"),
       },
       {
-        path: "/home/project/fileIndex/:project_meta_id",
-        name: "file",
+        path: "/home/project/subContractor/fileIndex",
+        name: "fileIndex",
         component: () => import("@/view/project/fileIndex.vue"),
       },
       {

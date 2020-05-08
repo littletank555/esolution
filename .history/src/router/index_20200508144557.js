@@ -53,9 +53,9 @@ const router = new Router({
         component: () => import("@/view/project/subContractor.vue"),
       },
       {
-        path: "/home/project/fileIndex/:project_meta_id",
+        path: "/home/project/fileIndex",
         name: "file",
-        component: () => import("@/view/project/fileIndex.vue"),
+        component: () => import("@/view/project/subContractor/fileIndex.vue"),
       },
       {
         path: "contractor",

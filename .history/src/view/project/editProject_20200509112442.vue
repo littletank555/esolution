@@ -160,17 +160,16 @@ export default {
         .then(res => {
           console.log(res.list);
           if (res.list.length == 0) {
-            // this.defaultFileList = [];
-          } else {
-            let file = {
-              uid: file_id,
-              name: res.list[0].title,
-              status: res.list[0].status,
-              url: res.list[0].url
-            };
-            this.defaultFileList.push(file);
-            this.defaultFileList = [];
+            console.log("null");
           }
+          let file = {
+            uid: file_id,
+            name: res.list[0].title,
+            status: res.list[0].status,
+            url: res.list[0].url
+          };
+          this.defaultFileList.push(file);
+          this.defaultFileList = [];
           console.log(this.defaultFileList);
         })
         .catch(err => {});

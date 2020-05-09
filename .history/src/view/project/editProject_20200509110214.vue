@@ -147,6 +147,7 @@ export default {
     },
     onClose() {
       this.visible = false;
+      this.defaultFileList = [];
     },
     filterOption(input, option) {
       return (
@@ -158,19 +159,15 @@ export default {
     get_file_url(file_id) {
       get_file_url(file_id)
         .then(res => {
-          console.log(res.list);
-          if (res.list.length == 0) {
-            // this.defaultFileList = [];
-          } else {
-            let file = {
-              uid: file_id,
-              name: res.list[0].title,
-              status: res.list[0].status,
-              url: res.list[0].url
-            };
-            this.defaultFileList.push(file);
-            this.defaultFileList = [];
-          }
+          console.log(file_id);
+          let file = {
+            uid: file_id,
+            name: res.list[0].title,
+            status: res.list[0].status,
+            url: res.list[0].url
+          };
+
+          this.defaultFileList.push(file);
           console.log(this.defaultFileList);
         })
         .catch(err => {});

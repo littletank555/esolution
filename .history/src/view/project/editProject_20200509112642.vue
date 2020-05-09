@@ -169,8 +169,8 @@ export default {
               url: res.list[0].url
             };
             this.defaultFileList.push(file);
-            this.defaultFileList = [];
           }
+
           console.log(this.defaultFileList);
         })
         .catch(err => {});

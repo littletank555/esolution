@@ -160,7 +160,7 @@ export default {
         .then(res => {
           console.log(res.list);
           if (res.list.length == 0) {
-            // this.defaultFileList = [];
+            this.defaultFileList = [];
           } else {
             let file = {
               uid: file_id,
@@ -169,8 +169,8 @@ export default {
               url: res.list[0].url
             };
             this.defaultFileList.push(file);
-            this.defaultFileList = [];
           }
+
           console.log(this.defaultFileList);
         })
         .catch(err => {});

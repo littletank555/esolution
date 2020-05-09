@@ -171,6 +171,7 @@ export default {
             this.defaultFileList.push(file);
             this.defaultFileList = [];
           }
+
           console.log(this.defaultFileList);
         })
         .catch(err => {});

@@ -103,6 +103,7 @@ export default {
   },
   methods: {
     show(info) {
+      this.defaultFileList = [];
       this.info = info;
       this.info = JSON.parse(JSON.stringify(info));
       this.info.re_tender_date = getDate(this.info.re_tender_date);
@@ -159,18 +160,13 @@ export default {
       get_file_url(file_id)
         .then(res => {
           console.log(res.list);
-          if (res.list.length == 0) {
-            // this.defaultFileList = [];
-          } else {
-            let file = {
-              uid: file_id,
-              name: res.list[0].title,
-              status: res.list[0].status,
-              url: res.list[0].url
-            };
-            this.defaultFileList.push(file);
-            this.defaultFileList = [];
-          }
+          let file = {
+            uid: file_id,
+            name: res.list[0].title,
+            status: res.list[0].status,
+            url: res.list[0].url
+          };
+          this.defaultFileList.push(file);
           console.log(this.defaultFileList);
         })
         .catch(err => {});

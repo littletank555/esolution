@@ -74,9 +74,11 @@ export default {
       this.visible = false;
     },
     onClear() {
-      this.info.contractor_id = "";
-      this.info.price = "";
-      this.info.receipt_date = "";
+      for (const key in this.info) {
+        if (this.info.hasOwnProperty(key)) {
+          this.info[key] = "";
+        }
+      }
     },
     get_contractor() {
       get_sub_contractor()

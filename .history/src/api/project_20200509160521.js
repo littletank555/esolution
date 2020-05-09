@@ -99,12 +99,3 @@ export function del_project_file(pid, file_id) {
         })
     });
 }
-export function del_sub_contractor(pid) {
-    return request({
-        url: "admin-index?page=project&action=del_sub_contractor",
-        method: "POST",
-        data: Qs.stringify({
-            pid
-        })
-    });
-}

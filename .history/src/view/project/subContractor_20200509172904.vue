@@ -152,7 +152,7 @@ export default {
               console.log(res.status);
               if (res.status) {
                 this.$message.success("刪除成功");
-                this.getTableData(this.project_id);
+                this.get_tableData();
               } else {
                 this.$message.error("刪除失敗");
               }

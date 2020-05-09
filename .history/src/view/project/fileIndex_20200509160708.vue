@@ -20,7 +20,7 @@
         </a>
       </template>
       <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDeleteFile(record.id,record.file_id)">
+        <a href="#" @click="onDeleteFile(record.ID)">
           <a-icon type="delete" />&emsp;delete
         </a>
       </template>
@@ -90,7 +90,6 @@ export default {
       this.onTableLoading = true;
       get_project_file(project_meta_id, file_cat)
         .then(res => {
-          console.log(res.list);
           this.tableData = res.list;
           this.onTableLoading = false;
         })
@@ -98,7 +97,7 @@ export default {
           this.onTableLoading = false;
         });
     },
-    onDeleteFile(pid, file_id) {
+    onDeleteFile(fileid) {
       this.$confirm({
         title: "是否要刪除該文件",
         maskClosable: true,

@@ -59,7 +59,7 @@
           ></a-icon>
         </a>
       </template>
-      <!-- <template slot="delete" slot-scope="record">
+      <template slot="delete" slot-scope="record">
         <a-popconfirm
           v-if="tableData.length"
           title="Sure to delete?"
@@ -69,11 +69,6 @@
             <a-icon type="delete"></a-icon>
           </a>
         </a-popconfirm>
-      </template>-->
-      <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDelete(record.id)">
-          <a-icon type="delete" />
-        </a>
       </template>
     </a-table>
     <newSubContractor
@@ -89,7 +84,7 @@
 <script>
 import newSubContractor from "./newSubContractor";
 import editSubContractor from "./editSubContractor";
-import { get_sub_contractor, del_sub_contractor } from "@/api/project.js";
+import { get_sub_contractor } from "@/api/project.js";
 const columns = [
   { title: "承辦商名稱", dataIndex: "contractor_name" },
   { title: "發出日期", dataIndex: "send_date" },
@@ -142,9 +137,9 @@ export default {
         })
         .catch(err => {});
     },
-    onDelete(pid) {
-      this.$confirm({
-        title: "是否要刪除該承辦商",
+    onDelete(pid){
+         this.$confirm({
+        title: "是否要刪除該文件",
         maskClosable: true,
         onOk: () => {
           return del_sub_contractor(pid)
@@ -152,7 +147,7 @@ export default {
               console.log(res.status);
               if (res.status) {
                 this.$message.success("刪除成功");
-                this.getTableData(this.project_id);
+                this.get_tableData();
               } else {
                 this.$message.error("刪除失敗");
               }
@@ -163,7 +158,6 @@ export default {
               reject(error);
             });
         }
-      });
     }
   },
   components: {

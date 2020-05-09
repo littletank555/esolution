@@ -20,7 +20,7 @@
         </a>
       </template>
       <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDeleteFile(record.id,record.file_id)">
+        <a href="#" @click="onDeleteFile(record.ID)">
           <a-icon type="delete" />&emsp;delete
         </a>
       </template>
@@ -37,7 +37,7 @@
 </template>
 <script>
 import uploadfile from "./uploadFile";
-import { get_project_file, del_project_file } from "@/api/project.js";
+import { get_project_file } from "@/api/project.js";
 const columns = [
   { title: "文件名稱", dataIndex: "file_name" },
   {
@@ -90,7 +90,6 @@ export default {
       this.onTableLoading = true;
       get_project_file(project_meta_id, file_cat)
         .then(res => {
-          console.log(res.list);
           this.tableData = res.list;
           this.onTableLoading = false;
         })
@@ -98,24 +97,24 @@ export default {
           this.onTableLoading = false;
         });
     },
-    onDeleteFile(pid, file_id) {
+    onDeleteFile(fileid) {
       this.$confirm({
         title: "是否要刪除該文件",
         maskClosable: true,
         onOk: () => {
-          return del_project_file(pid, file_id)
+          return delete_file(fileid)
             .then(res => {
-              console.log(res.status);
+              console.log(fileid, res.status);
               if (res.status) {
-                this.$message.success("刪除成功");
+                this.$message.success("Successfully delete file!");
                 this.get_tableData();
               } else {
-                this.$message.error("刪除失敗");
+                this.$message.error("Delete file faild!");
               }
               return true;
             })
             .catch(err => {
-              this.$message.error("刪除失敗!");
+              this.$message.error("Delete file faild111!");
               reject(error);
             });
         }

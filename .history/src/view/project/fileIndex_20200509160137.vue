@@ -20,7 +20,7 @@
         </a>
       </template>
       <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDeleteFile(record.id,record.file_id)">
+        <a href="#" @click="onDeleteFile(record.ID)">
           <a-icon type="delete" />&emsp;delete
         </a>
       </template>
@@ -37,7 +37,7 @@
 </template>
 <script>
 import uploadfile from "./uploadFile";
-import { get_project_file, del_project_file } from "@/api/project.js";
+import { get_project_file } from "@/api/project.js";
 const columns = [
   { title: "文件名稱", dataIndex: "file_name" },
   {
@@ -90,7 +90,6 @@ export default {
       this.onTableLoading = true;
       get_project_file(project_meta_id, file_cat)
         .then(res => {
-          console.log(res.list);
           this.tableData = res.list;
           this.onTableLoading = false;
         })
@@ -98,7 +97,7 @@ export default {
           this.onTableLoading = false;
         });
     },
-    onDeleteFile(pid, file_id) {
+    onDeleteFile(fileid) {
       this.$confirm({
         title: "是否要刪除該文件",
         maskClosable: true,

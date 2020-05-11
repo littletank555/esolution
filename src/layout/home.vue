@@ -76,6 +76,7 @@ export default {
     $route: function(val) {
       this.breadcrumb = [];
       val.meta.title && this.breadcrumb.push(val.meta.title);
+      val.params.title && this.breadcrumb.push(val.params.title);
     }
   },
   created() {},

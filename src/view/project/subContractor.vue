@@ -22,10 +22,10 @@
         <router-link
           :to="{
             name: 'file',
-            params: { project_meta_id: record.id},
+            params: { project_meta_id: record.id,title:'項目資料/承辦商資料/報價函'},
             query:{
              file_cat:1,
-            }
+            },
           }"
           tag="a"
         >
@@ -36,7 +36,7 @@
         <router-link
           :to="{
             name: 'file',
-            params: { project_meta_id: record.id},
+            params: { project_meta_id: record.id,title:'項目資料/承辦商資料/回傳報價文件'},
             query:{
              file_cat:2,
             }

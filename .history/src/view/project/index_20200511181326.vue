@@ -205,7 +205,7 @@ export default {
           }
         }
       }
-      if (this.info.contractor_name == "" || this.info.bid_price == 0) {
+      if (info.contractor_name == "" || info.bid_price == 0) {
         this.$message.success("請輸入必要的信息！");
         return;
       }

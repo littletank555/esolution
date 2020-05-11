@@ -20,12 +20,18 @@
     >
       <template slot="is_bid" slot-scope="record">
         <span v-if="record.is_bid == '是'" style="color:blue;">是</span>
-        <span
-          v-if="record.is_bid == '否'"
-          @click="bidClick(record.project_id,record.contractor_data)"
-        >
+        <span v-if="record.is_bid == '否'" @click="bidClick(record.project_id)">
           <a style="color:red;">否</a>
         </span>
+        <a-modal
+          title="Title"
+          :visible="visible"
+          @ok="handleOk"
+          :confirmLoading="confirmLoading"
+          @cancel="handleCancel"
+        >
+          <p>{{ ModalText }}</p>
+        </a-modal>
       </template>
       <template slot="send_contractor" slot-scope="record">
         <span v-for="(item,i) in record.contractor_data" :key="i">
@@ -53,7 +59,7 @@
         }"></a-icon>
         </a>
       </template>
-      <!-- <template slot="delete" slot-scope="record">
+      <template slot="delete" slot-scope="record">
         <a-popconfirm
           v-if="tableData.length"
           title="Sure to delete?"
@@ -63,41 +69,8 @@
             <a-icon type="delete"></a-icon>
           </a>
         </a-popconfirm>
-      </template>-->
-      <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDelete(record.project_id)">
-          <a-icon type="delete" />
-        </a>
       </template>
     </a-table>
-    <a-modal
-      title="設置中標承辦商"
-      :visible="visible"
-      @ok="handleOk"
-      :confirmLoading="confirmLoading"
-      @cancel="handleCancel"
-      ok-text="确认"
-      cancel-text="取消"
-    >
-      <p>
-        <span>中標承辦商</span>
-        <a-select style="width:100%" v-model="info.contractor_name" @change="bidChange">
-          <a-select-option
-            v-for="(item,i) in contractor_data"
-            :key="i"
-            :value="item.contractor_name"
-          >{{item.contractor_name}}</a-select-option>
-        </a-select>
-      </p>
-      <p>
-        <span>中標日期</span>
-        <a-date-picker format="YYYY-MM-DD" v-model="info.bid_date" style="width:100%"></a-date-picker>
-      </p>
-      <p>
-        <span>中標價簽</span>
-        <a-input v-model="info.bid_price"></a-input>
-      </p>
-    </a-modal>
     <newProject ref="newProject" @done="()=>{
       this.getTableData();
       }" />
@@ -105,11 +78,9 @@
   </div>
 </template>
 <script>
-import moment from "moment";
 import newProject from "./newProject";
 import editProject from "./editProject";
 import { get_project, del_project } from "@/api/project.js";
-import { new_bid } from "@/api/outbid.js";
 const columns = [
   { title: "工程序號", dataIndex: "p_num" },
   { title: "負責同事", dataIndex: "sales_code" },
@@ -141,17 +112,11 @@ export default {
       dataSource: [],
       columns,
       onTableLoading: false,
+      ModalText: "Content of the modal",
       visible: false,
       confirmLoading: false,
       pagination: {
         defaultPageSize: 50
-      },
-      contractor_data: [],
-      info: {
-        project_id: 0,
-        contractor_name: "",
-        bid_price: "",
-        bid_date: moment()
       }
     };
   },
@@ -171,59 +136,19 @@ export default {
         this.tableData = this.dataSource;
       }
     },
-    bidClick(project_id, contractor_data) {
-      this.contractor_data = [];
-      for (const key in this.info) {
-        if (this.info.hasOwnProperty(key)) {
-          this.info[key] = "";
-        }
-      }
-      this.info.bid_date = moment();
-      this.info.project_id = project_id;
-      contractor_data.forEach(element => {
-        if (element.price != 0) {
-          this.contractor_data.push(element);
-        }
-      });
+    bidClick(project_id) {
       this.visible = true;
     },
-    bidChange(contractor_name) {
-      this.info.contractor_name = contractor_name;
-      let contractor = this.contractor_data.filter(
-        element => element.contractor_name == contractor_name
-      );
-      this.info.bid_price = contractor[0].price;
-    },
     handleOk(e) {
-      console.log(this.info);
-      for (const key in this.info) {
-        if (this.info.hasOwnProperty(key)) {
-          if (typeof this.info[key] == "object") {
-            this.info[key] = this.info[key]._isValid
-              ? this.info[key].format("YYYY-MM-DD")
-              : "";
-          }
-        }
-      }
-      if (this.info.contractor_name == "" || this.info.bid_price == 0) {
-        this.$message.success("請輸入必要的信息！");
-        return;
-      }
-      new_bid(this.info)
-        .then(res => {
-          if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
-            this.getTableData();
-          } else {
-            this.$message.error("添加失敗");
-          }
-        })
-        .catch(err => {
-          this.$message.error("添加失敗");
-        });
+      this.ModalText = "The modal will be closed after two seconds";
+      this.confirmLoading = true;
+      setTimeout(() => {
+        this.visible = false;
+        this.confirmLoading = false;
+      }, 2000);
     },
     handleCancel(e) {
+      console.log("Clicked cancel button");
       this.visible = false;
     },
     getTableData() {
@@ -236,29 +161,6 @@ export default {
           this.onTableLoading = false;
         })
         .catch(err => {});
-    },
-    onDelete(project_id) {
-      this.$confirm({
-        title: "是否要刪除該工程",
-        maskClosable: true,
-        onOk: () => {
-          return del_project(project_id)
-            .then(res => {
-              console.log(res.status);
-              if (res.status) {
-                this.$message.success("刪除成功");
-                this.getTableData();
-              } else {
-                this.$message.error("刪除失敗");
-              }
-              return true;
-            })
-            .catch(err => {
-              this.$message.error("刪除失敗!");
-              reject(error);
-            });
-        }
-      });
     }
   },
   components: { newProject, editProject }

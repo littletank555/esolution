@@ -109,7 +109,6 @@ import moment from "moment";
 import newProject from "./newProject";
 import editProject from "./editProject";
 import { get_project, del_project } from "@/api/project.js";
-import { new_bid } from "@/api/outbid.js";
 const columns = [
   { title: "工程序號", dataIndex: "p_num" },
   { title: "負責同事", dataIndex: "sales_code" },
@@ -196,32 +195,6 @@ export default {
     },
     handleOk(e) {
       console.log(this.info);
-      for (const key in this.info) {
-        if (this.info.hasOwnProperty(key)) {
-          if (typeof this.info[key] == "object") {
-            this.info[key] = this.info[key]._isValid
-              ? this.info[key].format("YYYY-MM-DD")
-              : "";
-          }
-        }
-      }
-      if (this.info.contractor_name == "" || this.info.bid_price == 0) {
-        this.$message.success("請輸入必要的信息！");
-        return;
-      }
-      new_bid(this.info)
-        .then(res => {
-          if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
-            this.getTableData();
-          } else {
-            this.$message.error("添加失敗");
-          }
-        })
-        .catch(err => {
-          this.$message.error("添加失敗");
-        });
     },
     handleCancel(e) {
       this.visible = false;

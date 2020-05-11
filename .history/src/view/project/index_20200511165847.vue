@@ -76,12 +76,10 @@
       @ok="handleOk"
       :confirmLoading="confirmLoading"
       @cancel="handleCancel"
-      ok-text="确认"
-      cancel-text="取消"
     >
       <p>
         <span>中標承辦商</span>
-        <a-select style="width:100%" v-model="info.contractor_name" @change="bidChange">
+        <a-select style="width:100%" @change="bidChange(contractor_name)">
           <a-select-option
             v-for="(item,i) in contractor_data"
             :key="i"
@@ -91,11 +89,11 @@
       </p>
       <p>
         <span>中標日期</span>
-        <a-date-picker format="YYYY-MM-DD" v-model="info.bid_date" style="width:100%"></a-date-picker>
+        <a-input></a-input>
       </p>
       <p>
         <span>中標價簽</span>
-        <a-input v-model="info.bid_price"></a-input>
+        <a-input></a-input>
       </p>
     </a-modal>
     <newProject ref="newProject" @done="()=>{
@@ -105,11 +103,9 @@
   </div>
 </template>
 <script>
-import moment from "moment";
 import newProject from "./newProject";
 import editProject from "./editProject";
 import { get_project, del_project } from "@/api/project.js";
-import { new_bid } from "@/api/outbid.js";
 const columns = [
   { title: "工程序號", dataIndex: "p_num" },
   { title: "負責同事", dataIndex: "sales_code" },
@@ -150,9 +146,10 @@ export default {
       info: {
         project_id: 0,
         contractor_name: "",
-        bid_price: "",
-        bid_date: moment()
-      }
+        price: "",
+        bid_date: ""
+      },
+      contractor: {}
     };
   },
   created() {
@@ -172,13 +169,7 @@ export default {
       }
     },
     bidClick(project_id, contractor_data) {
-      this.contractor_data = [];
-      for (const key in this.info) {
-        if (this.info.hasOwnProperty(key)) {
-          this.info[key] = "";
-        }
-      }
-      this.info.bid_date = moment();
+      // this.contractor_data = contractor_data;
       this.info.project_id = project_id;
       contractor_data.forEach(element => {
         if (element.price != 0) {
@@ -189,41 +180,20 @@ export default {
     },
     bidChange(contractor_name) {
       this.info.contractor_name = contractor_name;
-      let contractor = this.contractor_data.filter(
+      this.contractor = this.contractor_data.filter(
         element => element.contractor_name == contractor_name
       );
-      this.info.bid_price = contractor[0].price;
     },
     handleOk(e) {
-      console.log(this.info);
-      for (const key in this.info) {
-        if (this.info.hasOwnProperty(key)) {
-          if (typeof this.info[key] == "object") {
-            this.info[key] = this.info[key]._isValid
-              ? this.info[key].format("YYYY-MM-DD")
-              : "";
-          }
-        }
-      }
-      if (this.info.contractor_name == "" || this.info.bid_price == 0) {
-        this.$message.success("請輸入必要的信息！");
-        return;
-      }
-      new_bid(this.info)
-        .then(res => {
-          if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
-            this.getTableData();
-          } else {
-            this.$message.error("添加失敗");
-          }
-        })
-        .catch(err => {
-          this.$message.error("添加失敗");
-        });
+      this.ModalText = "The modal will be closed after two seconds";
+      this.confirmLoading = true;
+      setTimeout(() => {
+        this.visible = false;
+        this.confirmLoading = false;
+      }, 2000);
     },
     handleCancel(e) {
+      console.log("Clicked cancel button");
       this.visible = false;
     },
     getTableData() {

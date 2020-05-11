@@ -205,23 +205,19 @@ export default {
           }
         }
       }
-      if (this.info.contractor_name == "" || this.info.bid_price == 0) {
+      if (info.contractor_name == "" || info.bid_price == 0) {
         this.$message.success("請輸入必要的信息！");
         return;
       }
-      new_bid(this.info)
-        .then(res => {
-          if (res.status) {
-            this.$message.success("成功添加");
-            this.visible = false;
-            this.getTableData();
-          } else {
-            this.$message.error("添加失敗");
-          }
-        })
-        .catch(err => {
+      new_bid(this.info).then(res => {
+        if (res.status) {
+          this.$message.success("成功添加");
+          this.visible = false;
+          this.$emit("done", {});
+        } else {
           this.$message.error("添加失敗");
-        });
+        }
+      });
     },
     handleCancel(e) {
       this.visible = false;

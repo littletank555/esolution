@@ -15,22 +15,26 @@ const router = new Router({
       children: [{
         path: "client_list",
         name: "client_list",
-        component: () => import("@/view/clientList")
+        component: () => import("@/view/clientList"),
+        meta: { title: '客戶資料' }
       },
       {
         path: "client_data",
         name: "client_data",
-        component: () => import("@/view/clientData")
+        component: () => import("@/view/clientData"),
+        meta: { title: '施工地點' }
       },
       {
         path: "p_master",
         name: "p_master",
-        component: () => import("@/view/PMaster")
+        component: () => import("@/view/PMaster"),
+
       },
       {
         path: "project",
         name: "project",
-        component: () => import("@/view/project/index.vue")
+        component: () => import("@/view/project/index.vue"),
+        meta: { title: '項目資料' }
       },
       {
         path: "invitationForTender",
@@ -40,17 +44,19 @@ const router = new Router({
       {
         path: "Client",
         name: "Client",
-        component: () => import("@/view/Client")
+        component: () => import("@/view/Client"),
       },
       {
         path: "bid",
         name: "bid",
         component: () => import("@/view/bid/index.vue"),
+        meta: { title: '中標資料' }
       },
       {
         path: "/home/project/subContractor/:project_id",
         name: "subContractor",
         component: () => import("@/view/project/subContractor.vue"),
+        meta: { title: '項目資料/承辦商資料' }
       },
       {
         path: "/home/project/fileIndex/:project_meta_id",
@@ -61,11 +67,13 @@ const router = new Router({
         path: "contractor",
         name: "contractor",
         component: () => import("@/view/contractor/index.vue"),
+        meta: { title: '承辦商' }
       },
       {//kerecord
         path: "/home/bid/:sort",
         name: "keRecord",
         component: () => import("@/view/bid/keRecord"),
+        meta: { title: '中標資料' }
       },
       {//uploadFile
         path: "/home/pmaster/:pmaster_id",

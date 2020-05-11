@@ -89,6 +89,7 @@ const columns = [
   },
   {
     title: "樓盤數",
+    width: 120,
     dataIndex: "buildings",
     sorter: (a, b) => a.buildings - b.buildings
   },
@@ -112,10 +113,12 @@ const columns = [
   },
   {
     title: "聯絡人",
+    width: 120,
     dataIndex: "contact"
   },
   {
     title: "聯絡電話",
+    width: 180,
     dataIndex: "ct"
   },
   {
@@ -221,6 +224,7 @@ export default {
 </script>
 <style lang="scss">
 .client_list {
+  overflow: hidden;
   .header {
     display: flex;
     justify-content: space-between;

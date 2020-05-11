@@ -35,12 +35,8 @@
         </a-dropdown>
       </a-layout-header>
       <a-layout-content :style="{ padding: '0 50px' }">
-        <a-breadcrumb style="margin:76px 0px 16px 0px" :routes="routes">
-          <!-- <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">{{item}}</a-breadcrumb-item> -->
-          <template slot="itemRender" slot-scope="{ route, params, routes, paths }">
-            <!-- <span>{{route}}</span> -->
-            <span v-if="basePath+route.path == $route.path">{{route.breadcrumbName}}</span>
-          </template>
+        <a-breadcrumb style="margin:76px 0px 16px 0px">
+          <span v-for="item in breadcrumb" :key="item">{{item}}</span>
         </a-breadcrumb>
         <div
           :style="{ background: '#fff',padding: '24px', minHeight: '80px' ,'margin-bottom':'50px','margin-top':'0px'}"
@@ -72,84 +68,20 @@ export default {
         // { r_name: "Client", title: "客" }
         // { r_name: "invitationForTender", title: " Invitation for Tender" }
       ],
-      menuitem: [
-        {
-          r_name: "client_list",
-          title: "客戶資料"
-        },
-        { r_name: "contractor", title: "承辦商" },
-        {
-          r_name: "client_data",
-          title: "施工地點"
-        },
-        { r_name: "p_master", title: "項目資料" },
-        { r_name: "bid", title: "中標資料" }
-      ],
-      basePath: "/home",
-      routes: [
-        {
-          path: "/client_list",
-          breadcrumbName: "客戶資料"
-        },
-        {
-          path: "/client_data",
-          breadcrumbName: "施工地點"
-        },
-        {
-          path: "/contractor",
-          breadcrumbName: "承辦商"
-        },
-        {
-          path: "/project",
-          breadcrumbName: "項目資料"
-        },
-        {
-          path: "/project/subContractor",
-          breadcrumbName: "項目資料/承辦商資料"
-        },
-        {
-          path: "/bid",
-          breadcrumbName: "中標資料"
-        }
-      ],
       breadcrumb: [],
       activeItem: ["client_list"]
     };
   },
-  created() {
-    // this.breadcrumb.push("Home");
-    this.menuitem.some(item => {
-      if (this.$route.name == item.r_name) {
-        this.breadcrumb.push(item.title);
-        this.activeItem[0] = item.r_name;
-        return true;
-      }
-    });
-    // setInterval(() => {
-    //   if (this.breadcrumb.includes("中標資料") && sessionStorage.kesort) {
-    //     if (!this.breadcrumb.includes(sessionStorage.kesort)) {
-    //       this.breadcrumb.push(sessionStorage.kesort);
-    //     }
-    //   } else if (
-    //     this.breadcrumb.includes("項目資料") &&
-    //     sessionStorage.pmfile
-    //   ) {
-    //     if (!this.breadcrumb.includes(sessionStorage.pmfile)) {
-    //       this.breadcrumb.push(sessionStorage.pmfile);
-    //     }
-    //   } else {
-    //     if (this.breadcrumb.length > 2) {
-    //       this.breadcrumb.pop();
-    //     }
-    //   }
-    // }, 500);
+  watch: {
+    $route: function(val) {
+      this.breadcrumb = [];
+      val.meta.title && this.breadcrumb.push(val.meta.title);
+    }
   },
+  created() {},
   methods: {
     onMenuSelect(item) {
       this.$router.push({ name: item.r_name });
-      this.breadcrumb = [];
-      // this.breadcrumb.push("Home");
-      this.breadcrumb.push(item.title);
     },
     admin_logout() {
       logout()
@@ -174,14 +106,14 @@ export default {
   .components-layout-demo-fixed {
     .logo {
       width: 120px;
-      height: 31px;
+
+      height: 64px;
       margin: 0px 77px 0px 0;
       font-size: 25px;
-      // padding: 3px 8px;
       float: left;
-      line-height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      color: aliceblue;
+      img {
+        padding: 10px;
+      }
     }
     .user {
       cursor: pointer;

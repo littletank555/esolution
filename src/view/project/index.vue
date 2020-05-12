@@ -17,6 +17,7 @@
       :loading="onTableLoading"
       :rowKey="record => record.project_id"
       :pagination="pagination"
+      :scroll="{x:1200}"
     >
       <template slot="is_bid" slot-scope="record">
         <span v-if="record.is_bid == '是'" style="color:blue;">是</span>
@@ -111,12 +112,12 @@ import editProject from "./editProject";
 import { get_project, del_project } from "@/api/project.js";
 import { new_bid } from "@/api/outbid.js";
 const columns = [
-  { title: "工程序號", dataIndex: "p_num" },
-  { title: "負責同事", dataIndex: "sales_code" },
-  { title: "工程地點", dataIndex: "lc" },
-  { title: "工程標號和標題", dataIndex: "titleandno", width: "550px" },
-  { title: "收到標書日期", dataIndex: "re_tender_date" },
-  { title: "截標日期", dataIndex: "end_tender_date" },
+  { title: "工程序號", dataIndex: "p_num", width: 100 },
+  { title: "負責同事", dataIndex: "sales_code", width: 100 },
+  { title: "工程地點", dataIndex: "lc", width: 100 },
+  { title: "工程標號和標題", dataIndex: "titleandno", width: 400 },
+  { title: "收到標書日期", dataIndex: "re_tender_date", width: 150 },
+  { title: "截標日期", dataIndex: "end_tender_date", width: 100 },
   // {
   //   title: "是否中標",
   //   width: "150px",
@@ -128,11 +129,15 @@ const columns = [
   //   filterMultiple: true,
   //   onFilter: (value, record) => record.is_bidding.indexOf(value) === 0
   // },
-  { title: "是否中標", scopedSlots: { customRender: "is_bid" } },
-  { title: "標書發送", scopedSlots: { customRender: "send_contractor" } },
-  { scopedSlots: { customRender: "contractor" } },
-  { scopedSlots: { customRender: "edit" } },
-  { scopedSlots: { customRender: "delete" } }
+  { title: "是否中標", scopedSlots: { customRender: "is_bid" }, width: 100 },
+  {
+    title: "標書發送",
+    scopedSlots: { customRender: "send_contractor" },
+    width: 200
+  },
+  { scopedSlots: { customRender: "contractor" }, width: 120, fixed: "right" },
+  { scopedSlots: { customRender: "edit" }, width: 80, fixed: "right" },
+  { scopedSlots: { customRender: "delete" }, width: 80, fixed: "right" }
 ];
 export default {
   data() {

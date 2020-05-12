@@ -16,13 +16,13 @@ const router = new Router({
         path: "client_list",
         name: "client_list",
         component: () => import("@/view/clientList"),
-        meta: { title: '客戶資料' }
+        meta: { title: '客戶資料', order: 1 }
       },
       {
         path: "client_data",
         name: "client_data",
         component: () => import("@/view/clientData"),
-        meta: { title: '施工地點' }
+        meta: { title: '施工地點', order: 1 }
       },
       {
         path: "p_master",
@@ -34,7 +34,7 @@ const router = new Router({
         path: "project",
         name: "project",
         component: () => import("@/view/project/index.vue"),
-        meta: { title: '項目資料' }
+        meta: { title: '項目資料', order: 1 }
       },
       {
         path: "invitationForTender",
@@ -50,25 +50,25 @@ const router = new Router({
         path: "outbid",
         name: "outbid",
         component: () => import("@/view/outbid/index.vue"),
-        meta: { title: '中標資料' }
+        meta: { title: '中標資料', order: 1 }
       },
       {
         path: "/home/project/subContractor/:project_id",
         name: "subContractor",
         component: () => import("@/view/project/subContractor.vue"),
-        meta: { title: '項目資料/承辦商資料' }
+        meta: { title: '承辦商資料', order: 2 }
       },
       {
         path: "/home/project/fileIndex/:project_meta_id",
         name: "file",
         component: () => import("@/view/project/fileIndex.vue"),
-        meta: {}
+        meta: { title: '', order: 3 }
       },
       {
         path: "contractor",
         name: "contractor",
         component: () => import("@/view/contractor/index.vue"),
-        meta: { title: '承辦商' }
+        meta: { title: '承辦商', order: 1 }
       },
       {//kerecord
         path: "/home/bid/:sort",

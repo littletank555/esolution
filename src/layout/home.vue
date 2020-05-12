@@ -36,8 +36,11 @@
       </a-layout-header>
       <a-layout-content :style="{ padding: '0 50px' }">
         <a-breadcrumb style="margin:76px 0px 16px 0px">
-          <span v-for="(item,i) in breadcrumb" :key="i">{{item}}</span>
-          <!-- <span v-if="breadcrumb.length == 0">{{ $route.meta.title}}</span> -->
+          <a-breadcrumb-item v-for="(item,i) in breadcrumb" :key="i">
+            <a class="a-link" @click="()=>$router.push({path:item.r_name})">
+              <span>{{item.title}}</span>
+            </a>
+          </a-breadcrumb-item>
         </a-breadcrumb>
         <div
           :style="{ background: '#fff',padding: '24px', minHeight: '80px' ,'margin-bottom':'50px','margin-top':'0px'}"
@@ -75,21 +78,47 @@ export default {
   },
   watch: {
     $route: function(val) {
-      this.breadcrumb = [];
-      val.meta.title && this.breadcrumb.push(val.meta.title);
-      val.params.title && this.breadcrumb.push(val.params.title);
+      if (val.meta.order == 1) {
+        this.breadcrumb = [];
+      }
+      if (val.meta.order == 2) {
+        this.breadcrumb = this.breadcrumb.filter(item => item.order !== 3);
+      }
+      let flag = false;
+      this.breadcrumb.some(item => {
+        if (item.r_name === val.path) {
+          flag = true;
+          return true;
+        }
+      });
+      !flag &&
+        val.meta.title &&
+        this.breadcrumb.push({
+          r_name: val.path,
+          title: val.meta.title,
+          order: val.meta.order
+        });
+      !flag &&
+        val.params.title &&
+        this.breadcrumb.push({
+          r_name: val.path,
+          title: val.params.title,
+          order: val.meta.order
+        });
+      if (this.breadcrumb[0].order > 1) {
+        this.$router.push({ name: "project" });
+      }
     }
   },
   created() {
-    let item = this.$route.path.split("/");
-    this.activeItem[0] = item[2];
-    this.breadcrumb[0] = this.$route.meta.title;
-    if (Object.keys(this.$route.meta).length == 0) {
-      if (this.$route.query.file_cat == 1) {
-        this.breadcrumb[0] = "項目資料/承辦商資料/報價函";
-      } else {
-        this.breadcrumb[0] = "項目資料/承辦商資料/回傳報價文件";
-      }
+    if (this.$route.meta.order > 1) {
+      this.$router.push({ name: "project" });
+    } else {
+      this.breadcrumb.push({
+        r_name: this.$route.path,
+        title: this.$route.meta.title,
+        order: this.$route.meta.order
+      });
     }
   },
   methods: {
@@ -143,6 +172,10 @@ export default {
   }
   .ant-breadcrumb-link {
     font-weight: 600;
+  }
+  .a-link {
+    color: #276297;
+    font-weight: bold;
   }
 }
 </style>

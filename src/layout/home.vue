@@ -77,6 +77,9 @@ export default {
     };
   },
   watch: {
+    activeItem(val) {
+      console.log(val);
+    },
     $route: function(val) {
       if (val.meta.order == 1) {
         this.breadcrumb = [];
@@ -111,14 +114,18 @@ export default {
     }
   },
   created() {
+    console.log(this.$route);
+
     if (this.$route.meta.order > 1) {
       this.$router.push({ name: "project" });
+      this.activeItem = ["project"];
     } else {
       this.breadcrumb.push({
         r_name: this.$route.path,
         title: this.$route.meta.title,
         order: this.$route.meta.order
       });
+      this.activeItem = [this.$route.name];
     }
   },
   methods: {

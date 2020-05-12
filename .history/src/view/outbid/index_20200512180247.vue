@@ -10,17 +10,6 @@
       :rowKey="record => record.project_id"
       :pagination="pagination"
     >
-      <template slot="invoice" slot-scope="record">
-        <a-tag color="blue">{{record.receivable}}</a-tag>
-        <a-tag color="red">{{record.uncollected}}</a-tag>
-      </template>
-      <template slot="spending" slot-scope="record">
-        <a-tag color="blue">{{record.dues}}</a-tag>
-        <a-tag color="red">{{record.overdues}}</a-tag>
-      </template>
-      <template slot="schedule">
-        <a-icon type="paper-clip" />
-      </template>
       <template slot="edit" slot-scope="record">
         <a>
           <a-icon type="edit" @click="()=>{
@@ -28,11 +17,16 @@
         }"></a-icon>
         </a>
       </template>
+      <template slot="delete" slot-scope="record">
+        <a href="#" @click="onDelete(record.project_id)">
+          <a-icon type="delete" />
+        </a>
+      </template>
     </a-table>
   </div>
 </template>
 <script>
-import { get_bid } from "@/api/outbid.js";
+import { get_project, del_project } from "@/api/project.js";
 const columns = [
   { title: "工程序號", dataIndex: "p_num" },
   { title: "工程地點", dataIndex: "lc" },
@@ -41,8 +35,8 @@ const columns = [
   { title: "開工日期", dataIndex: "start_date" },
   { title: "完工日期", dataIndex: "end_date" },
   { title: "invoice", scopedSlots: { customRender: "invoice" } },
-  { title: "開支", scopedSlots: { customRender: "spending" } },
-  { title: "工程進度", scopedSlots: { customRender: "schedule" } },
+  { title: "開支", scopedSlots: { customRender: "invoice" } },
+  { title: "工程進度", scopedSlots: { customRender: "invoice" } },
   { scopedSlots: { customRender: "edit" } }
 ];
 export default {
@@ -58,9 +52,7 @@ export default {
       }
     };
   },
-  created() {
-    this.getTableData();
-  },
+  created() {},
   methods: {
     onSearch(val) {
       const dataSource = [...this.dataSource];
@@ -76,7 +68,7 @@ export default {
     },
     getTableData() {
       this.onTableLoading = true;
-      get_bid()
+      get_project()
         .then(res => {
           console.log(res.list);
           this.tableData = res.list;

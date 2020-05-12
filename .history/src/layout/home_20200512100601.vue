@@ -2,9 +2,9 @@
   <div class="home-container">
     <a-layout class="components-layout-demo-fixed">
       <a-layout-header :style="{ zIndex: 1, width: '100%',position: 'fixed' ,display:'flex' }">
-        <!-- <p class="logo"> -->
-        <img height="64px" src="http://34.92.29.165:8080/wp-content/uploads/2020/04/logo.png" />
-        <!-- </p> -->
+        <p class="logo">
+          <img height="64px" src="http://34.92.29.165:8080/wp-content/uploads/2020/04/logo.png" />
+        </p>
         <a-menu
           theme="dark"
           mode="horizontal"
@@ -36,8 +36,7 @@
       </a-layout-header>
       <a-layout-content :style="{ padding: '0 50px' }">
         <a-breadcrumb style="margin:76px 0px 16px 0px">
-          <span v-for="(item,i) in breadcrumb" :key="i">{{item}}</span>
-          <!-- <span v-if="breadcrumb.length == 0">{{ $route.meta.title}}</span> -->
+          <span v-for="item in breadcrumb" :key="item">{{item}}</span>
         </a-breadcrumb>
         <div
           :style="{ background: '#fff',padding: '24px', minHeight: '80px' ,'margin-bottom':'50px','margin-top':'0px'}"
@@ -65,12 +64,12 @@ export default {
           title: "施工地點"
         },
         { r_name: "project", title: "項目資料" },
-        { r_name: "outbid", title: "中標資料" }
+        { r_name: "bid", title: "中標資料" }
         // { r_name: "Client", title: "客" }
         // { r_name: "invitationForTender", title: " Invitation for Tender" }
       ],
       breadcrumb: [],
-      activeItem: []
+      activeItem: ["client_list"]
     };
   },
   watch: {
@@ -80,18 +79,7 @@ export default {
       val.params.title && this.breadcrumb.push(val.params.title);
     }
   },
-  created() {
-    let item = this.$route.path.split("/");
-    this.activeItem[0] = item[2];
-    this.breadcrumb[0] = this.$route.meta.title;
-    if (Object.keys(this.$route.meta).length == 0) {
-      if (this.$route.query.file_cat == 1) {
-        this.breadcrumb[0] = "項目資料/承辦商資料/報價函";
-      } else {
-        this.breadcrumb[0] = "項目資料/承辦商資料/回傳報價文件";
-      }
-    }
-  },
+  created() {},
   methods: {
     onMenuSelect(item) {
       this.$router.push({ name: item.r_name });
@@ -129,7 +117,7 @@ export default {
       width: auto;
       height: 31px;
       font-size: 25px;
-      padding: 3px 8px;
+      // padding: 3px 8px;
       float: right;
       margin: 16px 0px 16px 0;
       line-height: 100%;

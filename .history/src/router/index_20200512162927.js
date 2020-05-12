@@ -71,9 +71,10 @@ const router = new Router({
         meta: { title: '承辦商' }
       },
       {//kerecord
-        path: "/home/bid/:sort",
-        name: "keRecord",
-        component: () => import("@/view/bid/keRecord"),
+        // path: "/home/bid/:sort",
+        // name: "keRecord",
+        // component: () => import("@/view/bid/keRecord"),
+        // meta: { title: '中標資料' }
       },
       {//uploadFile
         path: "/home/pmaster/:pmaster_id",

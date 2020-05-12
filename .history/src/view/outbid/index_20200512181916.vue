@@ -15,11 +15,8 @@
         <a-tag color="red">{{record.uncollected}}</a-tag>
       </template>
       <template slot="spending" slot-scope="record">
-        <a-tag color="blue">{{record.dues}}</a-tag>
-        <a-tag color="red">{{record.overdues}}</a-tag>
-      </template>
-      <template slot="schedule">
-        <a-icon type="paper-clip" />
+        <span>{{record.dues}}</span>
+        <span>{{record.overdues}}</span>
       </template>
       <template slot="edit" slot-scope="record">
         <a>

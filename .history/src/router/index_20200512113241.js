@@ -47,22 +47,21 @@ const router = new Router({
         component: () => import("@/view/Client"),
       },
       {
-        path: "outbid",
-        name: "outbid",
-        component: () => import("@/view/outbid/index.vue"),
+        path: "bid",
+        name: "bid",
+        component: () => import("@/view/bid/index.vue"),
         meta: { title: '中標資料' }
       },
       {
         path: "/home/project/subContractor/:project_id",
         name: "subContractor",
         component: () => import("@/view/project/subContractor.vue"),
-        meta: { title: '項目資料/承辦商資料' }
+        meta: { r_name: "subContractor", title: '項目資料/承辦商資料' }
       },
       {
         path: "/home/project/fileIndex/:project_meta_id",
         name: "file",
         component: () => import("@/view/project/fileIndex.vue"),
-        meta: {}
       },
       {
         path: "contractor",
@@ -74,6 +73,7 @@ const router = new Router({
         path: "/home/bid/:sort",
         name: "keRecord",
         component: () => import("@/view/bid/keRecord"),
+        meta: { title: '中標資料' }
       },
       {//uploadFile
         path: "/home/pmaster/:pmaster_id",

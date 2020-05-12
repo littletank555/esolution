@@ -47,9 +47,9 @@ const router = new Router({
         component: () => import("@/view/Client"),
       },
       {
-        path: "outbid",
-        name: "outbid",
-        component: () => import("@/view/outbid/index.vue"),
+        path: "obid",
+        name: "bid",
+        component: () => import("@/view/bid/index.vue"),
         meta: { title: '中標資料' }
       },
       {

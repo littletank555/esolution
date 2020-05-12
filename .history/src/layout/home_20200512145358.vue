@@ -65,7 +65,7 @@ export default {
           title: "施工地點"
         },
         { r_name: "project", title: "項目資料" },
-        { r_name: "outbid", title: "中標資料" }
+        { r_name: "bid", title: "中標資料" }
         // { r_name: "Client", title: "客" }
         // { r_name: "invitationForTender", title: " Invitation for Tender" }
       ],
@@ -81,8 +81,7 @@ export default {
     }
   },
   created() {
-    let item = this.$route.path.split("/");
-    this.activeItem[0] = item[2];
+    this.activeItem[0] = this.$route.name;
     this.breadcrumb[0] = this.$route.meta.title;
     if (Object.keys(this.$route.meta).length == 0) {
       if (this.$route.query.file_cat == 1) {

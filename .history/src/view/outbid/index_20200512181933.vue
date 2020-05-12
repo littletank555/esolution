@@ -18,9 +18,6 @@
         <a-tag color="blue">{{record.dues}}</a-tag>
         <a-tag color="red">{{record.overdues}}</a-tag>
       </template>
-      <template slot="schedule">
-        <a-icon type="paper-clip" />
-      </template>
       <template slot="edit" slot-scope="record">
         <a>
           <a-icon type="edit" @click="()=>{

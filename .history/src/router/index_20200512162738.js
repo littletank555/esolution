@@ -47,9 +47,9 @@ const router = new Router({
         component: () => import("@/view/Client"),
       },
       {
-        path: "outbid",
-        name: "outbid",
-        component: () => import("@/view/outbid/index.vue"),
+        path: "bid",
+        name: "bid",
+        component: () => import("@/view/bid/index.vue"),
         meta: { title: '中標資料' }
       },
       {
@@ -71,9 +71,10 @@ const router = new Router({
         meta: { title: '承辦商' }
       },
       {//kerecord
-        path: "/home/bid/:sort",
-        name: "keRecord",
-        component: () => import("@/view/bid/keRecord"),
+        // path: "/home/bid/:sort",
+        // name: "keRecord",
+        // component: () => import("@/view/bid/keRecord"),
+        // meta: { title: '中標資料' }
       },
       {//uploadFile
         path: "/home/pmaster/:pmaster_id",

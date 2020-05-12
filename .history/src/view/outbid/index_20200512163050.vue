@@ -10,17 +10,6 @@
       :rowKey="record => record.project_id"
       :pagination="pagination"
     >
-      <template slot="invoice" slot-scope="record">
-        <a-tag color="blue">{{record.receivable}}</a-tag>
-        <a-tag color="red">{{record.uncollected}}</a-tag>
-      </template>
-      <template slot="spending" slot-scope="record">
-        <a-tag color="blue">{{record.dues}}</a-tag>
-        <a-tag color="red">{{record.overdues}}</a-tag>
-      </template>
-      <template slot="schedule">
-        <a-icon type="paper-clip" />
-      </template>
       <template slot="edit" slot-scope="record">
         <a>
           <a-icon type="edit" @click="()=>{
@@ -28,22 +17,27 @@
         }"></a-icon>
         </a>
       </template>
+      <template slot="delete" slot-scope="record">
+        <a href="#" @click="onDelete(record.project_id)">
+          <a-icon type="delete" />
+        </a>
+      </template>
     </a-table>
   </div>
 </template>
 <script>
-import { get_bid } from "@/api/outbid.js";
+import { get_project, del_project } from "@/api/project.js";
 const columns = [
   { title: "工程序號", dataIndex: "p_num" },
+  { title: "負責同事", dataIndex: "sales_code" },
   { title: "工程地點", dataIndex: "lc" },
-  { title: "中標承辦商", dataIndex: "contractor_name", width: "550px" },
-  { title: "中標價錢", dataIndex: "bid_price" },
-  { title: "開工日期", dataIndex: "start_date" },
-  { title: "完工日期", dataIndex: "end_date" },
-  { title: "invoice", scopedSlots: { customRender: "invoice" } },
-  { title: "開支", scopedSlots: { customRender: "spending" } },
-  { title: "工程進度", scopedSlots: { customRender: "schedule" } },
-  { scopedSlots: { customRender: "edit" } }
+  { title: "工程標號和標題", dataIndex: "titleandno", width: "550px" },
+  { title: "收到標書日期", dataIndex: "re_tender_date" },
+  { title: "截標日期", dataIndex: "end_tender_date" },
+  { title: "標書發送", scopedSlots: { customRender: "send_contractor" } },
+  { scopedSlots: { customRender: "contractor" } },
+  { scopedSlots: { customRender: "edit" } },
+  { scopedSlots: { customRender: "delete" } }
 ];
 export default {
   data() {
@@ -76,7 +70,7 @@ export default {
     },
     getTableData() {
       this.onTableLoading = true;
-      get_bid()
+      get_project()
         .then(res => {
           console.log(res.list);
           this.tableData = res.list;
@@ -84,6 +78,29 @@ export default {
           this.onTableLoading = false;
         })
         .catch(err => {});
+    },
+    onDelete(project_id) {
+      this.$confirm({
+        title: "是否要刪除該工程",
+        maskClosable: true,
+        onOk: () => {
+          return del_project(project_id)
+            .then(res => {
+              console.log(res.status);
+              if (res.status) {
+                this.$message.success("刪除成功");
+                this.getTableData();
+              } else {
+                this.$message.error("刪除失敗");
+              }
+              return true;
+            })
+            .catch(err => {
+              this.$message.error("刪除失敗!");
+              reject(error);
+            });
+        }
+      });
     }
   },
   components: {}

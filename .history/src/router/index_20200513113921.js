@@ -66,7 +66,7 @@ const router = new Router({
       },
       {
         path: "/home/outbid/fileIndex/:project_id",
-        name: "bidfile",
+        name: "file",
         component: () => import("@/view/outbid/fileIndex.vue"),
         meta: { title: '', order: 2 }
       },

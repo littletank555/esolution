@@ -14,7 +14,7 @@
         <router-link
           :to="{
             name: 'bidfile',
-            params: { project_id: record.project_id,title:'invoice'},
+            params: { project_id: record.project_id,title:'發票'},
             query:{
              file_cat:0,
             },
@@ -22,6 +22,17 @@
           tag="a"
         >
           <a-tag color="blue">{{record.receivable}}</a-tag>
+        </router-link>
+        <router-link
+          :to="{
+            name: 'bidfile',
+            params: { project_id: record.project_id,title:'收據'},
+            query:{
+             file_cat:1,
+            },
+          }"
+          tag="a"
+        >
           <a-tag color="red">{{record.uncollected}}</a-tag>
         </router-link>
       </template>
@@ -29,7 +40,7 @@
         <router-link
           :to="{
             name: 'bidfile',
-            params: { project_id: record.project_id,title:'開支'},
+            params: { project_id: record.project_id,title:'應付'},
             query:{
              file_cat:2,
             },
@@ -37,10 +48,21 @@
           tag="a"
         >
           <a-tag color="blue">{{record.dues}}</a-tag>
+        </router-link>
+        <router-link
+          :to="{
+            name: 'bidfile',
+            params: { project_id: record.project_id,title:'未付'},
+            query:{
+             file_cat:3,
+            },
+          }"
+          tag="a"
+        >
           <a-tag color="red">{{record.overdues}}</a-tag>
         </router-link>
       </template>
-      <template slot="schedule" slot-scope="record">
+      <template slot="schedule">
         <router-link
           :to="{
             name: 'bidfile',

@@ -27,12 +27,3 @@ export function new_bid_file(list) {
         })
     });
 }
-export function get_bid_file(project_id, file_cat) {
-    return request({
-        url: "admin-index?page=outbid&action=get_bid_file",
-        method: "POST",
-        data: Qs.stringify({
-            project_id, file_cat
-        })
-    });
-}

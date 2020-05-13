@@ -46,6 +46,7 @@
           }"
           tag="a"
         >
+          <!-- <span>報價承辦商</span> -->
           <a-tag color="blue">報價承辦商</a-tag>
         </router-link>
         <!-- <span @click="link(record.project_id)">承辦商</span> -->
@@ -138,7 +139,7 @@ const columns = [
     scopedSlots: { customRender: "send_contractor" },
     width: 200
   },
-  { scopedSlots: { customRender: "contractor" }, width: 120, fixed: "right" },
+  { scopedSlots: { customRender: "contractor" }, width: 80, fixed: "right" },
   { scopedSlots: { customRender: "edit" }, width: 80, fixed: "right" },
   { scopedSlots: { customRender: "delete" }, width: 80, fixed: "right" }
 ];

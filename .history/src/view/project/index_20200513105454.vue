@@ -46,7 +46,7 @@
           }"
           tag="a"
         >
-          <a-tag color="blue">報價承辦商</a-tag>
+          <a-icon type="container" />
         </router-link>
         <!-- <span @click="link(record.project_id)">承辦商</span> -->
       </template>

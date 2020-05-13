@@ -45,10 +45,7 @@
             }
           }"
           tag="a"
-        >
-          <a-tag color="blue">報價承辦商</a-tag>
-        </router-link>
-        <!-- <span @click="link(record.project_id)">承辦商</span> -->
+        >承辦商</router-link>
       </template>
       <template slot="edit" slot-scope="record">
         <a>
@@ -178,12 +175,6 @@ export default {
       if (val == "") {
         this.tableData = this.dataSource;
       }
-    },
-    link(project_id) {
-      this.$router.push({
-        name: "subContractor",
-        params: { project_id: project_id }
-      });
     },
     bidClick(project_id, contractor_data) {
       this.contractor_data = [];

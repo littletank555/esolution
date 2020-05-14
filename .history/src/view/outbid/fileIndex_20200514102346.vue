@@ -20,7 +20,7 @@
         </a>
       </template>
       <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDeleteFile(record.id,record.file_id,record.file_cat)">
+        <a href="#" @click="onDeleteFile(record.id,record.file_id)">
           <a-icon type="delete" />&emsp;delete
         </a>
       </template>
@@ -37,9 +37,9 @@
 </template>
 <script>
 import uploadfile from "./uploadFile";
-import { get_bid_file, del_bid_file } from "@/api/outbid.js";
+import { get_bid_file } from "@/api/outbid.js";
 const columns = [
-  { title: "文件類型", dataIndex: "file_catname" },
+  { title: "文件類型", dataIndex: "file_cat" },
   {
     title: "上傳時間",
     dataIndex: "upload_date"
@@ -64,7 +64,7 @@ const columns = [
 export default {
   data() {
     return {
-      project_id: 0,
+      project_meta_id: 0,
       file_cat: 0,
       columns,
       tableData: [],
@@ -72,7 +72,7 @@ export default {
     };
   },
   created() {
-    this.project_id = this.$route.params.project_id;
+    this.project_meta_id = this.$route.params.project_meta_id;
     if (this.$route.query.file_cat == 0) {
       this.file_cat = 0;
     } else if (this.$route.query.file_cat == 2) {
@@ -109,28 +109,28 @@ export default {
           this.onTableLoading = false;
         });
     },
-    onDeleteFile(bid, file_id, file_cat) {
-      this.$confirm({
-        title: "是否要刪除該文件",
-        maskClosable: true,
-        onOk: () => {
-          return del_bid_file(bid, file_id, file_cat)
-            .then(res => {
-              console.log(res.status);
-              if (res.status) {
-                this.$message.success("刪除成功");
-                this.get_tableData(this.project_id, this.file_cat);
-              } else {
-                this.$message.error("刪除失敗");
-              }
-              return true;
-            })
-            .catch(err => {
-              this.$message.error("刪除失敗!");
-              reject(error);
-            });
-        }
-      });
+    onDeleteFile(pid, file_id) {
+      // this.$confirm({
+      //   title: "是否要刪除該文件",
+      //   maskClosable: true,
+      //   onOk: () => {
+      //     return del_project_file(pid, file_id)
+      //       .then(res => {
+      //         console.log(res.status);
+      //         if (res.status) {
+      //           this.$message.success("刪除成功");
+      //           this.get_tableData();
+      //         } else {
+      //           this.$message.error("刪除失敗");
+      //         }
+      //         return true;
+      //       })
+      //       .catch(err => {
+      //         this.$message.error("刪除失敗!");
+      //         reject(error);
+      //       });
+      //   }
+      // });
     }
   },
   components: { uploadfile }

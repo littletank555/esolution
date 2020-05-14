@@ -33,7 +33,7 @@
           <a-tag color="red" v-else>{{item.s_name}}</a-tag>
         </span>
       </template>
-      <template slot="subContractor" slot-scope="record">
+      <template slot="contractor" slot-scope="record">
         <router-link
           :to="{
             name: 'subContractor',
@@ -137,11 +137,7 @@ const columns = [
     scopedSlots: { customRender: "send_contractor" },
     width: 200
   },
-  {
-    scopedSlots: { customRender: "subContractor" },
-    width: 80,
-    fixed: "right"
-  },
+  { scopedSlots: { customRender: "contractor" }, width: 120, fixed: "right" },
   { scopedSlots: { customRender: "edit" }, width: 80, fixed: "right" },
   { scopedSlots: { customRender: "delete" }, width: 80, fixed: "right" }
 ];

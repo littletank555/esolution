@@ -139,7 +139,7 @@ const columns = [
   },
   {
     scopedSlots: { customRender: "subContractor" },
-    width: 80,
+    width: 120,
     fixed: "right"
   },
   { scopedSlots: { customRender: "edit" }, width: 80, fixed: "right" },

@@ -20,7 +20,7 @@
         </a>
       </template>
       <template slot="delete" slot-scope="record">
-        <a href="#" @click="onDeleteFile(record.id,record.file_id,record.file_cat)">
+        <a href="#" @click="onDeleteFile(record.id,record.file_id)">
           <a-icon type="delete" />&emsp;delete
         </a>
       </template>
@@ -39,7 +39,7 @@
 import uploadfile from "./uploadFile";
 import { get_bid_file, del_bid_file } from "@/api/outbid.js";
 const columns = [
-  { title: "文件類型", dataIndex: "file_catname" },
+  { title: "文件類型", dataIndex: "file_cat" },
   {
     title: "上傳時間",
     dataIndex: "upload_date"

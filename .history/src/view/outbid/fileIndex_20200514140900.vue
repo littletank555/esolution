@@ -39,7 +39,7 @@
 import uploadfile from "./uploadFile";
 import { get_bid_file, del_bid_file } from "@/api/outbid.js";
 const columns = [
-  { title: "文件類型", dataIndex: "file_catname" },
+  { title: "文件類型", dataIndex: "file_cat" },
   {
     title: "上傳時間",
     dataIndex: "upload_date"

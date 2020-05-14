@@ -36,12 +36,12 @@ export function get_bid_file(project_id, file_cat) {
         })
     });
 }
-export function del_bid_file(bid, file_id, file_cat) {
+export function del_bid_file(bid, file_id) {
     return request({
         url: "admin-index?page=outbid&action=del_bid_file",
         method: "POST",
         data: Qs.stringify({
-            bid, file_id, file_cat
+            bid, file_id
         })
     });
 }

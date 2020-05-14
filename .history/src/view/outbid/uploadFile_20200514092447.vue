@@ -11,8 +11,8 @@
         paddingBottom: '108px'
       }"
   >
-    <p v-if="$route.query.file_cat != 4">
-      <span>文件類型</span>
+    <p>
+      <span v-if="$route.query.file_cat == 4">文件類型</span>
       <a-select v-if="$route.query.file_cat == 0" v-model="info.file_cat" style="width:100%">
         <a-select-option value="0">發票</a-select-option>
         <a-select-option value="1">收據</a-select-option>

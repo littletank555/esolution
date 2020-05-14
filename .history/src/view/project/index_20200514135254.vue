@@ -33,8 +33,8 @@
           <a-tag color="red" v-else>{{item.s_name}}</a-tag>
         </span>
       </template>
-      <template slot="subContractor" slot-scope="record">
-        <router-link
+      <template slot="contractor" slot-scope="record">
+        <!-- <router-link
           :to="{
             name: 'subContractor',
             params: { project_id: record.project_id},
@@ -46,8 +46,8 @@
           tag="a"
         >
           <a-tag color="blue">報價承辦商</a-tag>
-        </router-link>
-        <!-- <span @click="link(record.project_id)">承辦商</span> -->
+        </router-link>-->
+        <span @click="link(record.project_id)">承辦商</span>
       </template>
       <template slot="edit" slot-scope="record">
         <a>
@@ -137,11 +137,7 @@ const columns = [
     scopedSlots: { customRender: "send_contractor" },
     width: 200
   },
-  {
-    scopedSlots: { customRender: "subContractor" },
-    width: 80,
-    fixed: "right"
-  },
+  { scopedSlots: { customRender: "contractor" }, width: 120, fixed: "right" },
   { scopedSlots: { customRender: "edit" }, width: 80, fixed: "right" },
   { scopedSlots: { customRender: "delete" }, width: 80, fixed: "right" }
 ];

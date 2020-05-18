@@ -110,24 +110,36 @@ export default {
         });
       if (this.breadcrumb[0].order > 1) {
         this.$router.push({ name: "project" });
+      } else {
+        sessionStorage.breadcrumb = JSON.stringify(this.breadcrumb);
       }
     }
   },
   created() {
-    console.log(this.$route);
-
-    if (this.$route.meta.order > 1) {
-      this.$router.push({ name: "project" });
-      this.activeItem = ["project"];
-    } else {
-      this.breadcrumb.push({
-        r_name: this.$route.path,
-        title: this.$route.meta.title,
-        order: this.$route.meta.order
-      });
+    let list = JSON.parse(sessionStorage.breadcrumb);
+    if ((list || []).length) {
+      this.breadcrumb = list || [
+        {
+          r_name: this.$route.path,
+          title: this.$route.meta.title,
+          order: this.$route.meta.order
+        }
+      ];
       this.activeItem = [this.$route.name];
+    } else {
+      if (this.$route.meta.order > 1) {
+        this.activeItem = ["project"];
+      } else {
+        this.breadcrumb.push({
+          r_name: this.$route.path,
+          title: this.$route.meta.title,
+          order: this.$route.meta.order
+        });
+        this.activeItem = [this.$route.name];
+      }
     }
   },
+  mounted() {},
   methods: {
     onMenuSelect(item) {
       this.$router.push({ name: item.r_name });

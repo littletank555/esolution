@@ -6,9 +6,9 @@
     @close="onClose"
     :visible="visible"
     :wrapStyle="{
-        height: 'calc(100% - 108px)',
         overflow: 'auto',
-        paddingBottom: '108px'
+        paddingBottom: '108px',
+        zIndex:999
       }"
   >
     <p>
@@ -24,6 +24,7 @@
       <a-input v-model="info.remark" />
     </p>
     <a-upload
+      v-if="reRenderUpload"
       name="orm_file"
       :multiple="false"
       :action="action_url"
@@ -44,6 +45,7 @@ import { new_project_file } from "@/api/project.js";
 export default {
   data() {
     return {
+      reRenderUpload: true,
       visible: false,
       info: {
         file_name: "",
@@ -67,6 +69,10 @@ export default {
     showDrawer() {
       this.info.project_meta_id = this.$route.params.project_meta_id;
       this.info.file_cat = this.$route.query.file_cat;
+      this.info.file_name = "";
+      this.info.remark = "";
+      this.info.upload_date = moment();
+      this.info.file_id = 0;
       this.disable = true;
       this.visible = true;
     },
@@ -75,16 +81,21 @@ export default {
     },
     handleChange(info) {
       if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
-        console.log("file", info);
         this.info.file_id = info.file.response.id;
         if (this.info.file_name == "") {
           this.info.file_name = info.file.response.name;
         }
 
-        // this.fileinfo = info.fileList[0].response;
+        //测试
+        setTimeout(() => {
+          this.reRenderUpload = false;
+          this.$nextTick(() => {
+            this.reRenderUpload = true;
+          });
+        }, 100);
+
         this.disable = false;
         this.$message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
@@ -101,10 +112,8 @@ export default {
           }
         }
       }
-      console.log(this.info);
       new_project_file(this.info)
         .then(res => {
-          console.log(res.status);
           if (res.status) {
             this.$message.success("成功添加");
             this.visible = false;
